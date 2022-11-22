@@ -8,12 +8,12 @@ package formularios;
  *
  * @author Yamila Karim Conrado
  */
-public class FrmLibros extends javax.swing.JInternalFrame {
+public class FrmCatalogo extends javax.swing.JInternalFrame {
 
     /**
      * Creates new form FrmLibros
      */
-    public FrmLibros() {
+    public FrmCatalogo() {
         initComponents();
     }
 

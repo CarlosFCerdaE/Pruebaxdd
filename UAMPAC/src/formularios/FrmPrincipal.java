@@ -11,7 +11,7 @@ package formularios;
 public class FrmPrincipal extends javax.swing.JFrame {
     //crear objeto formulario para cada uno (internos)
     FrmRegistroPersonas frmPersonas = new FrmRegistroPersonas();
-    FrmLibros frmLibros = new FrmLibros();
+    FrmCatalogo frmLibros = new FrmCatalogo();
     
     /**
      * Creates new form FrmPrincipal
