@@ -50,13 +50,15 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         LblCat = new javax.swing.JLabel();
         BtnResetRbs = new javax.swing.JButton();
         LblDatos = new javax.swing.JLabel();
-        LblChangeCat = new javax.swing.JLabel();
+        LblCatID = new javax.swing.JLabel();
         TfCatId = new javax.swing.JTextField();
         ToolBarClud = new javax.swing.JToolBar();
         BtnLimpiar = new javax.swing.JButton();
         BtnAgregar = new javax.swing.JButton();
         BtnEditar = new javax.swing.JButton();
         BtnEliminar = new javax.swing.JButton();
+        LblRoleID = new javax.swing.JLabel();
+        TfRoleID = new javax.swing.JTextField();
 
         setClosable(true);
         setResizable(true);
@@ -204,9 +206,9 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         LblDatos.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
         LblDatos.setText("Datos de Persona");
 
-        LblChangeCat.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
-        LblChangeCat.setText("Sin Categoría...");
-        LblChangeCat.setEnabled(false);
+        LblCatID.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        LblCatID.setText("Sin Categoría...");
+        LblCatID.setEnabled(false);
 
         TfCatId.setEnabled(false);
         TfCatId.addActionListener(new java.awt.event.ActionListener() {
@@ -249,6 +251,12 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         BtnEliminar.setEnabled(false);
         ToolBarClud.add(BtnEliminar);
 
+        LblRoleID.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
+        LblRoleID.setText("Sin Categoría...");
+        LblRoleID.setEnabled(false);
+
+        TfRoleID.setEnabled(false);
+
         javax.swing.GroupLayout PanelAgregarLayout = new javax.swing.GroupLayout(PanelAgregar);
         PanelAgregar.setLayout(PanelAgregarLayout);
         PanelAgregarLayout.setHorizontalGroup(
@@ -274,9 +282,11 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                                     .addComponent(TfTelefono)))))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelAgregarLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(PanelAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(LblChangeCat)
-                            .addComponent(TfCatId, javax.swing.GroupLayout.PREFERRED_SIZE, 190, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(PanelAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(LblCatID)
+                            .addComponent(TfCatId, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
+                            .addComponent(LblRoleID)
+                            .addComponent(TfRoleID)))
                     .addGroup(PanelAgregarLayout.createSequentialGroup()
                         .addGap(29, 29, 29)
                         .addComponent(LblDatos)))
@@ -318,11 +328,15 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                 .addGap(26, 26, 26)
                 .addGroup(PanelAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelAgregarLayout.createSequentialGroup()
-                        .addComponent(LblChangeCat)
+                        .addComponent(LblCatID)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(TfCatId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addComponent(ToolBarClud, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(119, Short.MAX_VALUE))
+                .addGap(17, 17, 17)
+                .addComponent(LblRoleID)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(TfRoleID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(47, Short.MAX_VALUE))
         );
 
         TpPersonas.addTab("Agregar/Editar", PanelAgregar);
@@ -359,29 +373,37 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
 
     private void RbEstudianteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RbEstudianteActionPerformed
         // TODO add your handling code here:
-        if (this.RbEstudiante.isSelected()) {
-            this.LblChangeCat.setEnabled(true);
-            this.LblChangeCat.setText("CIF Estudiante:");
-            this.TfCatId.setEnabled(true);
-        }
+        this.LblCatID.setEnabled(true);
+        this.LblCatID.setText("CIF Estudiante:");
+        this.TfCatId.setEnabled(true);
+        
+        this.LblRoleID.setEnabled(true);
+        this.LblRoleID.setText("Carrera:");
+        this.TfRoleID.setEnabled(true);
+        
     }//GEN-LAST:event_RbEstudianteActionPerformed
 
     private void RbDocenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RbDocenteActionPerformed
         // TODO add your handling code here:
-        if (this.RbDocente.isSelected()) {
-            this.LblChangeCat.setEnabled(true);
-            this.LblChangeCat.setText("CIF Docente:");
-            this.TfCatId.setEnabled(true);
-        }
+        this.LblCatID.setEnabled(true);
+        this.LblCatID.setText("CIF Docente:");
+        this.TfCatId.setEnabled(true);
+        
+        this.LblRoleID.setEnabled(true);
+        this.LblRoleID.setText("Facultad:");
+        this.TfRoleID.setEnabled(true);
     }//GEN-LAST:event_RbDocenteActionPerformed
 
     private void RbPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RbPersonalActionPerformed
         // TODO add your handling code here:
-        if (this.RbPersonal.isSelected()) {
-            this.LblChangeCat.setEnabled(true);
-            this.LblChangeCat.setText("ID Personal:");
-            this.TfCatId.setEnabled(true);
-        }
+        this.LblCatID.setEnabled(true);
+        this.LblCatID.setText("ID Personal:");
+        this.TfCatId.setEnabled(true);
+        
+        this.LblRoleID.setEnabled(true);
+        this.LblRoleID.setText("Cargo:");
+        this.TfRoleID.setEnabled(true);
+        
     }//GEN-LAST:event_RbPersonalActionPerformed
 
     private void BtnResetRbsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnResetRbsActionPerformed
@@ -389,10 +411,17 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         this.BgCategoria.clearSelection();      //limpia selección de los tres radio buttons (button group)
 
         //reestablecer campo extra opcional (categoria persona)
-        this.LblChangeCat.setEnabled(false);
-        this.LblChangeCat.setText("Sin Categoría...");
+        this.LblCatID.setEnabled(false);
+        this.LblRoleID.setEnabled(false);
+        
+        this.LblCatID.setText("Sin Categoría...");
+        this.LblRoleID.setText("Sin Categoría...");
+        
         this.TfCatId.setText("");
         this.TfCatId.setEnabled(false);
+        
+        this.TfRoleID.setText("");
+        this.TfRoleID.setEnabled(false);
 
     }//GEN-LAST:event_BtnResetRbsActionPerformed
 
@@ -427,10 +456,11 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
     private javax.swing.JLabel LblApe;
     private javax.swing.JLabel LblBuscarPersona;
     private javax.swing.JLabel LblCat;
+    private javax.swing.JLabel LblCatID;
     private javax.swing.JLabel LblCedula;
-    private javax.swing.JLabel LblChangeCat;
     private javax.swing.JLabel LblDatos;
     private javax.swing.JLabel LblNom;
+    private javax.swing.JLabel LblRoleID;
     private javax.swing.JLabel LblTel;
     private javax.swing.JLabel LblTitulo;
     private javax.swing.JPanel PanelAgregar;
@@ -445,6 +475,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
     private javax.swing.JTextField TfCedula;
     private javax.swing.JTextField TfDatoPersona;
     private javax.swing.JTextField TfNombres;
+    private javax.swing.JTextField TfRoleID;
     private javax.swing.JTextField TfTelefono;
     private javax.swing.JToolBar ToolBarClud;
     private javax.swing.JTabbedPane TpPersonas;

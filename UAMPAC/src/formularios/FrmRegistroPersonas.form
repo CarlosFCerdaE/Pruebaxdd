@@ -188,9 +188,11 @@
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
                               <EmptySpace max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="LblChangeCat" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="TfCatId" alignment="0" min="-2" pref="190" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="LblCatID" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="TfCatId" alignment="0" pref="190" max="32767" attributes="0"/>
+                                  <Component id="LblRoleID" alignment="0" min="-2" max="-2" attributes="0"/>
+                                  <Component id="TfRoleID" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
@@ -248,13 +250,17 @@
                       <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="LblChangeCat" min="-2" max="-2" attributes="0"/>
+                              <Component id="LblCatID" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Component id="TfCatId" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Component id="ToolBarClud" min="-2" pref="68" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="119" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                      <Component id="LblRoleID" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <Component id="TfRoleID" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="47" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -418,7 +424,7 @@
                 <Property name="text" type="java.lang.String" value="Datos de Persona"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="LblChangeCat">
+            <Component class="javax.swing.JLabel" name="LblCatID">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Dialog" size="18" style="1"/>
@@ -496,6 +502,20 @@
                 </Component>
               </SubComponents>
             </Container>
+            <Component class="javax.swing.JLabel" name="LblRoleID">
+              <Properties>
+                <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                  <Font name="Dialog" size="18" style="1"/>
+                </Property>
+                <Property name="text" type="java.lang.String" value="Sin Categor&#xed;a..."/>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+            </Component>
+            <Component class="javax.swing.JTextField" name="TfRoleID">
+              <Properties>
+                <Property name="enabled" type="boolean" value="false"/>
+              </Properties>
+            </Component>
           </SubComponents>
         </Container>
       </SubComponents>
