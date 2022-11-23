@@ -22,10 +22,10 @@ public class DPrestamo {
     private PreparedStatement ps = null;
     private ResultSet rs = null;
 
-    public void obtRegistros() {
+    public void obtRegistros(String x) {
         try {
             conn = Conexion.obtConexion();
-            String tSQL = "Select * from [CATALOGO].[Prestamo]";
+            String tSQL = x;
             ps = conn.prepareStatement(tSQL, ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE,
                     ResultSet.HOLD_CURSORS_OVER_COMMIT);
@@ -38,7 +38,7 @@ public class DPrestamo {
     public ArrayList<Prestamo> listarPrestamo() {
         ArrayList<Prestamo> lista = new ArrayList<>();
         try {
-            this.obtRegistros();
+            this.obtRegistros("Select * from [CATALOGO].[Prestamo]");
             while (rs.next()) {
                 lista.add(new Prestamo(rs.getString("codigo_prestamo"),
                         rs.getTimestamp("f_emision"),
@@ -67,9 +67,9 @@ public class DPrestamo {
         return lista;
     }
 
-    public boolean guardarPrestamo(Prestamo a) {
+    public boolean guardarPrestamo(Prestamo a, String x) {
         boolean guardado = false;
-        this.obtRegistros();
+        this.obtRegistros("Select * from [CATALOGO].[Prestamo]");
         try {
             rs.moveToInsertRow();
             rs.updateString("codigo_prestamo",a.getCod_prestamo());
@@ -77,6 +77,7 @@ public class DPrestamo {
             rs.updateTimestamp("f_devolucion",a.getf_devolucion());
             rs.updateBigDecimal("mora",a.getMora());
             rs.updateBoolean("estado",a.isEstado());
+            rs.updateString("id_persona", x);
             rs.insertRow();
             rs.moveToCurrentRow();
             guardado = true;
@@ -102,7 +103,7 @@ public class DPrestamo {
 
     public boolean existePrestamo(String id) {
         boolean resp = false;
-        this.obtRegistros();
+        this.obtRegistros("Select * from [CATALOGO].[Prestamo]");
         try {
             rs.beforeFirst();
             while (rs.next()) {
@@ -135,9 +136,9 @@ public class DPrestamo {
 
     }
 
-    public boolean editarPrestamo(Prestamo a) {
+    public boolean editarPrestamo(Prestamo a,String x) {
         boolean resp = false;
-        this.obtRegistros();
+        this.obtRegistros("Select * from [CATALOGO].[Prestamo]");
 
         try {
             rs.beforeFirst();
@@ -147,6 +148,7 @@ public class DPrestamo {
                     rs.updateTimestamp("f_devolucion",a.getf_devolucion());
                     rs.updateBigDecimal("mora",a.getMora());
                     rs.updateBoolean("estado",a.isEstado());
+                    rs.updateString("id_persona", x);
                     rs.updateRow();
                     resp = true;
                     break;
@@ -154,40 +156,6 @@ public class DPrestamo {
             }
         } catch (SQLException ex) {
             System.out.println("Error al editar: " + ex.getMessage());
-        } finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-
-                if (ps != null) {
-                    ps.close();
-                }
-
-                if (conn != null) {
-                    Conexion.cerrarConexion(conn);
-                }
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
-        return resp;
-    }
-
-    public boolean eliminarPrestamo(String id) {
-        boolean resp = false;
-        this.obtRegistros();
-        try {
-            rs.beforeFirst();
-            while (rs.next()) {
-                if (rs.getString("codigo_prestamo").equals(id)) {
-                    rs.deleteRow();
-                    resp = true;
-                    break;
-                }
-            }
-        } catch (SQLException ex) {
-            System.out.println("Error al eliminar ejemplar" + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
