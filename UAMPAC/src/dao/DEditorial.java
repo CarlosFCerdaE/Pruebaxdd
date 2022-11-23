@@ -70,7 +70,7 @@ public class DEditorial {
         try {
             rs.moveToInsertRow();
             rs.updateString("codigo_editorial", a.getCod_editorial());
-            rs.updateString("nombre", a.getNombre_editorial());
+            rs.updateString("nombre_editorial", a.getNombre_editorial());
             rs.insertRow();
             rs.moveToCurrentRow();
             guardado = true;

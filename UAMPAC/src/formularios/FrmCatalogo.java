@@ -4,19 +4,121 @@
  */
 package formularios;
 
+import dao.*;
+import entidades.*;
+import java.awt.HeadlessException;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+
 /**
  *
- * @author Yamila Karim Conrado
+ * @author Gabriel Cahng
  */
 public class FrmCatalogo extends javax.swing.JInternalFrame {
 
+    private String cod;
+    
+    DEditorial dEditorial = new DEditorial();
+    ArrayList<Editorial> listaEditoriales = new ArrayList<>();
+    
+    TableRowSorter filtroTablaEditorial;
+    
     /**
      * Creates new form FrmLibros
      */
     public FrmCatalogo() {
         initComponents();
+        llenarTablaEditoriales();
     }
 
+    private void limpiarEditorial() {
+        this.TfCodEditorial.setText("");
+        this.TfNomEditorial.setText("");
+        this.TfCodEditorial.requestFocus();
+    }
+    
+    private void actualizarTablaEditoriales() {
+        llenarTablaEditoriales();
+        this.TpLibros.setSelectedIndex(1);
+        limpiarEditorial();
+    }
+    
+    public void actualizarBotonesUD() {
+        this.BtnAgregarEdit.setEnabled(true);
+        this.BtnEliminarEdit.setEnabled(false);
+        this.BtnEditarEdit.setEnabled(false);
+        this.TfCodEditorial.setEnabled(true);
+    }
+    
+    private void llenarListaEditoriales() {
+        if(listaEditoriales.isEmpty())
+            listaEditoriales.clear();
+        
+        listaEditoriales = dEditorial.listarEditorial();
+    }
+    
+    private void llenarTablaEditoriales() {
+        llenarListaEditoriales();
+        DefaultTableModel dtm = new DefaultTableModel() {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
+        String titulos[] = {"Código", "Nombre"};
+        dtm.setColumnIdentifiers(titulos);
+        
+        for (Editorial e: listaEditoriales) {
+            Object[] fila = new Object[] {
+                e.getCod_editorial(),
+                e.getNombre_editorial()
+            };
+            dtm.addRow(fila);
+        }
+        
+        this.TblRegEditoriales.setModel(dtm);
+    }
+    
+    private void filtrarTablaEditoriales() {
+        filtroTablaEditorial.setRowFilter(RowFilter.regexFilter(this.TfDatoBuscarEdit.getText(),
+                1));
+    }
+    
+    private void verificarDatosVaciosEditorial() {
+        if (this.TfCodEditorial.getText().equals("") || this.TfCodEditorial.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this, "Por favor verifique que el código" 
+                + " no esté vacío.", "Editorial", JOptionPane.WARNING_MESSAGE);
+            this.TfCodEditorial.requestFocus();
+        }
+        
+        if (this.TfNomEditorial.getText().equals("") || this.TfNomEditorial.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this , "Por favor verifique que el nombre" 
+                + " no esté vacío.", "Editorial", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        this.TfNomEditorial.requestFocus();
+    }
+    
+    private void ubicarDatosEditorial() {
+        int fila = this.TblRegEditoriales.getSelectedRow();
+        cod = listaEditoriales.get(fila).getCod_editorial();
+        
+        this.TfCodEditorial.setEnabled(false);
+        this.TfCodEditorial.setText(cod);
+        
+        this.TfNomEditorial.setText(listaEditoriales.get(fila).getNombre_editorial());
+        
+        this.BtnAgregarEdit.setEnabled(false);
+        this.BtnEditarEdit.setEnabled(true);
+        this.BtnEliminarEdit.setEnabled(true);
+        this.TfNomEditorial.requestFocus();
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -30,6 +132,19 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         TpLibros = new javax.swing.JTabbedPane();
         PanelListadoAutores = new javax.swing.JPanel();
         PanelListadoEditoriales = new javax.swing.JPanel();
+        LblBuscarEdit = new javax.swing.JLabel();
+        TfDatoBuscarEdit = new javax.swing.JTextField();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        TblRegEditoriales = new javax.swing.JTable();
+        jLabel7 = new javax.swing.JLabel();
+        TfCodEditorial = new javax.swing.JTextField();
+        jLabel8 = new javax.swing.JLabel();
+        TfNomEditorial = new javax.swing.JTextField();
+        ToolbarCRUDEditorial = new javax.swing.JToolBar();
+        BtnLimpiarEdit = new javax.swing.JButton();
+        BtnAgregarEdit = new javax.swing.JButton();
+        BtnEditarEdit = new javax.swing.JButton();
+        BtnEliminarEdit = new javax.swing.JButton();
         PanelListadoClasificaciones = new javax.swing.JPanel();
         PanelListadoLibros = new javax.swing.JPanel();
         LblBuscarLibro = new javax.swing.JLabel();
@@ -72,20 +187,148 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         );
         PanelListadoAutoresLayout.setVerticalGroup(
             PanelListadoAutoresLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 522, Short.MAX_VALUE)
+            .addGap(0, 460, Short.MAX_VALUE)
         );
 
         TpLibros.addTab("Autores", PanelListadoAutores);
+
+        LblBuscarEdit.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        LblBuscarEdit.setText("Buscar: ");
+
+        TfDatoBuscarEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TfDatoBuscarEditActionPerformed(evt);
+            }
+        });
+        TfDatoBuscarEdit.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TfDatoBuscarEditKeyTyped(evt);
+            }
+        });
+
+        TblRegEditoriales.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        TblRegEditoriales.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TblRegEditorialesMouseClicked(evt);
+            }
+        });
+        jScrollPane2.setViewportView(TblRegEditoriales);
+
+        jLabel7.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        jLabel7.setText("Código: ");
+
+        jLabel8.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        jLabel8.setText("Nombre: ");
+
+        ToolbarCRUDEditorial.setRollover(true);
+
+        BtnLimpiarEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/nuevo-producto.png"))); // NOI18N
+        BtnLimpiarEdit.setToolTipText("Limpiar");
+        BtnLimpiarEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnLimpiarEdit.setFocusable(false);
+        BtnLimpiarEdit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnLimpiarEdit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtnLimpiarEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnLimpiarEditActionPerformed(evt);
+            }
+        });
+        ToolbarCRUDEditorial.add(BtnLimpiarEdit);
+
+        BtnAgregarEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/disquete.png"))); // NOI18N
+        BtnAgregarEdit.setToolTipText("Guardar");
+        BtnAgregarEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnAgregarEdit.setFocusable(false);
+        BtnAgregarEdit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnAgregarEdit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtnAgregarEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAgregarEditActionPerformed(evt);
+            }
+        });
+        ToolbarCRUDEditorial.add(BtnAgregarEdit);
+
+        BtnEditarEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/editar.png"))); // NOI18N
+        BtnEditarEdit.setToolTipText("Editar");
+        BtnEditarEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnEditarEdit.setEnabled(false);
+        BtnEditarEdit.setFocusable(false);
+        BtnEditarEdit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnEditarEdit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtnEditarEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEditarEditActionPerformed(evt);
+            }
+        });
+        ToolbarCRUDEditorial.add(BtnEditarEdit);
+
+        BtnEliminarEdit.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/boton-eliminar.png"))); // NOI18N
+        BtnEliminarEdit.setToolTipText("Eliminar");
+        BtnEliminarEdit.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnEliminarEdit.setEnabled(false);
+        BtnEliminarEdit.setFocusable(false);
+        BtnEliminarEdit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnEliminarEdit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtnEliminarEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEliminarEditActionPerformed(evt);
+            }
+        });
+        ToolbarCRUDEditorial.add(BtnEliminarEdit);
 
         javax.swing.GroupLayout PanelListadoEditorialesLayout = new javax.swing.GroupLayout(PanelListadoEditoriales);
         PanelListadoEditoriales.setLayout(PanelListadoEditorialesLayout);
         PanelListadoEditorialesLayout.setHorizontalGroup(
             PanelListadoEditorialesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 687, Short.MAX_VALUE)
+            .addGroup(PanelListadoEditorialesLayout.createSequentialGroup()
+                .addGap(63, 63, 63)
+                .addGroup(PanelListadoEditorialesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(PanelListadoEditorialesLayout.createSequentialGroup()
+                        .addComponent(LblBuscarEdit)
+                        .addGap(2, 2, 2)
+                        .addGroup(PanelListadoEditorialesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 474, Short.MAX_VALUE)
+                            .addComponent(TfDatoBuscarEdit)))
+                    .addGroup(PanelListadoEditorialesLayout.createSequentialGroup()
+                        .addGroup(PanelListadoEditorialesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(PanelListadoEditorialesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(TfCodEditorial)
+                            .addComponent(TfNomEditorial, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(ToolbarCRUDEditorial, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(91, Short.MAX_VALUE))
         );
         PanelListadoEditorialesLayout.setVerticalGroup(
             PanelListadoEditorialesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 522, Short.MAX_VALUE)
+            .addGroup(PanelListadoEditorialesLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(PanelListadoEditorialesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(LblBuscarEdit)
+                    .addComponent(TfDatoBuscarEdit, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(18, 18, 18)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addGroup(PanelListadoEditorialesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(PanelListadoEditorialesLayout.createSequentialGroup()
+                        .addGroup(PanelListadoEditorialesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel7)
+                            .addComponent(TfCodEditorial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12, 12, 12)
+                        .addGroup(PanelListadoEditorialesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel8)
+                            .addComponent(TfNomEditorial, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(ToolbarCRUDEditorial, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
         );
 
         TpLibros.addTab("Editoriales", PanelListadoEditoriales);
@@ -98,7 +341,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         );
         PanelListadoClasificacionesLayout.setVerticalGroup(
             PanelListadoClasificacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 522, Short.MAX_VALUE)
+            .addGap(0, 460, Short.MAX_VALUE)
         );
 
         TpLibros.addTab("Clasificaciones", PanelListadoClasificaciones);
@@ -263,23 +506,137 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(LblLibros, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(TpLibros, javax.swing.GroupLayout.PREFERRED_SIZE, 549, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(TpLibros, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void TfDatoBuscarEditKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TfDatoBuscarEditKeyTyped
+        // TODO add your handling code here:
+        //filtrarTablaEditoriales();
+        this.TfDatoBuscarEdit.addKeyListener(new KeyAdapter() {
+            public void keyReleased(final KeyEvent e) {
+                filtrarTablaEditoriales();
+                
+            }
+        });
+        //this.TpLibros.setSelectedIndex(1);
+        
+        filtroTablaEditorial = new TableRowSorter(this.TblRegEditoriales.getModel());
+        this.TblRegEditoriales.setRowSorter(filtroTablaEditorial);
+    }//GEN-LAST:event_TfDatoBuscarEditKeyTyped
+
+    private void BtnLimpiarEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarEditActionPerformed
+        // TODO add your handling code here:
+        limpiarEditorial();
+    }//GEN-LAST:event_BtnLimpiarEditActionPerformed
+
+    private void BtnAgregarEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarEditActionPerformed
+        // TODO add your handling code here:
+        this.verificarDatosVaciosEditorial();
+        
+        try {
+            Editorial e = new Editorial( 
+                this.TfCodEditorial.getText(),
+                this.TfNomEditorial.getText()
+            );
+            
+            if (dEditorial.guardarEditorial(e)) {
+                JOptionPane.showMessageDialog(this, "Registro Guardado.",
+                        "Editorial", JOptionPane.INFORMATION_MESSAGE);
+                
+               
+                actualizarTablaEditoriales();
+                
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al guardar",
+                        "Editorial", JOptionPane.WARNING_MESSAGE);
+            }
+            
+        } catch (HeadlessException ex) {
+            System.out.println("Error al intentar guardar: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_BtnAgregarEditActionPerformed
+
+    private void TblRegEditorialesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TblRegEditorialesMouseClicked
+        // TODO add your handling code here:
+        
+        this.TblRegEditoriales.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    ubicarDatosEditorial();
+                }
+            }
+        });
+    }//GEN-LAST:event_TblRegEditorialesMouseClicked
+
+    private void BtnEditarEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarEditActionPerformed
+        // TODO add your handling code here:
+        this.verificarDatosVaciosEditorial();
+        
+        Editorial e = new Editorial(
+                this.TfCodEditorial.getText(),
+                this.TfNomEditorial.getText()
+        );
+        
+        if (dEditorial.editarEditorial(e)) {
+            JOptionPane.showMessageDialog(this, "Registro Editado.",
+                    "Editorial", JOptionPane.INFORMATION_MESSAGE);
+            actualizarBotonesUD();
+            actualizarTablaEditoriales();
+            
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al editar",
+                    "Autor", JOptionPane.WARNING_MESSAGE);
+        }
+    }//GEN-LAST:event_BtnEditarEditActionPerformed
+
+    private void BtnEliminarEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarEditActionPerformed
+        // TODO add your handling code here:
+        this.verificarDatosVaciosEditorial();
+        
+        int resp = JOptionPane.showConfirmDialog(this, "¿Desea eliminar este registro?",
+                "Editorial", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        
+        if (resp == 0) {
+            if (dEditorial.eliminarEditorial(cod)) {
+                JOptionPane.showMessageDialog(this, "Registro eliminado satisfactoriamente",
+                        "Editorial", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al eliminar.",
+                        "Editorial", JOptionPane.WARNING_MESSAGE);
+            }
+        }
+        actualizarBotonesUD();
+        actualizarTablaEditoriales();
+    }//GEN-LAST:event_BtnEliminarEditActionPerformed
+
+    private void TfDatoBuscarEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TfDatoBuscarEditActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TfDatoBuscarEditActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnAgregarEdit;
+    private javax.swing.JButton BtnEditarEdit;
+    private javax.swing.JButton BtnEliminarEdit;
+    private javax.swing.JButton BtnLimpiarEdit;
+    private javax.swing.JLabel LblBuscarEdit;
     private javax.swing.JLabel LblBuscarLibro;
     private javax.swing.JLabel LblLibros;
     private javax.swing.JPanel PanelListadoAutores;
     private javax.swing.JPanel PanelListadoClasificaciones;
     private javax.swing.JPanel PanelListadoEditoriales;
     private javax.swing.JPanel PanelListadoLibros;
+    private javax.swing.JTable TblRegEditoriales;
     private javax.swing.JTable TblRegistroLibros;
+    private javax.swing.JTextField TfCodEditorial;
+    private javax.swing.JTextField TfDatoBuscarEdit;
     private javax.swing.JTextField TfDatoLibro;
+    private javax.swing.JTextField TfNomEditorial;
+    private javax.swing.JToolBar ToolbarCRUDEditorial;
     private javax.swing.JTabbedPane TpLibros;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
@@ -291,7 +648,10 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField2;
     private javax.swing.JTextField jTextField3;
