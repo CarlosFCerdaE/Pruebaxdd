@@ -8,7 +8,7 @@ package entidades;
  *
  * @author cfco5
  */
-public class Ejemplar {
+public class Ejemplar extends Libro {
     private String cod_inventario;
     private boolean estado;
     private int num_copia;
@@ -40,11 +40,13 @@ public class Ejemplar {
     public Ejemplar() {
     }
 
-    public Ejemplar(String cod_inventario, boolean estado, int num_copia) {
+    public Ejemplar(String cod_inventario, boolean estado, int num_copia, String isbn, String titulo_libro, String mfn) {
+        super(isbn, titulo_libro, mfn);
         this.cod_inventario = cod_inventario;
         this.estado = estado;
         this.num_copia = num_copia;
     }
+
 
     
     

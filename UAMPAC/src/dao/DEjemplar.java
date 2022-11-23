@@ -5,12 +5,15 @@
 package dao;
 
 import entidades.Ejemplar;
+import entidades.Ubicacion;
 import complementos.Conexion;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import entidades.Libro;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -22,26 +25,27 @@ public class DEjemplar {
     private PreparedStatement ps = null;
     private ResultSet rs = null;
 
-    public void obtRegistros() {
-        try {
-            conn = Conexion.obtConexion();
-            String tSQL = "Select * from [CATALOGO].[Ejemplar]";
-            ps = conn.prepareStatement(tSQL, ResultSet.TYPE_SCROLL_SENSITIVE,
-                    ResultSet.CONCUR_UPDATABLE,
-                    ResultSet.HOLD_CURSORS_OVER_COMMIT);
-            rs = ps.executeQuery();
-        } catch (SQLException ex) {
-            System.out.println("Error al obtener registros: " + ex.getMessage());
-        }
+    public void obtRegistros(String x) {
+            try {
+                conn = Conexion.obtConexion();
+                String tSQL = x;
+                ps = conn.prepareStatement(tSQL, ResultSet.TYPE_SCROLL_SENSITIVE,
+                        ResultSet.CONCUR_UPDATABLE,
+                        ResultSet.HOLD_CURSORS_OVER_COMMIT);
+                rs = ps.executeQuery();
+            } catch (SQLException ex) {
+                System.out.println("Error al obtener registros: " + ex.getMessage());
+            }
     }
+    
 
     public ArrayList<Ejemplar> listarEjemplar() {
         ArrayList<Ejemplar> lista = new ArrayList<>();
         try {
-            this.obtRegistros();
+            this.obtRegistros("Select * from [CATALOGO].[v_Ejemplar]");
             while (rs.next()) {
                 lista.add(new Ejemplar(rs.getString("codigo_inventario"),
-                        rs.getBoolean("estado"),rs.getInt("numero_copia")));
+                        rs.getBoolean("estado"),rs.getInt("numero_copia"),rs.getString("ISBN"),rs.getString("titulo"),rs.getString("MFN")));
             }
         } catch (SQLException ex) {
             System.out.println("Error al listar la Ejemplar " + ex.getMessage());
@@ -64,40 +68,51 @@ public class DEjemplar {
         return lista;
     }
 
-    public boolean guardarEjemplar(Ejemplar a) {
+    public boolean guardarEjemplar(Ejemplar a,Ubicacion c) {
         boolean guardado = false;
-        this.obtRegistros();
-        try {
-            rs.moveToInsertRow();
-            rs.updateString("codigo_inventario", a.getCod_inventario());
-            rs.updateBoolean("estado", a.isEstado());
-            rs.updateInt("numero_copia",a.getNum_copia());
-            rs.insertRow();
-            rs.moveToCurrentRow();
-            guardado = true;
-        } catch (SQLException ex) {
-            System.out.println("Error al guardar Ejemplar:" + ex.getMessage());
-        } finally {
+        this.obtRegistros("Select * from [CATALOGO].[Ejemplar]");
+        DLibro dlibro = new DLibro();
+        if(dlibro.existeLibro(a.getIsbn())){
             try {
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ps != null) {
-                    ps.close();
-                }
-                if (conn != null) {
-                    Conexion.cerrarConexion(conn);
-                }
+
+
+                rs.moveToInsertRow();
+                rs.updateString("codigo_inventario", a.getCod_inventario());
+                rs.updateBoolean("estado", a.isEstado());
+                rs.updateInt("numero_copia",a.getNum_copia());
+                rs.updateString("codigo_ubicacion", c.getCod_ubicacion());
+                rs.insertRow();
+                rs.moveToCurrentRow();
+                guardado = true;
+                dlibro = null;
             } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
+                System.out.println("Error al guardar Ejemplar:" + ex.getMessage());
+            } finally {
+                try {
+                    if (rs != null) {
+                        rs.close();
+                    }
+                    if (ps != null) {
+                        ps.close();
+                    }
+                    if (conn != null) {
+                        Conexion.cerrarConexion(conn);
+                    }
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
             }
+            return guardado;
         }
-        return guardado;
+        else{
+            System.out.println("No existe el libro");
+            return !guardado;
+        }
     }
 
     public boolean existeEjemplar(String id) {
         boolean resp = false;
-        this.obtRegistros();
+        this.obtRegistros("Select * from [CATALOGO].[Ejemplar]");
         try {
             rs.beforeFirst();
             while (rs.next()) {
@@ -130,46 +145,55 @@ public class DEjemplar {
 
     }
 
-    public boolean editarEjemplar(Ejemplar a) {
+    public boolean editarEjemplar(Ejemplar a,Ubicacion c) {
         boolean resp = false;
-        this.obtRegistros();
+        this.obtRegistros("Select * from [CATALOGO].[Ejemplar]");
+       DLibro dlibro = new DLibro();
+        if(dlibro.existeLibro(a.getIsbn())){
 
-        try {
-            rs.beforeFirst();
-            while (rs.next()) {
-                if (rs.getString("codigo_inventario").equals(a.getCod_inventario())) {
-                    rs.updateBoolean("estado", a.isEstado());
-                    rs.updateInt("numero_copia",a.getNum_copia());
-                    rs.updateRow();
-                    resp = true;
-                    break;
-                }
-            }
-        } catch (SQLException ex) {
-            System.out.println("Error al editar: " + ex.getMessage());
-        } finally {
             try {
-                if (rs != null) {
-                    rs.close();
+                rs.beforeFirst();
+                while (rs.next()) {
+                    if (rs.getString("codigo_inventario").equals(a.getCod_inventario())) {
+                        rs.updateBoolean("estado", a.isEstado());
+                        rs.updateString("codigo_ubicacion", c.getCod_ubicacion());
+                        rs.updateRow();
+                        resp = true;
+                        dlibro=null;
+                        break;
+                    }
                 }
 
-                if (ps != null) {
-                    ps.close();
-                }
-
-                if (conn != null) {
-                    Conexion.cerrarConexion(conn);
-                }
             } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
+                System.out.println("Error al editar: " + ex.getMessage());
+            } finally {
+                try {
+                    if (rs != null) {
+                        rs.close();
+                    }
+
+                    if (ps != null) {
+                        ps.close();
+                    }
+
+                    if (conn != null) {
+                        Conexion.cerrarConexion(conn);
+                    }
+                } catch (SQLException ex) {
+                    System.out.println(ex.getMessage());
+                }
             }
         }
-        return resp;
+        else{
+             System.out.println("No existe el libro");
+             
+        }
+         return resp;
     }
 
     public boolean eliminarEjemplar(String id) {
         boolean resp = false;
-        this.obtRegistros();
+        this.obtRegistros("Select * from [CATALOGO].[Ejemplar]");
         try {
             rs.beforeFirst();
             while (rs.next()) {

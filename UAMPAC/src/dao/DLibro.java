@@ -6,6 +6,8 @@ package dao;
 
 import entidades.Libro;
 import complementos.Conexion;
+import entidades.Clasificacion;
+import entidades.Editorial;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,6 +23,7 @@ public class DLibro {
     private Connection conn = null;
     private PreparedStatement ps = null;
     private ResultSet rs = null;
+    
 
     public void obtRegistros() {
         try {
@@ -65,7 +68,7 @@ public class DLibro {
         return lista;
     }
 
-    public boolean guardarLibro(Libro a) {
+    public boolean guardarLibro(Libro a,Clasificacion c,Editorial e) {
         boolean guardado = false;
         this.obtRegistros();
         try {
@@ -73,6 +76,8 @@ public class DLibro {
             rs.updateString("ISBN", a.getIsbn());
             rs.updateString("titulo", a.getTitulo_libro());
             rs.updateString("MFN", a.getMfn());
+            rs.updateString("codigo_editorial", e.getCod_editorial());
+            rs.updateString("codigo_clasificacion", c.getCod_clasificacion());
             rs.insertRow();
             rs.moveToCurrentRow();
             guardado = true;
@@ -131,16 +136,17 @@ public class DLibro {
 
     }
 
-    public boolean editarLibro(Libro a) {
+    public boolean editarLibro(Libro a,Clasificacion c, Editorial e) {
         boolean resp = false;
         this.obtRegistros();
-
         try {
             rs.beforeFirst();
             while (rs.next()) {
                 if (rs.getString("ISBN").equals(a.getIsbn())) {
                     rs.updateString("titulo",a.getTitulo_libro());
                     rs.updateString("MFN",a.getMfn());
+                    rs.updateString("codigo_editorial", e.getCod_editorial());
+                    rs.updateString("codigo_clasificacion", c.getCod_clasificacion());
                     rs.updateRow();
                     resp = true;
                     break;
@@ -181,7 +187,7 @@ public class DLibro {
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Error al eliminar ejemplar" + ex.getMessage());
+            System.out.println("Error al eliminar Libro" + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
