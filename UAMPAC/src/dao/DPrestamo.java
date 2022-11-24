@@ -38,7 +38,7 @@ public class DPrestamo {
     public ArrayList<Prestamo> listarPrestamo() {
         ArrayList<Prestamo> lista = new ArrayList<>();
         try {
-            this.obtRegistros("Select * from [CATALOGO].[Prestamo]");
+            this.obtRegistros("Select * from [PRESTAMOS].[Prestamo]");
             while (rs.next()) {
                 lista.add(new Prestamo(rs.getString("codigo_prestamo"),
                         rs.getTimestamp("f_emision"),
@@ -69,7 +69,7 @@ public class DPrestamo {
 
     public boolean guardarPrestamo(Prestamo a, String x) {
         boolean guardado = false;
-        this.obtRegistros("Select * from [CATALOGO].[Prestamo]");
+        this.obtRegistros("Select * from [PRESTAMOS].[Prestamo]");
         try {
             rs.moveToInsertRow();
             rs.updateString("codigo_prestamo",a.getCod_prestamo());
@@ -103,7 +103,7 @@ public class DPrestamo {
 
     public boolean existePrestamo(String id) {
         boolean resp = false;
-        this.obtRegistros("Select * from [CATALOGO].[Prestamo]");
+        this.obtRegistros("Select * from [PRESTAMOS].[Prestamo]");
         try {
             rs.beforeFirst();
             while (rs.next()) {
@@ -138,7 +138,7 @@ public class DPrestamo {
 
     public boolean editarPrestamo(Prestamo a,String x) {
         boolean resp = false;
-        this.obtRegistros("Select * from [CATALOGO].[Prestamo]");
+        this.obtRegistros("Select * from [PRESTAMOS].[Prestamo]");
 
         try {
             rs.beforeFirst();
