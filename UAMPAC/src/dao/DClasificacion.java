@@ -70,7 +70,7 @@ public class DClasificacion {
         try {
             rs.moveToInsertRow();
             rs.updateString("codigo_clasificacion", a.getCod_clasificacion());
-            rs.updateString("nombre", a.getNombre_clasificacion());
+            rs.updateString("nombre_clasificacion", a.getNombre_clasificacion());
             rs.insertRow();
             rs.moveToCurrentRow();
             guardado = true;

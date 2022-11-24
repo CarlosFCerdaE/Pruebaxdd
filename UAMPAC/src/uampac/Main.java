@@ -8,7 +8,7 @@ import formularios.*;
 
 /**
  *
- * @author cfco5
+ * @author cfco5 y gchang110101
  */
 public class Main {
 

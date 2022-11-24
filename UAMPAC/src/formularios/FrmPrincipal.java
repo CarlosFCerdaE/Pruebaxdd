@@ -6,18 +6,21 @@ package formularios;
 
 /**
  *
- * @author Yamila Karim Conrado
+ * @author gchang110101
  */
 public class FrmPrincipal extends javax.swing.JFrame {
     //crear objeto formulario para cada uno (internos)
     FrmRegistroPersonas frmPersonas = new FrmRegistroPersonas();
     FrmCatalogo frmLibros = new FrmCatalogo();
+    FrmPaginaPrincipal frmInicio = new FrmPaginaPrincipal();
     
     /**
      * Creates new form FrmPrincipal
      */
     public FrmPrincipal() {
         initComponents();
+        this.DpEscritorio.add(frmInicio);
+        frmInicio.setVisible(true);
     }
 
     /**
@@ -36,8 +39,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         MenuCat = new javax.swing.JMenu();
         MiLibrosList = new javax.swing.JMenuItem();
         MiInventarioList = new javax.swing.JMenuItem();
-        MenuPrestamos = new javax.swing.JMenu();
-        MenuUser = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("Pagina Principal");
@@ -46,7 +47,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         DpEscritorio.setLayout(DpEscritorioLayout);
         DpEscritorioLayout.setHorizontalGroup(
             DpEscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 537, Short.MAX_VALUE)
+            .addGap(0, 789, Short.MAX_VALUE)
         );
         DpEscritorioLayout.setVerticalGroup(
             DpEscritorioLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -84,12 +85,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
         MenuCat.add(MiInventarioList);
 
         MbMenu.add(MenuCat);
-
-        MenuPrestamos.setText("Prestamos");
-        MbMenu.add(MenuPrestamos);
-
-        MenuUser.setText("Usuarios");
-        MbMenu.add(MenuUser);
 
         setJMenuBar(MbMenu);
 
@@ -163,9 +158,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JDesktopPane DpEscritorio;
     private javax.swing.JMenuBar MbMenu;
     private javax.swing.JMenu MenuCat;
-    private javax.swing.JMenu MenuPrestamos;
     private javax.swing.JMenu MenuRH;
-    private javax.swing.JMenu MenuUser;
     private javax.swing.JMenuItem MiGestionarPer;
     private javax.swing.JMenuItem MiInventarioList;
     private javax.swing.JMenuItem MiLibrosList;
