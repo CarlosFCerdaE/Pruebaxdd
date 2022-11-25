@@ -34,17 +34,21 @@ public class DPrestamo {
             System.out.println("Error al obtener registros: " + ex.getMessage());
         }
     }
-
+/*
     public ArrayList<Prestamo> listarPrestamo() {
         ArrayList<Prestamo> lista = new ArrayList<>();
+        Object VPrestamo[] = new Object[8];
         try {
-            this.obtRegistros("Select * from [PRESTAMOS].[Prestamo]");
+            this.obtRegistros("Select * from [PRESTAMOS].[VW_LISTADOPRESTAMOS]");
             while (rs.next()) {
-                lista.add(new Prestamo(rs.getString("codigo_prestamo"),
+                lista.add(new VPrestamo(rs.getString("codigo_prestamo"),
+                        rs.getString("nombres"),
+                        rs.getString("apellidos"),
+                        rs.getString("titulo"),
+                        rs.getInt("numero_copia"),
                         rs.getTimestamp("f_emision"),
                         rs.getTimestamp("f_devolucion"),
-                        rs.getBigDecimal("mora"),
-                        rs.getBoolean("estado")));
+                        rs.getBigDecimal("mora")));
             }
         } catch (SQLException ex) {
             System.out.println("Error al listar el Prestamo " + ex.getMessage());
@@ -66,7 +70,7 @@ public class DPrestamo {
         }
         return lista;
     }
-
+*/
     public boolean guardarPrestamo(Prestamo a, String x) {
         boolean guardado = false;
         this.obtRegistros("Select * from [PRESTAMOS].[Prestamo]");

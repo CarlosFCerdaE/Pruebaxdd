@@ -7,6 +7,8 @@ package dao;
 import entidades.Ejemplar;
 import entidades.Ubicacion;
 import complementos.Conexion;
+import entidades.Clasificacion;
+import entidades.Editorial;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,10 +42,17 @@ public class DEjemplar {
     public ArrayList<Ejemplar> listarEjemplar() {
         ArrayList<Ejemplar> lista = new ArrayList<>();
         try {
-            this.obtRegistros("Select * from [CATALOGO].[v_Ejemplar]");
+            this.obtRegistros("Select * from [CATALOGO].[VW_EJEMPLAR]");
             while (rs.next()) {
                 lista.add(new Ejemplar(rs.getString("codigo_inventario"),
-                        rs.getBoolean("estado"),rs.getInt("numero_copia"),rs.getString("ISBN"),rs.getString("titulo"),rs.getString("MFN")));
+                        rs.getBoolean("estado"),
+                        rs.getInt("numero_copia"),
+                        new Ubicacion(rs.getString("codigo_ubicacion"),rs.getString("nombre")),
+                        rs.getString("ISBN"),
+                        rs.getString("titulo"),
+                        rs.getString("MFN"),
+                        new Clasificacion(rs.getString("codigo_clasificacion"),rs.getString("nombre_clasificacion")),
+                        new Editorial (rs.getString("codigo_editorial"),rs.getString("nombre_editorial"))));
             }
         } catch (SQLException ex) {
             System.out.println("Error al listar la Ejemplar " + ex.getMessage());
@@ -66,7 +75,7 @@ public class DEjemplar {
         return lista;
     }
 
-    public boolean guardarEjemplar(Ejemplar a,Ubicacion c) {
+    public boolean guardarEjemplar(Ejemplar a) {
         boolean guardado = false;
         this.obtRegistros("Select * from [CATALOGO].[Ejemplar]");
         DLibro dlibro = new DLibro();
@@ -78,7 +87,8 @@ public class DEjemplar {
                 rs.updateString("codigo_inventario", a.getCod_inventario());
                 rs.updateBoolean("estado", a.isEstado());
                 rs.updateInt("numero_copia",a.getNum_copia());
-                rs.updateString("codigo_ubicacion", c.getCod_ubicacion());
+                rs.updateString("ISBN", a.getIsbn());
+                rs.updateString("codigo_ubicacion", a.getUbicacion().getCod_ubicacion());
                 rs.insertRow();
                 rs.moveToCurrentRow();
                 guardado = true;
@@ -143,18 +153,19 @@ public class DEjemplar {
 
     }
 
-    public boolean editarEjemplar(Ejemplar a,Ubicacion c) {
+    public boolean editarEjemplar(Ejemplar a) {
         boolean resp = false;
         this.obtRegistros("Select * from [CATALOGO].[Ejemplar]");
        DLibro dlibro = new DLibro();
         if(dlibro.existeLibro(a.getIsbn())){
-
             try {
                 rs.beforeFirst();
                 while (rs.next()) {
                     if (rs.getString("codigo_inventario").equals(a.getCod_inventario())) {
                         rs.updateBoolean("estado", a.isEstado());
-                        rs.updateString("codigo_ubicacion", c.getCod_ubicacion());
+                        rs.updateInt("numero_copia", a.getNum_copia());
+                        rs.updateString("ISBN", a.getIsbn());
+                        rs.updateString("codigo_ubicacion", a.getUbicacion().getCod_ubicacion());
                         rs.updateRow();
                         resp = true;
                         dlibro=null;

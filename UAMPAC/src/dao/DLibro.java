@@ -25,10 +25,10 @@ public class DLibro {
     private ResultSet rs = null;
     
 
-    public void obtRegistros() {
+    public void obtRegistros(String x) {
         try {
             conn = Conexion.obtConexion();
-            String tSQL = "Select * from [CATALOGO].[Libro]";
+            String tSQL = x;
             ps = conn.prepareStatement(tSQL, ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE,
                     ResultSet.HOLD_CURSORS_OVER_COMMIT);
@@ -40,15 +40,18 @@ public class DLibro {
 
     public ArrayList<Libro> listarLibro() {
         ArrayList<Libro> lista = new ArrayList<>();
+        
         try {
-            this.obtRegistros();
+            this.obtRegistros("Select * from [CATALOGO].[VW_Libro]");
             while (rs.next()) {
                 lista.add(new Libro(rs.getString("ISBN"),
                         rs.getString("titulo"),
-                        rs.getString("MFN")));
+                        rs.getString("MFN"),
+                        new Clasificacion(rs.getString("codigo_clasificacion"),rs.getString("nombre_clasificacion")),
+                        new Editorial (rs.getString("codigo_editorial"),rs.getString("nombre_editorial"))));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar la Libro " + ex.getMessage());
+            System.out.println("Error al listar Libro " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -68,16 +71,16 @@ public class DLibro {
         return lista;
     }
 
-    public boolean guardarLibro(Libro a,Clasificacion c,Editorial e) {
+    public boolean guardarLibro(Libro a) {
         boolean guardado = false;
-        this.obtRegistros();
+        this.obtRegistros("SELECT * FROM[CATALOGO].[Libro]");
         try {
             rs.moveToInsertRow();
             rs.updateString("ISBN", a.getIsbn());
             rs.updateString("titulo", a.getTitulo_libro());
             rs.updateString("MFN", a.getMfn());
-            rs.updateString("codigo_editorial", e.getCod_editorial());
-            rs.updateString("codigo_clasificacion", c.getCod_clasificacion());
+            rs.updateString("codigo_editorial", a.getEditorial().getCod_editorial());
+            rs.updateString("codigo_clasificacion", a.getClasificacion().getCod_clasificacion());
             rs.insertRow();
             rs.moveToCurrentRow();
             guardado = true;
@@ -103,7 +106,7 @@ public class DLibro {
 
     public boolean existeLibro(String id) {
         boolean resp = false;
-        this.obtRegistros();
+        this.obtRegistros("SELECT * FROM[CATALOGO].[Libro]");
         try {
             rs.beforeFirst();
             while (rs.next()) {
@@ -136,17 +139,17 @@ public class DLibro {
 
     }
 
-    public boolean editarLibro(Libro a,Clasificacion c, Editorial e) {
+    public boolean editarLibro(Libro a) {
         boolean resp = false;
-        this.obtRegistros();
+        this.obtRegistros("SELECT * FROM[CATALOGO].[Libro]");
         try {
             rs.beforeFirst();
             while (rs.next()) {
                 if (rs.getString("ISBN").equals(a.getIsbn())) {
                     rs.updateString("titulo",a.getTitulo_libro());
                     rs.updateString("MFN",a.getMfn());
-                    rs.updateString("codigo_editorial", e.getCod_editorial());
-                    rs.updateString("codigo_clasificacion", c.getCod_clasificacion());
+                    rs.updateString("codigo_editorial", a.getEditorial().getCod_editorial());
+                    rs.updateString("codigo_clasificacion", a.getClasificacion().getCod_clasificacion());
                     rs.updateRow();
                     resp = true;
                     break;
@@ -176,7 +179,7 @@ public class DLibro {
 
     public boolean eliminarLibro(String id) {
         boolean resp = false;
-        this.obtRegistros();
+        this.obtRegistros("SELECT * FROM[CATALOGO].[Libro]");
         try {
             rs.beforeFirst();
             while (rs.next()) {

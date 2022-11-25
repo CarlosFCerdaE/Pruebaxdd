@@ -12,6 +12,7 @@ public class Ejemplar extends Libro {
     private String cod_inventario;
     private boolean estado;
     private int num_copia;
+    private Ubicacion ubicacion;
 
     public String getCod_inventario() {
         return cod_inventario;
@@ -37,15 +38,26 @@ public class Ejemplar extends Libro {
         this.num_copia = num_copia;
     }
 
+    public Ubicacion getUbicacion() {
+        return ubicacion;
+    }
+
+    public void setUbicacion(Ubicacion ubicacion) {
+        this.ubicacion = ubicacion;
+    }
+
     public Ejemplar() {
     }
 
-    public Ejemplar(String cod_inventario, boolean estado, int num_copia, String isbn, String titulo_libro, String mfn) {
-        super(isbn, titulo_libro, mfn);
+    public Ejemplar(String cod_inventario, boolean estado, int num_copia, Ubicacion ubicacion, String isbn, String titulo_libro, String mfn, Clasificacion clasificacion, Editorial editorial) {
+        super(isbn, titulo_libro, mfn, clasificacion, editorial);
         this.cod_inventario = cod_inventario;
         this.estado = estado;
         this.num_copia = num_copia;
+        this.ubicacion = ubicacion;
     }
+
+    
 
 
     

@@ -13,6 +13,9 @@ public class Libro {
     private String isbn;
     private String titulo_libro;
     private String mfn;
+    private Clasificacion clasificacion;
+    private Editorial editorial;
+
     
     public String getIsbn() {
         return isbn;
@@ -38,14 +41,38 @@ public class Libro {
         this.mfn = mfn;
     }
 
-    public Libro() {
+    public Clasificacion getClasificacion() {
+        return clasificacion;
     }
 
-    public Libro(String isbn, String titulo_libro, String mfn) {
+    public void setClasificacion(Clasificacion clasificacion) {
+        this.clasificacion = clasificacion;
+    }
+
+    public Editorial getEditorial() {
+        return editorial;
+    }
+
+    public void setEditorial(Editorial editorial) {
+        this.editorial = editorial;
+    }
+/*a*/
+   public Libro() {
+    }
+   
+
+ 
+    
+
+    public Libro(String isbn, String titulo_libro, String mfn, Clasificacion clasificacion, Editorial editorial) {
         this.isbn = isbn;
         this.titulo_libro = titulo_libro;
         this.mfn = mfn;
+        this.clasificacion = clasificacion;
+        this.editorial = editorial;
     }
+
+   
     
     
 }
