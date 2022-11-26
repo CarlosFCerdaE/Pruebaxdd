@@ -4,6 +4,8 @@
  */
 package entidades;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author cfco5
@@ -15,6 +17,7 @@ public class Libro {
     private String mfn;
     private Clasificacion clasificacion;
     private Editorial editorial;
+    private ArrayList<Autor> autores;
 
     
     public String getIsbn() {
@@ -56,21 +59,35 @@ public class Libro {
     public void setEditorial(Editorial editorial) {
         this.editorial = editorial;
     }
-/*a*/
+    
+     public ArrayList<Autor> getAutores() {
+        return autores;
+    }
+
+    public void setAutores(ArrayList<Autor> autores) {
+        this.autores = autores;
+    }
+    
+    
    public Libro() {
+    }
+
+    public Libro(String isbn, String titulo_libro, String mfn, Clasificacion clasificacion, Editorial editorial, ArrayList<Autor> autores) {
+        this.isbn = isbn;
+        this.titulo_libro = titulo_libro;
+        this.mfn = mfn;
+        this.clasificacion = clasificacion;
+        this.editorial = editorial;
+        this.autores = autores;
     }
    
 
  
     
 
-    public Libro(String isbn, String titulo_libro, String mfn, Clasificacion clasificacion, Editorial editorial) {
-        this.isbn = isbn;
-        this.titulo_libro = titulo_libro;
-        this.mfn = mfn;
-        this.clasificacion = clasificacion;
-        this.editorial = editorial;
-    }
+    
+
+   
 
    
     

@@ -6,6 +6,7 @@ package dao;
 
 import entidades.Libro;
 import complementos.Conexion;
+import entidades.Autor;
 import entidades.Clasificacion;
 import entidades.Editorial;
 import java.sql.Connection;
@@ -40,18 +41,51 @@ public class DLibro {
 
     public ArrayList<Libro> listarLibro() {
         ArrayList<Libro> lista = new ArrayList<>();
-        
         try {
             this.obtRegistros("Select * from [CATALOGO].[VW_Libro]");
             while (rs.next()) {
+              ArrayList<Autor> autores = listarAutor(rs.getString("ISBN"));
                 lista.add(new Libro(rs.getString("ISBN"),
                         rs.getString("titulo"),
                         rs.getString("MFN"),
                         new Clasificacion(rs.getString("codigo_clasificacion"),rs.getString("nombre_clasificacion")),
-                        new Editorial (rs.getString("codigo_editorial"),rs.getString("nombre_editorial"))));
+                        new Editorial (rs.getString("codigo_editorial"),rs.getString("nombre_editorial")),
+                        autores
+                ));
             }
         } catch (SQLException ex) {
             System.out.println("Error al listar Libro " + ex.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+
+                if (conn != null) {
+                    Conexion.cerrarConexion(conn);
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        return lista;
+    }
+    
+    public ArrayList<Autor> listarAutor(String isbn){
+        ArrayList<Autor> lista = new ArrayList<>();
+        try {
+            this.obtRegistros("Select * from [CATALOGO].[VW_Libro]"
+                    + " WHERE ISBN LIKE '"+isbn+"'");
+            while (rs.next()) {
+                lista.add(new Autor(
+                        rs.getString("codigo_autor"),
+                        rs.getString("nombre")));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al listar Autores " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -74,6 +108,7 @@ public class DLibro {
     public boolean guardarLibro(Libro a) {
         boolean guardado = false;
         this.obtRegistros("SELECT * FROM[CATALOGO].[Libro]");
+        DAutorxLibro daxl= new DAutorxLibro();
         try {
             rs.moveToInsertRow();
             rs.updateString("ISBN", a.getIsbn());
@@ -83,6 +118,10 @@ public class DLibro {
             rs.updateString("codigo_clasificacion", a.getClasificacion().getCod_clasificacion());
             rs.insertRow();
             rs.moveToCurrentRow();
+            for(Autor aut:a.getAutores()){
+                daxl.guardarAutorxLibro(a.getIsbn(), aut.getCodigo_autor());
+            }
+            
             guardado = true;
         } catch (SQLException ex) {
             System.out.println("Error al guardar Libro:" + ex.getMessage());
@@ -142,6 +181,7 @@ public class DLibro {
     public boolean editarLibro(Libro a) {
         boolean resp = false;
         this.obtRegistros("SELECT * FROM[CATALOGO].[Libro]");
+        DAutorxLibro daxl= new DAutorxLibro();
         try {
             rs.beforeFirst();
             while (rs.next()) {
@@ -151,6 +191,9 @@ public class DLibro {
                     rs.updateString("codigo_editorial", a.getEditorial().getCod_editorial());
                     rs.updateString("codigo_clasificacion", a.getClasificacion().getCod_clasificacion());
                     rs.updateRow();
+                    for(Autor aut:a.getAutores()){
+                        daxl.editarAutorxLibro(a.getIsbn(), aut.getCodigo_autor());
+                    }
                     resp = true;
                     break;
                 }

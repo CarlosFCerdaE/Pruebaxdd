@@ -6,6 +6,7 @@ package dao;
 
 import entidades.Estudiante;
 import complementos.Conexion;
+import entidades.Carrera;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,10 +42,17 @@ public class DEstudiante {
     public ArrayList<Estudiante> listarEstudiante() {
         ArrayList<Estudiante> lista = new ArrayList<>();
         try {
-            this.obtRegistros("Select * from [CATALOGO].[VW_ESTUDIANTES]");
+            this.obtRegistros("Select * from [RRHH].[VW_ESTUDIANTES]");
             while (rs.next()) {
+                ArrayList<Carrera> carreras = listarCarrera(rs.getString("CIF_Estudiante"));
                 lista.add(new Estudiante(rs.getString("CIF_Estudiante"),
-                        rs.getString("Cedula"),rs.getString("Nombres"),rs.getString("Apellidos"),rs.getString("telefono")));
+                        carreras,
+                        rs.getString("Cedula"),
+                        rs.getString("Nombres"),
+                        rs.getString("Apellidos"),
+                        rs.getString("telefono")
+                        
+                ));
             }
         } catch (SQLException ex) {
             System.out.println("Error al listar la Estudiante " + ex.getMessage());
@@ -66,11 +74,43 @@ public class DEstudiante {
         }
         return lista;
     }
+    
+    public ArrayList<Carrera> listarCarrera(String cif_estudiante){
+        ArrayList<Carrera> lista = new ArrayList<>();
+        try {
+            this.obtRegistros("Select * from [RRHH].[VWLISTADOCARRERAS]"
+                    + " WHERE cif LIKE '"+cif_estudiante+"'");
+            while (rs.next()) {
+                lista.add(new Carrera(
+                        rs.getString("codigo_carrera"),
+                        rs.getString("nombre")));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al listar Carreras " + ex.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+
+                if (conn != null) {
+                    Conexion.cerrarConexion(conn);
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        return lista;
+    }
 
     public boolean guardarEstudiante(Estudiante e) {
         boolean guardado = false;
-        this.obtRegistros("Select * from [CATALOGO].[Estudiante]");
+        this.obtRegistros("Select * from [RRHH].[Estudiante]");
         DPersona dpersona = new DPersona();
+        DEstudiantexCarrera dexc = new DEstudiantexCarrera();
         if(dpersona.guardarPersona(new Persona(e.getId_pers(),e.getNombre_pers(),e.getApellidos_pers(),e.getTelefono_pers()))){
             try {
                 rs.moveToInsertRow();
@@ -78,6 +118,10 @@ public class DEstudiante {
                 rs.updateString("id_persona", e.getId_pers());
                 rs.insertRow();
                 rs.moveToCurrentRow();
+                for(Carrera carr: e.getCarreras()){
+                    dexc.guardarEstudiantexCarrera(e.getCif(),carr.getCod_carrera());
+                }
+                
                 guardado = true;
                 dpersona = null;
             } catch (SQLException ex) {
@@ -107,7 +151,7 @@ public class DEstudiante {
 
     public boolean existeEstudiante(String id) {
         boolean resp = false;
-        this.obtRegistros("Select * from [CATALOGO].[Estudiante]");
+        this.obtRegistros("Select * from [RRHH].[Estudiante]");
         try {
             rs.beforeFirst();
             while (rs.next()) {
@@ -142,8 +186,9 @@ public class DEstudiante {
 
     public boolean editarEstudiante(Estudiante e) {
         boolean resp = false;
-        this.obtRegistros("Select * from [CATALOGO].[Estudiante]");
+        this.obtRegistros("Select * from [RRHH].[Estudiante]");
        DPersona dpersona = new DPersona();
+       DEstudiantexCarrera dexc = new DEstudiantexCarrera();
         if(dpersona.existePersona(e.getId_pers())){
             try {
                 dpersona.editarPersona(new Persona(e.getId_pers(),e.getNombre_pers(),e.getApellidos_pers(),e.getTelefono_pers()));
@@ -152,6 +197,9 @@ public class DEstudiante {
                     if (rs.getString("cif").equals(e.getCif())) {
                         rs.updateString("cif",e.getCif());
                         rs.updateRow();
+                        for(Carrera carr: e.getCarreras()){
+                            dexc.editarEstudiantexCarrera(e.getCif(),carr.getCod_carrera());
+                        }
                         resp = true;
                         dpersona=null;
                         break;
@@ -187,7 +235,7 @@ public class DEstudiante {
 
     public boolean eliminarEstudiante(String id) {
         boolean resp = false;
-        this.obtRegistros("Select * from [CATALOGO].[Estudiante]");
+        this.obtRegistros("Select * from [RRHH].[Estudiante]");
         DPersona dpersona = new DPersona();
         try {
             rs.beforeFirst();

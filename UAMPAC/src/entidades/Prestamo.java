@@ -6,19 +6,22 @@ package entidades;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 
 /**
  *
  * @author cfco5
  */
 /*http://www.java2s.com/Code/Java/Database-SQL-JDBC/StandardSQLDataTypeswithTheirJavaEquivalents.htm*/
-
 public class Prestamo {
+
     private String cod_prestamo;
     private java.sql.Timestamp f_emision;
     private java.sql.Timestamp f_devolucion;
     private java.math.BigDecimal mora;
     private boolean estado;
+    private Persona persona;
+    private ArrayList<Ejemplar> ejemplares;
 
     public String getCod_prestamo() {
         return cod_prestamo;
@@ -60,19 +63,35 @@ public class Prestamo {
         this.estado = estado;
     }
 
-    public Prestamo() {
+    public Persona getPersona() {
+        return persona;
     }
 
-    public Prestamo(String cod_prestamo, Timestamp f_emision, Timestamp f_devolucion, BigDecimal mora, boolean estado) {
+    public void setPersona(Persona persona) {
+        this.persona = persona;
+    }
+
+    public ArrayList<Ejemplar> getEjemplares() {
+        return ejemplares;
+    }
+
+    public void setEjemplares(ArrayList<Ejemplar> ejemplares) {
+        this.ejemplares = ejemplares;
+    }
+    
+     public Prestamo() {
+         
+    }
+
+    public Prestamo(String cod_prestamo, Timestamp f_emision, Timestamp f_devolucion, BigDecimal mora, boolean estado, Persona persona, ArrayList<Ejemplar> ejemplares) {
         this.cod_prestamo = cod_prestamo;
         this.f_emision = f_emision;
         this.f_devolucion = f_devolucion;
         this.mora = mora;
         this.estado = estado;
+        this.persona = persona;
+        this.ejemplares = ejemplares;
     }
-    
-    
-    
-    
+     
+   
 }
-

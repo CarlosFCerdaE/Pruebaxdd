@@ -15,7 +15,7 @@ import java.sql.SQLException;
  *
  * @author cfco5
  */
-public class DAutorxLibro {
+public class DDocentexFacultad {
 
     private Connection conn = null;
     private PreparedStatement ps = null;
@@ -24,7 +24,7 @@ public class DAutorxLibro {
     public void obtRegistros() {
         try {
             conn = Conexion.obtConexion();
-            String tSQL = "Select * from [CATALOGO].[AutorXLibro]";
+            String tSQL = "Select * from [RRHH].[DocenteXFacultad]";
             ps = conn.prepareStatement(tSQL, ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE,
                     ResultSet.HOLD_CURSORS_OVER_COMMIT);
@@ -36,18 +36,18 @@ public class DAutorxLibro {
 
     
 
-    public boolean guardarAutorxLibro(String ISBN,String Cod_autor) {
+    public boolean guardarDocentexFacultad(String id_docente,String Cod_Facultad) {
         boolean guardado = false;
         this.obtRegistros();
         try {
             rs.moveToInsertRow();
-            rs.updateString("ISBN", ISBN);
-            rs.updateString("codigo_autor", Cod_autor);
+            rs.updateString("id_docente", id_docente);
+            rs.updateString("codigo_facultad", Cod_Facultad);
             rs.insertRow();
             rs.moveToCurrentRow();
             guardado = true;
         } catch (SQLException ex) {
-            System.out.println("Error al guardar en tabla AutorXLibro: " + ex.getMessage());
+            System.out.println("Error al guardar en tabla DocenteXFacultad: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -65,23 +65,23 @@ public class DAutorxLibro {
         }
         return guardado;
     }
-    public boolean editarAutorxLibro(String ISBN,String Cod_autor) {
+    public boolean editarDocentexFacultad(String id_docente,String Cod_Facultad) {
         boolean resp = false;
         this.obtRegistros();
 
         try {
             rs.beforeFirst();
             while (rs.next()) {
-                if (rs.getString("ISBN").equals(ISBN) && rs.getString("codigo_autor").equals(Cod_autor)) {
-                    rs.updateString("ISBN", ISBN);
-                    rs.updateString("codigo_autor", Cod_autor);
+                if (rs.getString("id_docente").equals(id_docente) && rs.getString("codigo_facultad").equals(Cod_Facultad)) {
+                    rs.updateString("id_docente", id_docente);
+                    rs.updateString("codigo_facultad", Cod_Facultad);
                     rs.updateRow();
                     resp = true;
                     break;
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Error al editar en tabla autorxlibro: " + ex.getMessage());
+            System.out.println("Error al editar en tabla DocenteXFacultad: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {

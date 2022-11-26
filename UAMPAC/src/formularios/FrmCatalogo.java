@@ -277,7 +277,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         this.BtnAgregarEdit.setEnabled(false);
         this.BtnEditarEdit.setEnabled(true);
         this.BtnEliminarEdit.setEnabled(true);
-        this.TfNomEditorial.requestFocus();
+        /*this.TfNomEditorial.requestFocus();*/
     }
     
     private void ubicarDatosAutores() {
@@ -297,7 +297,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         this.BtnAgregarAutor.setEnabled(false);
         this.BtnEditarAutor.setEnabled(true);
         this.BtnEliminarAutor.setEnabled(true);
-        this.TfNomAutor.requestFocus();
+       /* this.TfNomAutor.requestFocus();*/
     }
     
     private void ubicarDatosClasificacion() {
@@ -317,7 +317,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         this.BtnAgregarClasi.setEnabled(false);
         this.BtnEditarClasi.setEnabled(true);
         this.BtnEliminarClasi.setEnabled(true);
-        this.TfNomClasi.requestFocus();
+       /* this.TfNomClasi.requestFocus();*/
     }
     
     /**

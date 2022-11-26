@@ -6,6 +6,7 @@ package dao;
 
 import entidades.Docente;
 import complementos.Conexion;
+import entidades.Facultad;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -41,13 +42,51 @@ public class DDocente {
     public ArrayList<Docente> listarDocente() {
         ArrayList<Docente> lista = new ArrayList<>();
         try {
-            this.obtRegistros("Select * from [CATALOGO].[VW_DOCENTES]");
+            this.obtRegistros("Select * from [RRHH].[VW_DOCENTES]");
             while (rs.next()) {
+                ArrayList<Facultad> facultades = listarFacultad(rs.getString("CIF_Docente"));
                 lista.add(new Docente(rs.getString("CIF_Docente"),
-                        rs.getString("Cedula"),rs.getString("Nombres"),rs.getString("Apellidos"),rs.getString("telefono")));
+                        facultades,
+                        rs.getString("Cedula"),
+                        rs.getString("Nombres"),
+                        rs.getString("Apellidos"),
+                        rs.getString("telefono")
+                        
+                ));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar Docente " + ex.getMessage());
+            System.out.println("Error al listar la Docente " + ex.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+
+                if (conn != null) {
+                    Conexion.cerrarConexion(conn);
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        return lista;
+    }
+    
+    public ArrayList<Facultad> listarFacultad(String cif_docente){
+        ArrayList<Facultad> lista = new ArrayList<>();
+        try {
+            this.obtRegistros("SELECT * FROM [RRHH].[VWLISTADOFACULTADES]"
+                    + " WHERE id_docente LIKE '"+cif_docente+"'");
+            while (rs.next()) {
+                lista.add(new Facultad(
+                        rs.getString("codigo_facultad"),
+                        rs.getString("nombre")));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al listar Facultades " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -67,17 +106,22 @@ public class DDocente {
         return lista;
     }
 
-    public boolean guardarDocente(Docente d) {
+    public boolean guardarDocente(Docente e) {
         boolean guardado = false;
-        this.obtRegistros("Select * from [CATALOGO].[Docente]");
+        this.obtRegistros("Select * from [RRHH].[Docente]");
         DPersona dpersona = new DPersona();
-        if(dpersona.guardarPersona(new Persona(d.getId_pers(),d.getNombre_pers(),d.getApellidos_pers(),d.getTelefono_pers()))){
+        DDocentexFacultad ddxf = new DDocentexFacultad();
+        if(dpersona.guardarPersona(new Persona(e.getId_pers(),e.getNombre_pers(),e.getApellidos_pers(),e.getTelefono_pers()))){
             try {
                 rs.moveToInsertRow();
-                rs.updateString("id_docente", d.getId_docente());
-                rs.updateString("id_persona", d.getId_pers());
+                rs.updateString("id_docente", e.getId_docente());
+                rs.updateString("id_persona", e.getId_pers());
                 rs.insertRow();
                 rs.moveToCurrentRow();
+                for(Facultad fac: e.getFacultad()){
+                    ddxf.guardarDocentexFacultad(e.getId_docente(),fac.getCod_facultad());
+                }
+                
                 guardado = true;
                 dpersona = null;
             } catch (SQLException ex) {
@@ -100,18 +144,18 @@ public class DDocente {
             return guardado;
         }
         else{
-            System.out.println("No existe el docente");
+            System.out.println("No existe el libro");
             return !guardado;
         }
     }
 
     public boolean existeDocente(String id) {
         boolean resp = false;
-        this.obtRegistros("Select * from [CATALOGO].[Docente]");
+        this.obtRegistros("Select * from [RRHH].[Docente]");
         try {
             rs.beforeFirst();
             while (rs.next()) {
-                if (rs.getString("id_docente").equals(id)) {
+                if (rs.getString("cif").equals(id)) {
                     resp = true;
                     break;
                 }
@@ -140,19 +184,22 @@ public class DDocente {
 
     }
 
-    public boolean editarDocente(Docente d) {
+    public boolean editarDocente(Docente e) {
         boolean resp = false;
-        this.obtRegistros("Select * from [CATALOGO].[Docente]");
+        this.obtRegistros("Select * from [RRHH].[Docente]");
        DPersona dpersona = new DPersona();
-        if(dpersona.existePersona(d.getId_pers())){
-
+       DDocentexFacultad dexc = new DDocentexFacultad();
+        if(dpersona.existePersona(e.getId_pers())){
             try {
-                dpersona.editarPersona(new Persona(d.getId_pers(),d.getNombre_pers(),d.getApellidos_pers(),d.getTelefono_pers()));
+                dpersona.editarPersona(new Persona(e.getId_pers(),e.getNombre_pers(),e.getApellidos_pers(),e.getTelefono_pers()));
                 rs.beforeFirst();
                 while (rs.next()) {
-                    if (rs.getString("id_docente").equals(d.getId_docente())) {
-                        rs.updateString("id_docente",d.getId_docente());
+                    if (rs.getString("id_docente").equals(e.getId_docente())) {
+                        rs.updateString("id_docente",e.getId_docente());
                         rs.updateRow();
+                        for(Facultad fac: e.getFacultad()){
+                            dexc.editarDocentexFacultad(e.getId_docente(),fac.getCod_facultad());
+                        }
                         resp = true;
                         dpersona=null;
                         break;
@@ -188,7 +235,7 @@ public class DDocente {
 
     public boolean eliminarDocente(String id) {
         boolean resp = false;
-        this.obtRegistros("Select * from [CATALOGO].[Docente]");
+        this.obtRegistros("Select * from [RRHH].[Docente]");
         DPersona dpersona = new DPersona();
         try {
             rs.beforeFirst();

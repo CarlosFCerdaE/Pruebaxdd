@@ -4,12 +4,15 @@
  */
 package entidades;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author cfco5
  */
 public class Estudiante extends Persona {
     private String cif;
+    private ArrayList<Carrera> carreras;
 
     public String getCif() {
         return cif;
@@ -19,12 +22,22 @@ public class Estudiante extends Persona {
         this.cif = cif;
     }
 
-    public Estudiante() {
+    public ArrayList<Carrera> getCarreras() {
+        return carreras;
     }
 
-    public Estudiante(String cif, String id_pers, String nombre_pers, String apellidos_pers, String telefono_pers) {
+    public void setCarreras(ArrayList<Carrera> carreras) {
+        this.carreras = carreras;
+    }
+       public Estudiante() {
+    }
+
+    public Estudiante(String cif, ArrayList<Carrera> carreras, String id_pers, String nombre_pers, String apellidos_pers, String telefono_pers) {
         super(id_pers, nombre_pers, apellidos_pers, telefono_pers);
         this.cif = cif;
+        this.carreras = carreras;
     }
+
+   
     
-}
+} 

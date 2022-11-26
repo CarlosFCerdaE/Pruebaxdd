@@ -4,6 +4,8 @@
  */
 package entidades;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author cfco5
@@ -49,13 +51,15 @@ public class Ejemplar extends Libro {
     public Ejemplar() {
     }
 
-    public Ejemplar(String cod_inventario, boolean estado, int num_copia, Ubicacion ubicacion, String isbn, String titulo_libro, String mfn, Clasificacion clasificacion, Editorial editorial) {
-        super(isbn, titulo_libro, mfn, clasificacion, editorial);
+    public Ejemplar(String cod_inventario, boolean estado, int num_copia, Ubicacion ubicacion, String isbn, String titulo_libro, String mfn, Clasificacion clasificacion, Editorial editorial, ArrayList<Autor> autores) {
+        super(isbn, titulo_libro, mfn, clasificacion, editorial, autores);
         this.cod_inventario = cod_inventario;
         this.estado = estado;
         this.num_copia = num_copia;
         this.ubicacion = ubicacion;
     }
+
+   
 
     
 

@@ -15,7 +15,7 @@ import java.sql.SQLException;
  *
  * @author cfco5
  */
-public class DAutorxLibro {
+public class DPrestamoxEjemplar {
 
     private Connection conn = null;
     private PreparedStatement ps = null;
@@ -24,7 +24,7 @@ public class DAutorxLibro {
     public void obtRegistros() {
         try {
             conn = Conexion.obtConexion();
-            String tSQL = "Select * from [CATALOGO].[AutorXLibro]";
+            String tSQL = "Select * from [PRESTAMOS].[PrestamoXEjemplar]";
             ps = conn.prepareStatement(tSQL, ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE,
                     ResultSet.HOLD_CURSORS_OVER_COMMIT);
@@ -36,18 +36,18 @@ public class DAutorxLibro {
 
     
 
-    public boolean guardarAutorxLibro(String ISBN,String Cod_autor) {
+    public boolean guardarPrestamoxEjemplar(String codigo_prestamo,String Cod_inventario) {
         boolean guardado = false;
         this.obtRegistros();
         try {
             rs.moveToInsertRow();
-            rs.updateString("ISBN", ISBN);
-            rs.updateString("codigo_autor", Cod_autor);
+            rs.updateString("codigo_prestamo", codigo_prestamo);
+            rs.updateString("codigo_inventario", Cod_inventario);
             rs.insertRow();
             rs.moveToCurrentRow();
             guardado = true;
         } catch (SQLException ex) {
-            System.out.println("Error al guardar en tabla AutorXLibro: " + ex.getMessage());
+            System.out.println("Error al guardar en tabla PrestamoXEjemplar: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -65,23 +65,23 @@ public class DAutorxLibro {
         }
         return guardado;
     }
-    public boolean editarAutorxLibro(String ISBN,String Cod_autor) {
+    public boolean editarPrestamoxEjemplar(String codigo_prestamo,String Cod_inventario) {
         boolean resp = false;
         this.obtRegistros();
 
         try {
             rs.beforeFirst();
             while (rs.next()) {
-                if (rs.getString("ISBN").equals(ISBN) && rs.getString("codigo_autor").equals(Cod_autor)) {
-                    rs.updateString("ISBN", ISBN);
-                    rs.updateString("codigo_autor", Cod_autor);
+                if (rs.getString("codigo_prestamo").equals(codigo_prestamo) && rs.getString("codigo_inventario").equals(Cod_inventario)) {
+                    rs.updateString("codigo_prestamo", codigo_prestamo);
+                    rs.updateString("codigo_inventario", Cod_inventario);
                     rs.updateRow();
                     resp = true;
                     break;
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Error al editar en tabla autorxlibro: " + ex.getMessage());
+            System.out.println("Error al editar en tabla PrestamoXEjemplar: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {

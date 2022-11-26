@@ -6,7 +6,9 @@ package dao;
 
 import entidades.Ejemplar;
 import entidades.Ubicacion;
+import entidades.Libro;
 import complementos.Conexion;
+import entidades.Autor;
 import entidades.Clasificacion;
 import entidades.Editorial;
 import java.sql.Connection;
@@ -41,9 +43,11 @@ public class DEjemplar {
 
     public ArrayList<Ejemplar> listarEjemplar() {
         ArrayList<Ejemplar> lista = new ArrayList<>();
+        DLibro dlibro = new DLibro();
         try {
             this.obtRegistros("Select * from [CATALOGO].[VW_EJEMPLAR]");
             while (rs.next()) {
+                ArrayList<Autor> autores = dlibro.listarAutor(rs.getString("ISBN"));
                 lista.add(new Ejemplar(rs.getString("codigo_inventario"),
                         rs.getBoolean("estado"),
                         rs.getInt("numero_copia"),
@@ -52,7 +56,49 @@ public class DEjemplar {
                         rs.getString("titulo"),
                         rs.getString("MFN"),
                         new Clasificacion(rs.getString("codigo_clasificacion"),rs.getString("nombre_clasificacion")),
-                        new Editorial (rs.getString("codigo_editorial"),rs.getString("nombre_editorial"))));
+                        new Editorial (rs.getString("codigo_editorial"),rs.getString("nombre_editorial")),
+                        autores
+                ));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al listar la Ejemplar " + ex.getMessage());
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+
+                if (conn != null) {
+                    Conexion.cerrarConexion(conn);
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        return lista;
+    }
+    
+    public ArrayList<Ejemplar> listarEjemplar(String x) {
+        ArrayList<Ejemplar> lista = new ArrayList<>();
+        DLibro dlibro = new DLibro();
+        try {
+            this.obtRegistros(x);
+            while (rs.next()) {
+                ArrayList<Autor> autores = dlibro.listarAutor(rs.getString("ISBN"));
+                lista.add(new Ejemplar(rs.getString("codigo_inventario"),
+                        rs.getBoolean("estado"),
+                        rs.getInt("numero_copia"),
+                        new Ubicacion(rs.getString("codigo_ubicacion"),rs.getString("nombre")),
+                        rs.getString("ISBN"),
+                        rs.getString("titulo"),
+                        rs.getString("MFN"),
+                        new Clasificacion(rs.getString("codigo_clasificacion"),rs.getString("nombre_clasificacion")),
+                        new Editorial (rs.getString("codigo_editorial"),rs.getString("nombre_editorial")),
+                        autores
+                ));
             }
         } catch (SQLException ex) {
             System.out.println("Error al listar la Ejemplar " + ex.getMessage());
@@ -79,10 +125,19 @@ public class DEjemplar {
         boolean guardado = false;
         this.obtRegistros("Select * from [CATALOGO].[Ejemplar]");
         DLibro dlibro = new DLibro();
-        if(dlibro.existeLibro(a.getIsbn())){
+        boolean existeLibro = dlibro.existeLibro(a.getIsbn());
+        if(!existeLibro){
+            dlibro.guardarLibro(new Libro(a.getIsbn(),
+                    a.getTitulo_libro(),
+                    a.getMfn(),
+                    a.getClasificacion(),
+                    a.getEditorial(),
+                    a.getAutores()
+            ));
+            existeLibro = true;
+        }
+        else if(existeLibro){
             try {
-
-
                 rs.moveToInsertRow();
                 rs.updateString("codigo_inventario", a.getCod_inventario());
                 rs.updateBoolean("estado", a.isEstado());
@@ -110,12 +165,12 @@ public class DEjemplar {
                     System.out.println(ex.getMessage());
                 }
             }
-            return guardado;
         }
         else{
             System.out.println("No existe el libro");
             return !guardado;
         }
+        return guardado;
     }
 
     public boolean existeEjemplar(String id) {
