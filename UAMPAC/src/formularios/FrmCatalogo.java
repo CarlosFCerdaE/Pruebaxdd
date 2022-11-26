@@ -534,9 +534,15 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
 
             }
         ));
+        TblRegAutores.getTableHeader().setReorderingAllowed(false);
         TblRegAutores.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TblRegAutoresMouseClicked(evt);
+            }
+        });
+        TblRegAutores.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                TblRegAutoresKeyReleased(evt);
             }
         });
         jScrollPane3.setViewportView(TblRegAutores);
@@ -694,9 +700,15 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
 
             }
         ));
+        TblRegEditoriales.getTableHeader().setReorderingAllowed(false);
         TblRegEditoriales.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TblRegEditorialesMouseClicked(evt);
+            }
+        });
+        TblRegEditoriales.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                TblRegEditorialesKeyReleased(evt);
             }
         });
         jScrollPane2.setViewportView(TblRegEditoriales);
@@ -857,9 +869,15 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
 
             }
         ));
+        TblRegClasificaciones.getTableHeader().setReorderingAllowed(false);
         TblRegClasificaciones.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TblRegClasificacionesMouseClicked(evt);
+            }
+        });
+        TblRegClasificaciones.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                TblRegClasificacionesKeyReleased(evt);
             }
         });
         jScrollPane4.setViewportView(TblRegClasificaciones);
@@ -1027,9 +1045,15 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
 
             }
         ));
+        TblRegUbicaciones.getTableHeader().setReorderingAllowed(false);
         TblRegUbicaciones.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 TblRegUbicacionesMouseClicked(evt);
+            }
+        });
+        TblRegUbicaciones.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                TblRegUbicacionesKeyReleased(evt);
             }
         });
         jScrollPane5.setViewportView(TblRegUbicaciones);
@@ -1179,6 +1203,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
 
             }
         ));
+        TblRegLibros.getTableHeader().setReorderingAllowed(false);
         jScrollPane1.setViewportView(TblRegLibros);
 
         LblBuscarLibro.setText("Buscar:");
@@ -1427,6 +1452,12 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
                 }
             }
         });
+        
+        if (evt.getClickCount() == 2) {
+            ubicarDatosEditorial();
+        }
+
+        
     }//GEN-LAST:event_TblRegEditorialesMouseClicked
 
     private void TfDatoBuscarEditKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TfDatoBuscarEditKeyTyped
@@ -1489,8 +1520,6 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
                 "Autor", JOptionPane.WARNING_MESSAGE);
             this.actualizarBotonesAutoresUD();
             actualizarTablaAutores();
-
-            
         }
     }//GEN-LAST:event_BtnEditarAutorActionPerformed
 
@@ -1576,13 +1605,20 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
 
     private void TblRegUbicacionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TblRegUbicacionesMouseClicked
         // TODO add your handling code here:
-        this.TblRegUbicaciones.addMouseListener(new java.awt.event.MouseAdapter() {
+        /*this.TblRegUbicaciones.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     ubicarDatosUbicacion();
                 }
             }
-        });
+        });*/
+        
+        if (evt.getClickCount() == 2) {
+            ubicarDatosUbicacion();
+        }
+        
+        
+        
     }//GEN-LAST:event_TblRegUbicacionesMouseClicked
 
     private void BtnLimpiarUbiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarUbiActionPerformed
@@ -1658,6 +1694,45 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         actualizarBotonesUbicacionesUD();
         actualizarTablaUbicaciones();
     }//GEN-LAST:event_BtnEliminarUbiActionPerformed
+
+    private void TblRegAutoresKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TblRegAutoresKeyReleased
+        if((evt.getKeyCode () == KeyEvent.VK_DOWN) || (evt.getKeyCode () == KeyEvent.VK_UP) || (evt.getKeyCode () == KeyEvent.VK_ENTER)) {
+            ubicarDatosAutores();
+        }
+        
+        //cuando se toca la tecla UP, DOWN, o ENTER, se ponen los datos de Autores
+        
+        
+    }//GEN-LAST:event_TblRegAutoresKeyReleased
+
+    private void TblRegEditorialesKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TblRegEditorialesKeyReleased
+        if((evt.getKeyCode () == KeyEvent.VK_DOWN) || (evt.getKeyCode () == KeyEvent.VK_UP) || (evt.getKeyCode () == KeyEvent.VK_ENTER)) {
+            ubicarDatosEditorial();
+        }
+        
+        //cuando se toca la tecla UP, DOWN, o ENTER, se ponen los datos de editorial
+        
+        
+    }//GEN-LAST:event_TblRegEditorialesKeyReleased
+
+    private void TblRegClasificacionesKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TblRegClasificacionesKeyReleased
+        if ((evt.getKeyCode () == KeyEvent.VK_DOWN) || (evt.getKeyCode () == KeyEvent.VK_UP) || (evt.getKeyCode () == KeyEvent.VK_ENTER)) {
+            ubicarDatosClasificacion();
+        }
+        
+        //cuando se toca la tecla UP, DOWN, o ENTER, se ponen los datos de Clasificacion
+        
+        
+    }//GEN-LAST:event_TblRegClasificacionesKeyReleased
+
+    private void TblRegUbicacionesKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TblRegUbicacionesKeyReleased
+        if ((evt.getKeyCode () == KeyEvent.VK_DOWN) || (evt.getKeyCode () == KeyEvent.VK_UP) || (evt.getKeyCode () == KeyEvent.VK_ENTER)) {
+            ubicarDatosUbicacion();
+        }
+        
+        //cuando se toca la tecla UP, DOWN, o ENTER, se ponen los datos de Ubicaciones
+        
+    }//GEN-LAST:event_TblRegUbicacionesKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
