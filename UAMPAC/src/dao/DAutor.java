@@ -41,7 +41,7 @@ public class DAutor {
             this.obtRegistros();
             while (rs.next()) {
                 lista.add(new Autor(rs.getString("codigo_autor"),
-                        rs.getString("nombre")));
+                        rs.getString("nombre_autor")));
             }
         } catch (SQLException ex) {
             System.out.println("Error al listar autor " + ex.getMessage());
@@ -70,7 +70,7 @@ public class DAutor {
         try {
             rs.moveToInsertRow();
             rs.updateString("codigo_autor", a.getCodigo_autor());
-            rs.updateString("nombre", a.getNombre_autor());
+            rs.updateString("nombre_autor", a.getNombre_autor());
             rs.insertRow();
             rs.moveToCurrentRow();
             guardado = true;
@@ -137,7 +137,7 @@ public class DAutor {
             rs.beforeFirst();
             while (rs.next()) {
                 if (rs.getString("codigo_autor").equals(a.getCodigo_autor())) {
-                    rs.updateString("nombre", a.getNombre_autor());
+                    rs.updateString("nombre_autor", a.getNombre_autor());
                     rs.updateRow();
                     resp = true;
                     break;

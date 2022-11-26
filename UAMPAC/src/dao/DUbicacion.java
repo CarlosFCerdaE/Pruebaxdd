@@ -41,7 +41,7 @@ public class DUbicacion {
             this.obtRegistros();
             while (rs.next()) {
                 lista.add(new Ubicacion(rs.getString("codigo_ubicacion"),
-                        rs.getString("nombre")));
+                        rs.getString("nombre_ubicacion")));
             }
         } catch (SQLException ex) {
             System.out.println("Error al listar la ubicacion " + ex.getMessage());
@@ -70,7 +70,7 @@ public class DUbicacion {
         try {
             rs.moveToInsertRow();
             rs.updateString("codigo_ubicacion", a.getCod_ubicacion());
-            rs.updateString("nombre", a.getNombre_ubi());
+            rs.updateString("nombre_ubicacion", a.getNombre_ubi());
             rs.insertRow();
             rs.moveToCurrentRow();
             guardado = true;
@@ -137,7 +137,7 @@ public class DUbicacion {
             rs.beforeFirst();
             while (rs.next()) {
                 if (rs.getString("codigo_ubicacion").equals(a.getCod_ubicacion())) {
-                    rs.updateString("nombre", a.getNombre_ubi());
+                    rs.updateString("nombre_ubicacion", a.getNombre_ubi());
                     rs.updateRow();
                     resp = true;
                     break;

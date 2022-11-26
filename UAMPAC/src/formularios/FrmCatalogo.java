@@ -36,10 +36,15 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
     DClasificacion dClasificacion = new DClasificacion();
     ArrayList<Clasificacion> listaClasificaciones = new ArrayList<>();
     
+    //objetos ubicacion
+    DUbicacion dUbicacion = new DUbicacion();
+    ArrayList<Ubicacion> listaUbicaciones = new ArrayList<>();
+    
     //objetos filtros tablas
     TableRowSorter filtroTablaEditorial;
     TableRowSorter filtroTablaAutores;
     TableRowSorter filtroTablaClasificaciones;
+    TableRowSorter filtroTablaUbicaciones;
     
     /**
      * Creates new form FrmLibros
@@ -49,8 +54,10 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         llenarTablaEditoriales();
         llenarTablaAutores();
         llenarTablaClasificaciones();
+        llenarTablaUbicaciones();
     }
 
+    //metodos limpiar tabs
     private void limpiarEditorial() {
         this.TfCodEditorial.setText("");
         this.TfNomEditorial.setText("");
@@ -72,17 +79,24 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         this.TfCodClasi.setEnabled(true);
     }
     
-    //
-    private void actualizarTablaEditoriales() {
-        llenarTablaEditoriales();
-        this.TpLibros.setSelectedIndex(1);
-        limpiarEditorial();
+    private void limpiarUbicacion() {
+        this.TfCodUbi.setText("");
+        this.TfNomUbi.setText("");
+        this.TfCodUbi.requestFocus();
+        this.TfCodUbi.setEnabled(true);
     }
     
+    //metodos actualizar tablas tabs
     private void actualizarTablaAutores() {
         llenarTablaAutores();
         this.TpLibros.setSelectedIndex(0);
         limpiarAutor();
+    }
+    
+    private void actualizarTablaEditoriales() {
+        llenarTablaEditoriales();
+        this.TpLibros.setSelectedIndex(1);
+        limpiarEditorial();
     }
     
     private void actualizarTablaClasificaciones() {
@@ -91,7 +105,13 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         limpiarClasificacion();
     }
     
-    //
+    private void actualizarTablaUbicaciones() {
+        llenarTablaUbicaciones();
+        this.TpLibros.setSelectedIndex(3);
+        limpiarUbicacion();
+    }
+    
+    //metodos actualizar botones cuando se hace update o delete en cada tab
     public void actualizarBotonesEditorialesUD() {
         this.BtnAgregarEdit.setEnabled(true);
         this.BtnEliminarEdit.setEnabled(false);
@@ -113,6 +133,14 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         this.TfCodClasi.setEnabled(true);
     }
     
+    public void actualizarBotonesUbicacionesUD() {
+        this.BtnAgregarUbi.setEnabled(true);
+        this.BtnEliminarUbi.setEnabled(false);
+        this.BtnEditarUbi.setEnabled(false);
+        this.TfCodUbi.setEnabled(true);
+    }
+    
+    //métodos llenar array lists con datos de tablas
     private void llenarListaEditoriales() {
         if(listaEditoriales.isEmpty())
             listaEditoriales.clear();
@@ -134,6 +162,14 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         listaClasificaciones = dClasificacion.listarClasificacion();
     }
     
+    private void llenarListaUbicaciones() {
+        if(listaUbicaciones.isEmpty())
+            listaUbicaciones.clear();
+        
+        listaUbicaciones = dUbicacion.listarUbicacion();
+    }
+    
+    //métodos llenar tablas tabs con sus datos respectivos
     private void llenarTablaEditoriales() {
         llenarListaEditoriales();
         DefaultTableModel dtm = new DefaultTableModel() {
@@ -200,6 +236,29 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         this.TblRegClasificaciones.setModel(dtm);
     }
     
+    private void llenarTablaUbicaciones() {
+        llenarListaUbicaciones();
+        DefaultTableModel dtm = new DefaultTableModel() {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
+        String titulos[] = {"Código", "Nombre"};
+        dtm.setColumnIdentifiers(titulos);
+        
+        for (Ubicacion u: listaUbicaciones) {
+            Object[] fila = new Object[] {
+                u.getCod_ubicacion(),
+                u.getNombre_ubi()
+            };
+            dtm.addRow(fila);
+        }
+        
+        this.TblRegUbicaciones.setModel(dtm);
+    }
+    
+    //métodos filtrar tablas tabs
     private void filtrarTablaEditoriales() {
         filtroTablaEditorial.setRowFilter(RowFilter.regexFilter(this.TfDatoBuscarEdit.getText(),
                 1));
@@ -215,6 +274,12 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
                 1));
     }
     
+    private void filtrarTablaUbicaciones() {
+        filtroTablaUbicaciones.setRowFilter(RowFilter.regexFilter(this.TfDatoBuscarUbi.getText(),
+                1));
+    }
+    
+    //métodos verificar datos vacios tabs
     private void verificarDatosVaciosEditorial() {
         if (this.TfCodEditorial.getText().equals("") || this.TfCodEditorial.getText().length() == 0) {
             JOptionPane.showMessageDialog(this, "Por favor verifique que el código" 
@@ -260,6 +325,22 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         this.TfNomClasi.requestFocus();
     }
     
+    private void verificarDatosVaciosUbicacion() {
+        if (this.TfCodUbi.getText().equals("") || this.TfCodUbi.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this, "Por favor verifique que el código" 
+                + " no esté vacío.", "Ubicacion", JOptionPane.WARNING_MESSAGE);
+            this.TfCodUbi.requestFocus();
+        }
+        
+        if (this.TfNomUbi.getText().equals("") || this.TfNomUbi.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this , "Por favor verifique que el nombre" 
+                + " no esté vacío.", "Ubicacion", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        this.TfNomUbi.requestFocus();
+    }
+    
+    //métodos ubicar datos tabs
     private void ubicarDatosEditorial() {
         int fila = this.TblRegEditoriales.getSelectedRow();
         
@@ -320,6 +401,26 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
        /* this.TfNomClasi.requestFocus();*/
     }
     
+    private void ubicarDatosUbicacion() {
+        int fila = this.TblRegUbicaciones.getSelectedRow();
+        
+        Object id = this.TblRegUbicaciones.getValueAt(fila, 0);
+        Object name = this.TblRegUbicaciones.getValueAt(fila, 1);
+        
+        cod = String.valueOf(id);
+        nom = String.valueOf(name);
+        
+        this.TfCodUbi.setEnabled(false);
+        this.TfCodUbi.setText(cod);
+        
+        this.TfNomUbi.setText(nom);
+        
+        this.BtnAgregarUbi.setEnabled(false);
+        this.BtnEditarUbi.setEnabled(true);
+        this.BtnEliminarUbi.setEnabled(true);
+       /* this.TfNomUbi.requestFocus();*/
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -378,8 +479,24 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         BtnEditarClasi = new javax.swing.JButton();
         BtnEliminarClasi = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        LblClasiIcon = new javax.swing.JLabel();
         LblClasificaciones = new javax.swing.JLabel();
+        PanelUbicaciones = new javax.swing.JPanel();
+        TfDatoBuscarUbi = new javax.swing.JTextField();
+        jScrollPane5 = new javax.swing.JScrollPane();
+        TblRegUbicaciones = new javax.swing.JTable();
+        LblUbiIcon = new javax.swing.JLabel();
+        LblUbi = new javax.swing.JLabel();
+        LblCodUbi = new javax.swing.JLabel();
+        TfCodUbi = new javax.swing.JTextField();
+        LblNombreUbi = new javax.swing.JLabel();
+        TfNomUbi = new javax.swing.JTextField();
+        ToolbarCRUDEditorial3 = new javax.swing.JToolBar();
+        BtnLimpiarUbi = new javax.swing.JButton();
+        BtnAgregarUbi = new javax.swing.JButton();
+        BtnEditarUbi = new javax.swing.JButton();
+        BtnEliminarUbi = new javax.swing.JButton();
+        LblBuscarUbi = new javax.swing.JLabel();
         PanelListadoLibros = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         TblRegLibros = new javax.swing.JTable();
@@ -656,9 +773,9 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         PanelListadoEditorialesLayout.setHorizontalGroup(
             PanelListadoEditorialesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelListadoEditorialesLayout.createSequentialGroup()
-                .addGap(40, 40, 40)
                 .addGroup(PanelListadoEditorialesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(PanelListadoEditorialesLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
                         .addGroup(PanelListadoEditorialesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(LblCodEditorial)
                             .addComponent(LblNombreEditorial))
@@ -670,18 +787,19 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
                         .addComponent(ToolbarCRUDEditorial, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(PanelListadoEditorialesLayout.createSequentialGroup()
                         .addGroup(PanelListadoEditorialesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(LblEditoriales)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelListadoEditorialesLayout.createSequentialGroup()
+                                .addComponent(LblEditorialIcon)
+                                .addGap(38, 38, 38))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelListadoEditorialesLayout.createSequentialGroup()
+                                .addComponent(LblBuscarEdit)
+                                .addGap(2, 2, 2))
                             .addGroup(PanelListadoEditorialesLayout.createSequentialGroup()
-                                .addGroup(PanelListadoEditorialesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelListadoEditorialesLayout.createSequentialGroup()
-                                        .addComponent(LblEditorialIcon)
-                                        .addGap(38, 38, 38))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelListadoEditorialesLayout.createSequentialGroup()
-                                        .addComponent(LblBuscarEdit)
-                                        .addGap(2, 2, 2)))
-                                .addGroup(PanelListadoEditorialesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(TfDatoBuscarEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                                .addGap(27, 27, 27)
+                                .addComponent(LblEditoriales)
+                                .addGap(28, 28, 28)))
+                        .addGroup(PanelListadoEditorialesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TfDatoBuscarEdit, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(10, 10, 10)))
                 .addContainerGap(55, Short.MAX_VALUE))
         );
@@ -808,7 +926,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         });
         ToolbarCRUDEditorial2.add(BtnEliminarClasi);
 
-        jLabel8.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/clasificacion (1).png"))); // NOI18N
+        LblClasiIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/clasificacion (1).png"))); // NOI18N
 
         LblClasificaciones.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         LblClasificaciones.setText("Clasificaciones");
@@ -829,7 +947,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelListadoClasificacionesLayout.createSequentialGroup()
                                 .addComponent(jLabel7)
                                 .addGap(18, 18, 18)
-                                .addComponent(jLabel8)
+                                .addComponent(LblClasiIcon)
                                 .addGap(45, 45, 45))
                             .addGroup(PanelListadoClasificacionesLayout.createSequentialGroup()
                                 .addGap(9, 9, 9)
@@ -857,7 +975,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
                 .addGroup(PanelListadoClasificacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelListadoClasificacionesLayout.createSequentialGroup()
                         .addGap(105, 105, 105)
-                        .addComponent(jLabel8)
+                        .addComponent(LblClasiIcon)
                         .addGap(18, 18, 18)
                         .addComponent(LblClasificaciones))
                     .addGroup(PanelListadoClasificacionesLayout.createSequentialGroup()
@@ -889,6 +1007,169 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         );
 
         TpLibros.addTab("Clasificaciones", PanelListadoClasificaciones);
+
+        TfDatoBuscarUbi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TfDatoBuscarUbiActionPerformed(evt);
+            }
+        });
+        TfDatoBuscarUbi.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                TfDatoBuscarUbiKeyTyped(evt);
+            }
+        });
+
+        TblRegUbicaciones.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+
+            }
+        ));
+        TblRegUbicaciones.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TblRegUbicacionesMouseClicked(evt);
+            }
+        });
+        jScrollPane5.setViewportView(TblRegUbicaciones);
+
+        LblUbiIcon.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/bookshelf (1).png"))); // NOI18N
+
+        LblUbi.setFont(new java.awt.Font("Dialog", 1, 16)); // NOI18N
+        LblUbi.setText("Ubicaciones");
+
+        LblCodUbi.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        LblCodUbi.setText("Código: ");
+
+        LblNombreUbi.setFont(new java.awt.Font("Dialog", 1, 11)); // NOI18N
+        LblNombreUbi.setText("Nombre: ");
+
+        ToolbarCRUDEditorial3.setRollover(true);
+
+        BtnLimpiarUbi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/nuevo-producto.png"))); // NOI18N
+        BtnLimpiarUbi.setToolTipText("Limpiar");
+        BtnLimpiarUbi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnLimpiarUbi.setFocusable(false);
+        BtnLimpiarUbi.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnLimpiarUbi.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtnLimpiarUbi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnLimpiarUbiActionPerformed(evt);
+            }
+        });
+        ToolbarCRUDEditorial3.add(BtnLimpiarUbi);
+
+        BtnAgregarUbi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/disquete.png"))); // NOI18N
+        BtnAgregarUbi.setToolTipText("Guardar");
+        BtnAgregarUbi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnAgregarUbi.setFocusable(false);
+        BtnAgregarUbi.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnAgregarUbi.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtnAgregarUbi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAgregarUbiActionPerformed(evt);
+            }
+        });
+        ToolbarCRUDEditorial3.add(BtnAgregarUbi);
+
+        BtnEditarUbi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/editar.png"))); // NOI18N
+        BtnEditarUbi.setToolTipText("Editar");
+        BtnEditarUbi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnEditarUbi.setEnabled(false);
+        BtnEditarUbi.setFocusable(false);
+        BtnEditarUbi.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnEditarUbi.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtnEditarUbi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEditarUbiActionPerformed(evt);
+            }
+        });
+        ToolbarCRUDEditorial3.add(BtnEditarUbi);
+
+        BtnEliminarUbi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/boton-eliminar.png"))); // NOI18N
+        BtnEliminarUbi.setToolTipText("Eliminar");
+        BtnEliminarUbi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnEliminarUbi.setEnabled(false);
+        BtnEliminarUbi.setFocusable(false);
+        BtnEliminarUbi.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnEliminarUbi.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtnEliminarUbi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEliminarUbiActionPerformed(evt);
+            }
+        });
+        ToolbarCRUDEditorial3.add(BtnEliminarUbi);
+
+        LblBuscarUbi.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
+        LblBuscarUbi.setText("Buscar: ");
+
+        javax.swing.GroupLayout PanelUbicacionesLayout = new javax.swing.GroupLayout(PanelUbicaciones);
+        PanelUbicaciones.setLayout(PanelUbicacionesLayout);
+        PanelUbicacionesLayout.setHorizontalGroup(
+            PanelUbicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelUbicacionesLayout.createSequentialGroup()
+                .addGroup(PanelUbicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addGroup(PanelUbicacionesLayout.createSequentialGroup()
+                        .addGap(40, 40, 40)
+                        .addGroup(PanelUbicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(LblCodUbi)
+                            .addComponent(LblNombreUbi))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(PanelUbicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(TfCodUbi)
+                            .addComponent(TfNomUbi, javax.swing.GroupLayout.PREFERRED_SIZE, 180, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(ToolbarCRUDEditorial3, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(PanelUbicacionesLayout.createSequentialGroup()
+                        .addGroup(PanelUbicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelUbicacionesLayout.createSequentialGroup()
+                                .addComponent(LblUbiIcon)
+                                .addGap(38, 38, 38))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelUbicacionesLayout.createSequentialGroup()
+                                .addComponent(LblBuscarUbi)
+                                .addGap(2, 2, 2))
+                            .addGroup(PanelUbicacionesLayout.createSequentialGroup()
+                                .addGap(24, 24, 24)
+                                .addComponent(LblUbi)
+                                .addGap(29, 29, 29)))
+                        .addGroup(PanelUbicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TfDatoBuscarUbi, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 474, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(10, 10, 10)))
+                .addContainerGap(55, Short.MAX_VALUE))
+        );
+        PanelUbicacionesLayout.setVerticalGroup(
+            PanelUbicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(PanelUbicacionesLayout.createSequentialGroup()
+                .addGroup(PanelUbicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(PanelUbicacionesLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(PanelUbicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(LblBuscarUbi)
+                            .addComponent(TfDatoBuscarUbi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(18, 18, 18)
+                        .addComponent(jScrollPane5, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(PanelUbicacionesLayout.createSequentialGroup()
+                        .addGap(100, 100, 100)
+                        .addComponent(LblUbiIcon)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(LblUbi)))
+                .addGap(18, 18, 18)
+                .addGroup(PanelUbicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addGroup(PanelUbicacionesLayout.createSequentialGroup()
+                        .addGroup(PanelUbicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(LblCodUbi)
+                            .addComponent(TfCodUbi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(12, 12, 12)
+                        .addGroup(PanelUbicacionesLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(LblNombreUbi)
+                            .addComponent(TfNomUbi, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(ToolbarCRUDEditorial3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(50, Short.MAX_VALUE))
+        );
+
+        TpLibros.addTab("Ubicaciones", PanelUbicaciones);
 
         TblRegLibros.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -935,23 +1216,22 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(225, 225, 225)
-                        .addComponent(LblLibros, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(TpLibros, javax.swing.GroupLayout.PREFERRED_SIZE, 692, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addGap(225, 225, 225)
+                .addComponent(LblLibros, javax.swing.GroupLayout.PREFERRED_SIZE, 310, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(197, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(TpLibros, javax.swing.GroupLayout.PREFERRED_SIZE, 692, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(LblLibros, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(TpLibros, javax.swing.GroupLayout.PREFERRED_SIZE, 487, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
@@ -972,7 +1252,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "Error al eliminar.",
                     "Clasificación", JOptionPane.WARNING_MESSAGE);
-                this.actualizarBotonesClasificacionesUD();
+                actualizarBotonesClasificacionesUD();
             }
         }
         actualizarBotonesClasificacionesUD();
@@ -997,7 +1277,8 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Error al editar",
                 "Clasificación", JOptionPane.WARNING_MESSAGE);
-            this.actualizarBotonesEditorialesUD();
+            actualizarBotonesClasificacionesUD();
+            actualizarTablaClasificaciones();
         }
     }//GEN-LAST:event_BtnEditarClasiActionPerformed
 
@@ -1075,7 +1356,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "Error al eliminar.",
                     "Editorial", JOptionPane.WARNING_MESSAGE);
-                this.actualizarBotonesEditorialesUD();
+                actualizarBotonesEditorialesUD();
             }
         }
         actualizarBotonesEditorialesUD();
@@ -1099,8 +1380,9 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
 
         } else {
             JOptionPane.showMessageDialog(this, "Error al editar",
-                "Autor", JOptionPane.WARNING_MESSAGE);
-            this.actualizarBotonesEditorialesUD();
+                "Editorial", JOptionPane.WARNING_MESSAGE);
+            actualizarBotonesEditorialesUD();
+            actualizarTablaEditoriales();
         }
     }//GEN-LAST:event_BtnEditarEditActionPerformed
 
@@ -1122,6 +1404,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "Error al guardar",
                     "Editorial", JOptionPane.WARNING_MESSAGE);
+                actualizarBotonesEditorialesUD();
             }
 
         } catch (HeadlessException ex) {
@@ -1179,7 +1462,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "Error al eliminar.",
                     "Autor", JOptionPane.WARNING_MESSAGE);
-                this.actualizarBotonesAutoresUD();
+                actualizarBotonesAutoresUD();
             }
         }
         actualizarBotonesAutoresUD();
@@ -1204,7 +1487,10 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         } else {
             JOptionPane.showMessageDialog(this, "Error al editar",
                 "Autor", JOptionPane.WARNING_MESSAGE);
-            this.actualizarBotonesEditorialesUD();
+            this.actualizarBotonesAutoresUD();
+            actualizarTablaAutores();
+
+            
         }
     }//GEN-LAST:event_BtnEditarAutorActionPerformed
 
@@ -1226,6 +1512,8 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
             } else {
                 JOptionPane.showMessageDialog(this, "Error al guardar",
                     "Autor", JOptionPane.WARNING_MESSAGE);
+                actualizarTablaAutores();
+
             }
 
         } catch (HeadlessException ex) {
@@ -1268,63 +1556,182 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_TfDatoBuscarAutorActionPerformed
 
+    private void TfDatoBuscarUbiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TfDatoBuscarUbiActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_TfDatoBuscarUbiActionPerformed
+
+    private void TfDatoBuscarUbiKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TfDatoBuscarUbiKeyTyped
+        // TODO add your handling code here:
+        this.TfDatoBuscarUbi.addKeyListener(new KeyAdapter() {
+            public void keyReleased(final KeyEvent e) {
+                filtrarTablaUbicaciones();
+
+            }
+        });
+        //this.TpLibros.setSelectedIndex(1);
+
+        filtroTablaUbicaciones = new TableRowSorter(this.TblRegUbicaciones.getModel());
+        this.TblRegUbicaciones.setRowSorter(filtroTablaUbicaciones);
+    }//GEN-LAST:event_TfDatoBuscarUbiKeyTyped
+
+    private void TblRegUbicacionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TblRegUbicacionesMouseClicked
+        // TODO add your handling code here:
+        this.TblRegUbicaciones.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    ubicarDatosUbicacion();
+                }
+            }
+        });
+    }//GEN-LAST:event_TblRegUbicacionesMouseClicked
+
+    private void BtnLimpiarUbiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarUbiActionPerformed
+        // TODO add your handling code here:
+        limpiarUbicacion();
+        this.actualizarBotonesUbicacionesUD();
+    }//GEN-LAST:event_BtnLimpiarUbiActionPerformed
+
+    private void BtnAgregarUbiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarUbiActionPerformed
+        // TODO add your handling code here:
+        this.verificarDatosVaciosUbicacion();
+
+        try {
+            Ubicacion u = new Ubicacion(
+                this.TfCodUbi.getText(),
+                this.TfNomUbi.getText()
+            );
+
+            if (dUbicacion.guardarUbicacion(u)) {
+                JOptionPane.showMessageDialog(this, "Registro Guardado.",
+                    "Ubicacion", JOptionPane.INFORMATION_MESSAGE);
+                actualizarTablaUbicaciones();
+
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al guardar",
+                    "Ubicacion", JOptionPane.WARNING_MESSAGE);
+            }
+
+        } catch (HeadlessException ex) {
+            System.out.println("Error al intentar guardar: " + ex.getMessage());
+        }
+    }//GEN-LAST:event_BtnAgregarUbiActionPerformed
+
+    private void BtnEditarUbiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarUbiActionPerformed
+        // TODO add your handling code here:
+        this.verificarDatosVaciosUbicacion();
+
+        Ubicacion u = new Ubicacion(
+            this.TfCodUbi.getText(),
+            this.TfNomUbi.getText()
+        );
+
+        if (dUbicacion.editarUbicacion(u)) {
+            JOptionPane.showMessageDialog(this, "Registro Editado.",
+                "Ubicacion", JOptionPane.INFORMATION_MESSAGE);
+            actualizarBotonesUbicacionesUD();
+            actualizarTablaUbicaciones();
+
+        } else {
+            JOptionPane.showMessageDialog(this, "Error al editar",
+                "Ubicacion", JOptionPane.WARNING_MESSAGE);
+            actualizarBotonesUbicacionesUD();
+        }
+    }//GEN-LAST:event_BtnEditarUbiActionPerformed
+
+    private void BtnEliminarUbiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarUbiActionPerformed
+        // TODO add your handling code here:
+        this.verificarDatosVaciosUbicacion();
+
+        int resp = JOptionPane.showConfirmDialog(this, "¿Desea eliminar este registro?",
+            "Ubicacion", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (resp == 0) {
+            if (dUbicacion.eliminarUbicacion(cod)) {
+                JOptionPane.showMessageDialog(this, "Registro eliminado satisfactoriamente",
+                    "Clasificación", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al eliminar.",
+                    "Ubicacion", JOptionPane.WARNING_MESSAGE);
+                actualizarBotonesUbicacionesUD();
+            }
+        }
+        actualizarBotonesUbicacionesUD();
+        actualizarTablaUbicaciones();
+    }//GEN-LAST:event_BtnEliminarUbiActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnAgregarAutor;
     private javax.swing.JButton BtnAgregarClasi;
     private javax.swing.JButton BtnAgregarEdit;
+    private javax.swing.JButton BtnAgregarUbi;
     private javax.swing.JButton BtnEditarAutor;
     private javax.swing.JButton BtnEditarClasi;
     private javax.swing.JButton BtnEditarEdit;
+    private javax.swing.JButton BtnEditarUbi;
     private javax.swing.JButton BtnEliminarAutor;
     private javax.swing.JButton BtnEliminarClasi;
     private javax.swing.JButton BtnEliminarEdit;
+    private javax.swing.JButton BtnEliminarUbi;
     private javax.swing.JButton BtnLimpiarAutor;
     private javax.swing.JButton BtnLimpiarClasi;
     private javax.swing.JButton BtnLimpiarEdit;
+    private javax.swing.JButton BtnLimpiarUbi;
     private javax.swing.JLabel LblAutorIcon;
     private javax.swing.JLabel LblAutores;
     private javax.swing.JLabel LblBuscarAutor;
     private javax.swing.JLabel LblBuscarClas;
     private javax.swing.JLabel LblBuscarEdit;
     private javax.swing.JLabel LblBuscarLibro;
+    private javax.swing.JLabel LblBuscarUbi;
+    private javax.swing.JLabel LblClasiIcon;
     private javax.swing.JLabel LblClasificaciones;
     private javax.swing.JLabel LblCodAutores;
     private javax.swing.JLabel LblCodClasi;
     private javax.swing.JLabel LblCodEditorial;
+    private javax.swing.JLabel LblCodUbi;
     private javax.swing.JLabel LblEditorialIcon;
     private javax.swing.JLabel LblEditoriales;
     private javax.swing.JLabel LblLibros;
     private javax.swing.JLabel LblNombreAutores;
     private javax.swing.JLabel LblNombreClasi;
     private javax.swing.JLabel LblNombreEditorial;
+    private javax.swing.JLabel LblNombreUbi;
+    private javax.swing.JLabel LblUbi;
+    private javax.swing.JLabel LblUbiIcon;
     private javax.swing.JPanel PanelListadoAutores;
     private javax.swing.JPanel PanelListadoClasificaciones;
     private javax.swing.JPanel PanelListadoEditoriales;
     private javax.swing.JPanel PanelListadoLibros;
+    private javax.swing.JPanel PanelUbicaciones;
     private javax.swing.JTable TblRegAutores;
     private javax.swing.JTable TblRegClasificaciones;
     private javax.swing.JTable TblRegEditoriales;
     private javax.swing.JTable TblRegLibros;
+    private javax.swing.JTable TblRegUbicaciones;
     private javax.swing.JTextField TfBuscarDatoLibro;
     private javax.swing.JTextField TfCodAutor;
     private javax.swing.JTextField TfCodClasi;
     private javax.swing.JTextField TfCodEditorial;
+    private javax.swing.JTextField TfCodUbi;
     private javax.swing.JTextField TfDatoBuscarAutor;
     private javax.swing.JTextField TfDatoBuscarClasi;
     private javax.swing.JTextField TfDatoBuscarEdit;
+    private javax.swing.JTextField TfDatoBuscarUbi;
     private javax.swing.JTextField TfNomAutor;
     private javax.swing.JTextField TfNomClasi;
     private javax.swing.JTextField TfNomEditorial;
+    private javax.swing.JTextField TfNomUbi;
     private javax.swing.JToolBar ToolbarCRUDEditorial;
     private javax.swing.JToolBar ToolbarCRUDEditorial1;
     private javax.swing.JToolBar ToolbarCRUDEditorial2;
+    private javax.swing.JToolBar ToolbarCRUDEditorial3;
     private javax.swing.JTabbedPane TpLibros;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
+    private javax.swing.JScrollPane jScrollPane5;
     // End of variables declaration//GEN-END:variables
 }
