@@ -22,9 +22,12 @@ import java.util.ArrayList;
 public class DLibro {
 
     private Connection conn = null;
+    private Connection conn2 = null;
     private PreparedStatement ps = null;
-    private ResultSet rs = null;
+    private ResultSet rs = null; 
     
+    private PreparedStatement ps2 = null;
+    private ResultSet rs2 = null; 
 
     public void obtRegistros(String x) {
         try {
@@ -38,18 +41,40 @@ public class DLibro {
             System.out.println("Error al obtener registros: " + ex.getMessage());
         }
     }
+    
+    public void obtRegistros2(String x) {
+        try {
+            conn2 = Conexion.obtConexion();
+            String tSQL = x;
+            ps2 = conn2.prepareStatement(tSQL, ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE,
+                    ResultSet.HOLD_CURSORS_OVER_COMMIT);
+            rs2 = ps2.executeQuery();
+        } catch (SQLException ex) {
+            System.out.println("Error al obtener registros: " + ex.getMessage());
+        }
+    }
+    
 
     public ArrayList<Libro> listarLibro() {
         ArrayList<Libro> lista = new ArrayList<>();
         try {
-            this.obtRegistros("Select * from [CATALOGO].[VW_Libro]");
-            while (rs.next()) {
-              ArrayList<Autor> autores = listarAutor(rs.getString("ISBN"));
-                lista.add(new Libro(rs.getString("ISBN"),
-                        rs.getString("titulo"),
-                        rs.getString("MFN"),
-                        new Clasificacion(rs.getString("codigo_clasificacion"),rs.getString("nombre_clasificacion")),
-                        new Editorial (rs.getString("codigo_editorial"),rs.getString("nombre_editorial")),
+            this.obtRegistros2("Select * from [CATALOGO].[VW_LibroCopias]");
+            while (rs2.next()) {
+              ArrayList<Autor> autores = listarAutor(rs2.getString("ISBN"));
+                //System.out.println(autores.get(0).getNombre_autor());
+                //System.out.println(autores.get(1).getNombre_autor());
+                //System.out.println(autores.get(2).getNombre_autor());
+                
+                //AQUI ES EL PROBLEMA (YA NO :D)
+                
+                autores.add(new Autor("0", (rs2.getString("copias"))));
+                
+                lista.add(new Libro(rs2.getString("ISBN"),
+                        rs2.getString("titulo"),
+                        rs2.getString("MFN"),
+                        new Clasificacion(rs2.getString("codigo_clasificacion"),rs2.getString("nombre_clasificacion")),
+                        new Editorial (rs2.getString("codigo_editorial"),rs2.getString("nombre_editorial")),
                         autores
                 ));
             }
@@ -57,6 +82,12 @@ public class DLibro {
             System.out.println("Error al listar Libro " + ex.getMessage());
         } finally {
             try {
+                if (rs2 != null) {
+                    rs2.close();
+                }
+                if (ps2 != null) {
+                    ps2.close();
+                }
                 if (rs != null) {
                     rs.close();
                 }
@@ -64,8 +95,8 @@ public class DLibro {
                     ps.close();
                 }
 
-                if (conn != null) {
-                    Conexion.cerrarConexion(conn);
+                if (conn2 != null) {
+                    Conexion.cerrarConexion(conn2);
                 }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
@@ -77,31 +108,32 @@ public class DLibro {
     public ArrayList<Autor> listarAutor(String isbn){
         ArrayList<Autor> lista = new ArrayList<>();
         try {
-            this.obtRegistros("Select * from [CATALOGO].[VW_Libro]"
+            this.obtRegistros("Select codigo_autor, nombre_autor from [CATALOGO].[VW_Libro]"
                     + " WHERE ISBN LIKE '"+isbn+"'");
             while (rs.next()) {
                 lista.add(new Autor(
                         rs.getString("codigo_autor"),
-                        rs.getString("nombre")));
+                        rs.getString("nombre_autor")));
             }
         } catch (SQLException ex) {
             System.out.println("Error al listar Autores " + ex.getMessage());
-        } finally {
+        } /*finally {
             try {
+                
                 if (rs != null) {
                     rs.close();
                 }
                 if (ps != null) {
                     ps.close();
-                }
+                } 
 
                 if (conn != null) {
                     Conexion.cerrarConexion(conn);
                 }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
-            }
-        }
+            } 
+        } */
         return lista;
     }
 
