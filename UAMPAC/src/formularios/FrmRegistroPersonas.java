@@ -4,11 +4,33 @@
  */
 package formularios;
 
+import dao.*;
+import java.awt.HeadlessException;
+import javax.swing.JOptionPane;
+import entidades.*;
+import java.util.ArrayList;
+import javax.swing.RowFilter;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
+
 /**
  *
  * @author Yamila Karim Conrado
  */
 public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
+    
+    int f = 0;
+    private String cod;
+    private String nom;
+    private String ape;
+    private String num;
+    private String ocu;
+    private String cifid;
+    
+    DEstudiante dEstudiante = new DEstudiante();
+    ArrayList<Estudiante> listaEstudiantes = new ArrayList<>();
+    
+    TableRowSorter filtroTablaEstudiantes;
 
     /**
      * Creates new form FrmRegistroPersonas
@@ -16,6 +38,153 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
     public FrmRegistroPersonas() {
         initComponents();
     }
+    
+    private void verificarDatosVaciosAutor() {
+        
+        if (this.TfCedula.getText().equals("") || this.TfCedula.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this , "Por favor no dejar espacios vacios.",
+                    "Estudiante", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        if (this.TfNombres.getText().equals("") || this.TfNombres.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this , "Por favor no dejar espacios vacios.",
+                    "Estudiante", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        if (this.TfApellidos.getText().equals("") || this.TfApellidos.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this , "Por favor no dejar espacios vacios.",
+                    "Estudiante", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        if (this.TfTelefono.getText().equals("") || this.TfTelefono.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this , "Por favor no dejar espacios vacios.",
+                    "Estudiante", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        if (this.TfCatId.getText().equals("") || this.TfCatId.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this , "Por favor no dejar espacios vacios.",
+                    "Estudiante", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        if (this.jCBRoleID.getSelectedIndex()==0) {
+            JOptionPane.showMessageDialog(this , "Por favor Escoja una opcion.",
+                    "Estudiante", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        if (f == 0) {
+            JOptionPane.showMessageDialog(this , "Por favor no dejar espacios vacios.", 
+                    "Estudiante", JOptionPane.WARNING_MESSAGE);
+        }
+        
+        this.TfCedula.requestFocus();
+    }
+    
+    private void llenarListaEstudiantes() {
+        if(listaEstudiantes.isEmpty())
+            listaEstudiantes.clear();
+        
+        listaEstudiantes = dEstudiante.listarEstudiante();
+    }
+    
+    private void limpiarbuton(){
+        this.BgCategoria.clearSelection();      //limpia selección de los tres radio buttons (button group)
+
+        //reestablecer campo extra opcional (categoria persona)
+        this.LblCatID.setEnabled(false);
+        this.LblRoleID.setEnabled(false);
+        
+        this.LblCatID.setText("Sin Categoría...");
+        this.LblRoleID.setText("Sin Categoría...");
+        
+        this.TfCatId.setText("");
+        this.TfCatId.setEnabled(false);
+        
+        this.jCBRoleID.setSelectedIndex(0);
+        this.jCBRoleID.setEnabled(false);
+    }
+    
+    
+    
+    private void actualizarTablaAutores() {
+        llenarTablaEstudiantes();
+        this.TpPersonas.setSelectedIndex(0);
+        limpiar();
+        limpiarbuton();
+    }
+    
+    private void limpiar() {
+        this.TfCedula.setText("");
+        this.TfNombres.setText("");
+        this.TfApellidos.setText("");
+        this.TfTelefono.setText("");
+        this.TfCedula.requestFocus();
+        this.TfCedula.setEnabled(true);
+    }
+    
+    private void llenarTablaEstudiantes() {
+        llenarListaEstudiantes();
+        DefaultTableModel dtm = new DefaultTableModel() {
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        
+        String titulos[] = {"Código", "Nombre"};
+        dtm.setColumnIdentifiers(titulos);
+        
+        for (Estudiante a: listaEstudiantes) {
+            Object[] fila = new Object[] {
+                a.getId_pers(),
+                a.getNombre_pers(),
+                a.getApellidos_pers(),
+                a.getTelefono_pers()
+            };
+            dtm.addRow(fila);
+        }
+        
+        this.TblRegistroPersonas.setModel(dtm);
+    }
+    
+    private void filtrarTablaEstudiantes() {
+        filtroTablaEstudiantes.setRowFilter(RowFilter.regexFilter(this.TfDatoPersona.getText(),
+                1));
+    }
+    
+    private void ubicarDatosPersonas() {
+        int fila = this.TblRegistroPersonas.getSelectedRow();
+        
+        Object id = this.TblRegistroPersonas.getValueAt(fila, 0);
+        Object name = this.TblRegistroPersonas.getValueAt(fila, 1);
+        Object lname = this.TblRegistroPersonas.getValueAt(fila, 2);
+        Object phone = this.TblRegistroPersonas.getValueAt(fila, 3);
+        Object occup = this.TblRegistroPersonas.getValueAt(fila, 4);
+        Object cif = this.TblRegistroPersonas.getValueAt(fila, 5);
+        
+        cod = String.valueOf(id);
+        nom = String.valueOf(name);
+        ape = String.valueOf(lname);
+        num = String.valueOf(phone);
+        ocu = String.valueOf(occup);
+        cifid = String.valueOf(cif);
+        
+        this.TfCedula.setEnabled(false);
+        this.TfCedula.setText(cod);
+        this.TfNombres.setText(nom);
+        this.TfApellidos.setText(ape);
+        this.TfTelefono.setText(num);
+        this.RbDocente.setText(ocu);
+        this.RbEstudiante.setText(ocu);
+        this.RbPersonal.setText(ocu);
+        this.TfCatId.setText(cifid);
+        
+        
+        this.BtnAgregar.setEnabled(false);
+        this.BtnEditar.setEnabled(true);
+        this.BtnEliminar.setEnabled(true);
+       /* this.TfNomAutor.requestFocus();*/
+    }
+    
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -48,7 +217,6 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         RbDocente = new javax.swing.JRadioButton();
         RbPersonal = new javax.swing.JRadioButton();
         LblCat = new javax.swing.JLabel();
-        BtnResetRbs = new javax.swing.JButton();
         LblDatos = new javax.swing.JLabel();
         LblCatID = new javax.swing.JLabel();
         TfCatId = new javax.swing.JTextField();
@@ -58,7 +226,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         BtnEditar = new javax.swing.JButton();
         BtnEliminar = new javax.swing.JButton();
         LblRoleID = new javax.swing.JLabel();
-        TfRoleID = new javax.swing.JTextField();
+        jCBRoleID = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setResizable(true);
@@ -155,22 +323,13 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         LblCat.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         LblCat.setText("Categoría");
 
-        BtnResetRbs.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/refresh-button (1).png"))); // NOI18N
-        BtnResetRbs.setToolTipText("Reestablecer ");
-        BtnResetRbs.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        BtnResetRbs.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnResetRbsActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout PanelCatLayout = new javax.swing.GroupLayout(PanelCat);
         PanelCat.setLayout(PanelCatLayout);
         PanelCatLayout.setHorizontalGroup(
             PanelCatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelCatLayout.createSequentialGroup()
                 .addContainerGap(20, Short.MAX_VALUE)
-                .addGroup(PanelCatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(PanelCatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelCatLayout.createSequentialGroup()
                         .addGroup(PanelCatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(RbDocente)
@@ -182,20 +341,15 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                                 .addGap(7, 7, 7)
                                 .addComponent(LblCat))
                             .addComponent(RbEstudiante))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(BtnResetRbs, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap())))
         );
         PanelCatLayout.setVerticalGroup(
             PanelCatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelCatLayout.createSequentialGroup()
                 .addGap(10, 10, 10)
-                .addGroup(PanelCatLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanelCatLayout.createSequentialGroup()
-                        .addComponent(LblCat)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(RbEstudiante))
-                    .addComponent(BtnResetRbs))
+                .addComponent(LblCat)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(RbEstudiante)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 12, Short.MAX_VALUE)
                 .addComponent(RbDocente)
                 .addGap(11, 11, 11)
@@ -255,7 +409,13 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         LblRoleID.setText("Sin Categoría...");
         LblRoleID.setEnabled(false);
 
-        TfRoleID.setEnabled(false);
+        jCBRoleID.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Escojer...", "SISTEMAS", "CONTABILIDAD", "COMUNICACION" }));
+        jCBRoleID.setEnabled(false);
+        jCBRoleID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBRoleIDActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout PanelAgregarLayout = new javax.swing.GroupLayout(PanelAgregar);
         PanelAgregar.setLayout(PanelAgregarLayout);
@@ -286,7 +446,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                             .addComponent(LblCatID)
                             .addComponent(TfCatId, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
                             .addComponent(LblRoleID)
-                            .addComponent(TfRoleID)))
+                            .addComponent(jCBRoleID, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(PanelAgregarLayout.createSequentialGroup()
                         .addGap(29, 29, 29)
                         .addComponent(LblDatos)))
@@ -297,7 +457,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                     .addGroup(PanelAgregarLayout.createSequentialGroup()
                         .addGap(18, 18, 18)
                         .addComponent(ToolBarClud, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(23, Short.MAX_VALUE))
+                .addContainerGap(30, Short.MAX_VALUE))
         );
         PanelAgregarLayout.setVerticalGroup(
             PanelAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -334,9 +494,9 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                     .addComponent(ToolBarClud, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(17, 17, 17)
                 .addComponent(LblRoleID)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(TfRoleID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(47, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jCBRoleID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(41, Short.MAX_VALUE))
         );
 
         TpPersonas.addTab("Agregar/Editar", PanelAgregar);
@@ -379,7 +539,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         
         this.LblRoleID.setEnabled(true);
         this.LblRoleID.setText("Carrera:");
-        this.TfRoleID.setEnabled(true);
+        this.jCBRoleID.setEnabled(true);
         
     }//GEN-LAST:event_RbEstudianteActionPerformed
 
@@ -391,7 +551,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         
         this.LblRoleID.setEnabled(true);
         this.LblRoleID.setText("Facultad:");
-        this.TfRoleID.setEnabled(true);
+        this.jCBRoleID.setEnabled(true);
     }//GEN-LAST:event_RbDocenteActionPerformed
 
     private void RbPersonalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RbPersonalActionPerformed
@@ -402,28 +562,9 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         
         this.LblRoleID.setEnabled(true);
         this.LblRoleID.setText("Cargo:");
-        this.TfRoleID.setEnabled(true);
+        this.jCBRoleID.setEnabled(true);
         
     }//GEN-LAST:event_RbPersonalActionPerformed
-
-    private void BtnResetRbsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnResetRbsActionPerformed
-        // TODO add your handling code here:
-        this.BgCategoria.clearSelection();      //limpia selección de los tres radio buttons (button group)
-
-        //reestablecer campo extra opcional (categoria persona)
-        this.LblCatID.setEnabled(false);
-        this.LblRoleID.setEnabled(false);
-        
-        this.LblCatID.setText("Sin Categoría...");
-        this.LblRoleID.setText("Sin Categoría...");
-        
-        this.TfCatId.setText("");
-        this.TfCatId.setEnabled(false);
-        
-        this.TfRoleID.setText("");
-        this.TfRoleID.setEnabled(false);
-
-    }//GEN-LAST:event_BtnResetRbsActionPerformed
 
     private void TfCatIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TfCatIdActionPerformed
         // TODO add your handling code here:
@@ -431,20 +572,68 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
 
     private void BtnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarActionPerformed
         // TODO add your handling code here:
+        ArrayList<Carrera> carrera = new ArrayList<>();
+        this.verificarDatosVaciosAutor();
+        
+        if (RbEstudiante.isSelected()){
+            f = 1;
+        }
+        
+        if (RbDocente.isSelected()){
+            f = 2;
+        }
+        
+        if (RbPersonal.isSelected()){
+            f = 3;
+        }
+        
+        if (f == 1){
+            try {
+                carrera.add(WIDTH, element);
+                
+                Estudiante a = new Estudiante(
+                    this.TfCatId.getText(),
+                    carrera,
+                    this.TfCedula.getText(),
+                    this.TfNombres.getText(),
+                    this.TfApellidos.getText(),
+                    this.TfTelefono.getText()
+
+
+                );
+
+                if (DEstudiante.guardarEstudiante(a)) {
+                    JOptionPane.showMessageDialog(this, "Registro Guardado.",
+                        "Estudiante", JOptionPane.INFORMATION_MESSAGE);
+                    actualizarTablaAutores();
+
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error al guardar",
+                        "Estudiante", JOptionPane.WARNING_MESSAGE);
+                    actualizarTablaAutores();
+
+                }
+
+            } catch (HeadlessException ex) {
+                System.out.println("Error al intentar guardar: " + ex.getMessage());
+            }
+        }
+        
+        
+
+        
     }//GEN-LAST:event_BtnAgregarActionPerformed
 
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed
         // TODO add your handling code here:
         limpiar();
+        limpiarbuton();
     }//GEN-LAST:event_BtnLimpiarActionPerformed
 
-    private void limpiar() {
-        this.TfCedula.setText("");
-        this.TfNombres.setText("");
-        this.TfApellidos.setText("");
-        this.TfTelefono.setText("");
-        this.TfCedula.requestFocus();
-    }
+    private void jCBRoleIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBRoleIDActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCBRoleIDActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup BgCategoria;
@@ -452,7 +641,6 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
     private javax.swing.JButton BtnEditar;
     private javax.swing.JButton BtnEliminar;
     private javax.swing.JButton BtnLimpiar;
-    private javax.swing.JButton BtnResetRbs;
     private javax.swing.JLabel LblApe;
     private javax.swing.JLabel LblBuscarPersona;
     private javax.swing.JLabel LblCat;
@@ -475,10 +663,10 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
     private javax.swing.JTextField TfCedula;
     private javax.swing.JTextField TfDatoPersona;
     private javax.swing.JTextField TfNombres;
-    private javax.swing.JTextField TfRoleID;
     private javax.swing.JTextField TfTelefono;
     private javax.swing.JToolBar ToolBarClud;
     private javax.swing.JTabbedPane TpPersonas;
+    private javax.swing.JComboBox<String> jCBRoleID;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }
