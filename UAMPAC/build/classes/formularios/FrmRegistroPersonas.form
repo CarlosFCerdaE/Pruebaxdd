@@ -192,7 +192,7 @@
                                   <Component id="LblCatID" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="TfCatId" alignment="0" pref="190" max="32767" attributes="0"/>
                                   <Component id="LblRoleID" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="TfRoleID" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="jCBRoleID" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <Group type="102" alignment="0" attributes="0">
@@ -210,7 +210,7 @@
                               <Component id="ToolBarClud" min="-2" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="23" max="32767" attributes="0"/>
+                      <EmptySpace pref="30" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -258,9 +258,9 @@
                       </Group>
                       <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
                       <Component id="LblRoleID" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                      <Component id="TfRoleID" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace pref="47" max="32767" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Component id="jCBRoleID" min="-2" max="-2" attributes="0"/>
+                      <EmptySpace pref="41" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -313,7 +313,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace pref="20" max="32767" attributes="0"/>
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <Group type="103" groupAlignment="0" attributes="0">
                                       <Component id="RbDocente" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -329,8 +329,6 @@
                                       </Group>
                                       <Component id="RbEstudiante" alignment="0" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <EmptySpace max="32767" attributes="0"/>
-                                  <Component id="BtnResetRbs" min="-2" pref="43" max="-2" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
                               </Group>
                           </Group>
@@ -341,14 +339,9 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="LblCat" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                  <Component id="RbEstudiante" min="-2" max="-2" attributes="0"/>
-                              </Group>
-                              <Component id="BtnResetRbs" alignment="0" min="-2" max="-2" attributes="0"/>
-                          </Group>
+                          <Component id="LblCat" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="RbEstudiante" min="-2" max="-2" attributes="0"/>
                           <EmptySpace pref="12" max="32767" attributes="0"/>
                           <Component id="RbDocente" min="-2" max="-2" attributes="0"/>
                           <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
@@ -399,20 +392,6 @@
                     </Property>
                     <Property name="text" type="java.lang.String" value="Categor&#xed;a"/>
                   </Properties>
-                </Component>
-                <Component class="javax.swing.JButton" name="BtnResetRbs">
-                  <Properties>
-                    <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
-                      <Image iconType="3" name="/iconos/refresh-button (1).png"/>
-                    </Property>
-                    <Property name="toolTipText" type="java.lang.String" value="Reestablecer "/>
-                    <Property name="cursor" type="java.awt.Cursor" editor="org.netbeans.modules.form.editors2.CursorEditor">
-                      <Color id="Hand Cursor"/>
-                    </Property>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnResetRbsActionPerformed"/>
-                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -511,10 +490,24 @@
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="TfRoleID">
+            <Component class="javax.swing.JComboBox" name="jCBRoleID">
               <Properties>
+                <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
+                  <StringArray count="4">
+                    <StringItem index="0" value="Escojer..."/>
+                    <StringItem index="1" value="SISTEMAS"/>
+                    <StringItem index="2" value="CONTABILIDAD"/>
+                    <StringItem index="3" value="COMUNICACION"/>
+                  </StringArray>
+                </Property>
                 <Property name="enabled" type="boolean" value="false"/>
               </Properties>
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jCBRoleIDActionPerformed"/>
+              </Events>
+              <AuxValues>
+                <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
+              </AuxValues>
             </Component>
           </SubComponents>
         </Container>

@@ -27,7 +27,7 @@
           <Group type="102" attributes="0">
               <EmptySpace min="-2" pref="225" max="-2" attributes="0"/>
               <Component id="LblLibros" min="-2" pref="310" max="-2" attributes="0"/>
-              <EmptySpace pref="197" max="32767" attributes="0"/>
+              <EmptySpace pref="198" max="32767" attributes="0"/>
           </Group>
           <Group type="102" alignment="1" attributes="0">
               <EmptySpace max="32767" attributes="0"/>
@@ -117,7 +117,7 @@
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace pref="61" max="32767" attributes="0"/>
+                      <EmptySpace pref="68" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -369,7 +369,7 @@
                               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="49" max="32767" attributes="0"/>
+                      <EmptySpace pref="56" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -625,7 +625,7 @@
                               </Group>
                           </Group>
                       </Group>
-                      <EmptySpace pref="60" max="32767" attributes="0"/>
+                      <EmptySpace pref="67" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -889,7 +889,7 @@
                               <EmptySpace min="-2" pref="10" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="49" max="32767" attributes="0"/>
+                      <EmptySpace pref="56" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1107,39 +1107,39 @@
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
-                                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
-                                      <Component id="jLabel1" min="-2" max="-2" attributes="0"/>
-                                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                                      <Component id="jTextField1" max="32767" attributes="0"/>
-                                      <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
-                                  </Group>
-                                  <Group type="102" attributes="0">
-                                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                      <Group type="103" groupAlignment="0" attributes="0">
                                           <Group type="102" alignment="0" attributes="0">
+                                              <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
+                                              <Component id="LblISBN" min="-2" max="-2" attributes="0"/>
                                               <EmptySpace max="-2" attributes="0"/>
-                                              <Component id="ToolbarCRUDEditorial4" min="-2" pref="203" max="-2" attributes="0"/>
+                                              <Component id="TfISBN" min="-2" pref="140" max="-2" attributes="0"/>
                                           </Group>
                                           <Group type="102" alignment="0" attributes="0">
-                                              <EmptySpace min="-2" pref="17" max="-2" attributes="0"/>
+                                              <EmptySpace min="-2" pref="29" max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="1" attributes="0">
-                                                  <Component id="jLabel2" min="-2" max="-2" attributes="0"/>
-                                                  <Component id="jLabel3" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="LblTitulo" min="-2" max="-2" attributes="0"/>
+                                                  <Component id="LblMFN" min="-2" max="-2" attributes="0"/>
                                               </Group>
-                                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                                              <EmptySpace max="-2" attributes="0"/>
                                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                                                  <Component id="jTextField3" pref="137" max="32767" attributes="0"/>
-                                                  <Component id="jTextField2" max="32767" attributes="0"/>
+                                                  <Component id="TfTitulo" pref="140" max="32767" attributes="0"/>
+                                                  <Component id="TfMFN" max="32767" attributes="0"/>
                                               </Group>
                                           </Group>
                                       </Group>
-                                      <EmptySpace max="32767" attributes="0"/>
+                                      <EmptySpace min="0" pref="6" max="32767" attributes="0"/>
+                                  </Group>
+                                  <Group type="102" alignment="1" attributes="0">
+                                      <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                                      <Component id="ToolbarCRUDEditorial4" min="-2" pref="203" max="-2" attributes="0"/>
                                   </Group>
                               </Group>
-                              <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="PanelEditorialEscoger" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jPanel2" min="-2" max="-2" attributes="0"/>
+                              <Component id="PanelClasificacionEscoger" min="-2" max="-2" attributes="0"/>
                               <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                              <Component id="jPanel3" min="-2" max="-2" attributes="0"/>
+                              <Component id="PanelAutoresEscoger" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="103" alignment="1" groupAlignment="0" attributes="0">
                               <Group type="102" attributes="0">
@@ -1150,7 +1150,7 @@
                               <Component id="jScrollPane6" min="-2" pref="618" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace pref="21" max="32767" attributes="0"/>
+                      <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -1168,26 +1168,26 @@
                       <Group type="103" groupAlignment="1" attributes="0">
                           <Group type="102" attributes="0">
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField1" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="LblISBN" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="TfISBN" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jLabel2" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jTextField3" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="LblTitulo" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="TfTitulo" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="3" attributes="0">
-                                  <Component id="jTextField2" alignment="3" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLabel3" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="TfMFN" alignment="3" min="-2" max="-2" attributes="0"/>
+                                  <Component id="LblMFN" alignment="3" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Component id="ToolbarCRUDEditorial4" min="-2" pref="50" max="-2" attributes="0"/>
                           </Group>
                           <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="jPanel1" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jPanel3" alignment="0" max="32767" attributes="0"/>
-                              <Component id="jPanel2" alignment="1" max="32767" attributes="0"/>
+                              <Component id="PanelEditorialEscoger" alignment="0" max="32767" attributes="0"/>
+                              <Component id="PanelAutoresEscoger" alignment="0" max="32767" attributes="0"/>
+                              <Component id="PanelClasificacionEscoger" alignment="1" max="32767" attributes="0"/>
                           </Group>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
@@ -1236,7 +1236,7 @@
                 <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="TfDatoBuscarLibroKeyTyped"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel1">
+            <Component class="javax.swing.JLabel" name="LblISBN">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Dialog" size="11" style="1"/>
@@ -1244,7 +1244,7 @@
                 <Property name="text" type="java.lang.String" value="ISBN:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel2">
+            <Component class="javax.swing.JLabel" name="LblTitulo">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Dialog" size="11" style="1"/>
@@ -1252,7 +1252,7 @@
                 <Property name="text" type="java.lang.String" value="Titulo:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JLabel" name="jLabel3">
+            <Component class="javax.swing.JLabel" name="LblMFN">
               <Properties>
                 <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                   <Font name="Dialog" size="11" style="1"/>
@@ -1260,13 +1260,16 @@
                 <Property name="text" type="java.lang.String" value="MFN:"/>
               </Properties>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField1">
+            <Component class="javax.swing.JTextField" name="TfISBN">
+              <Events>
+                <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="TfISBNActionPerformed"/>
+              </Events>
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField2">
+            <Component class="javax.swing.JTextField" name="TfMFN">
             </Component>
-            <Component class="javax.swing.JTextField" name="jTextField3">
+            <Component class="javax.swing.JTextField" name="TfTitulo">
             </Component>
-            <Container class="javax.swing.JPanel" name="jPanel1">
+            <Container class="javax.swing.JPanel" name="PanelEditorialEscoger">
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -1284,16 +1287,16 @@
                           <Group type="103" groupAlignment="0" attributes="0">
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="TfLibroEdiCod" max="32767" attributes="0"/>
+                                  <Component id="TfEditorialCodEscoger" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" attributes="0">
                                   <EmptySpace min="-2" pref="35" max="-2" attributes="0"/>
-                                  <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                                  <Component id="LblEditorialEscoger" min="-2" max="-2" attributes="0"/>
                                   <EmptySpace min="0" pref="23" max="32767" attributes="0"/>
                               </Group>
                               <Group type="102" alignment="0" attributes="0">
                                   <EmptySpace max="-2" attributes="0"/>
-                                  <Component id="TfLibroEdiNom" max="32767" attributes="0"/>
+                                  <Component id="TfEditorialNomEscoger" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
@@ -1309,11 +1312,11 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel4" min="-2" max="-2" attributes="0"/>
+                          <Component id="LblEditorialEscoger" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="TfLibroEdiCod" min="-2" max="-2" attributes="0"/>
+                          <Component id="TfEditorialCodEscoger" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="TfLibroEdiNom" min="-2" max="-2" attributes="0"/>
+                          <Component id="TfEditorialNomEscoger" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jButton1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="32767" attributes="0"/>
@@ -1322,7 +1325,7 @@
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JLabel" name="jLabel4">
+                <Component class="javax.swing.JLabel" name="LblEditorialEscoger">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Dialog" size="14" style="1"/>
@@ -1330,12 +1333,12 @@
                     <Property name="text" type="java.lang.String" value="Editorial"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="TfLibroEdiCod">
+                <Component class="javax.swing.JTextField" name="TfEditorialCodEscoger">
                   <Properties>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="TfLibroEdiNom">
+                <Component class="javax.swing.JTextField" name="TfEditorialNomEscoger">
                   <Properties>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
@@ -1347,7 +1350,7 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Container class="javax.swing.JPanel" name="jPanel2">
+            <Container class="javax.swing.JPanel" name="PanelClasificacionEscoger">
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -1362,27 +1365,29 @@
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" attributes="0">
-                                  <EmptySpace min="0" pref="9" max="32767" attributes="0"/>
-                                  <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="21" max="-2" attributes="0"/>
-                              </Group>
                               <Group type="102" alignment="1" attributes="0">
-                                  <Component id="jTextField5" max="32767" attributes="0"/>
                                   <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="TfClasificacionNomEscoger" alignment="1" max="32767" attributes="0"/>
+                                      <Component id="TfClasificacionCodEscoger" alignment="1" max="32767" attributes="0"/>
+                                  </Group>
                               </Group>
-                              <Group type="102" alignment="0" attributes="0">
-                                  <Component id="jTextField4" max="32767" attributes="0"/>
-                                  <EmptySpace max="-2" attributes="0"/>
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
+                                          <Component id="jButton2" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace max="-2" attributes="0"/>
+                                          <Component id="LblClasificacionEscoger" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
+                                  <EmptySpace min="0" pref="12" max="32767" attributes="0"/>
                               </Group>
                           </Group>
-                      </Group>
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="28" max="-2" attributes="0"/>
-                          <Component id="jButton2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
@@ -1390,20 +1395,20 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel5" min="-2" max="-2" attributes="0"/>
+                          <Component id="LblClasificacionEscoger" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="18" max="-2" attributes="0"/>
+                          <Component id="TfClasificacionCodEscoger" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jTextField4" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Component id="jTextField5" min="-2" max="-2" attributes="0"/>
+                          <Component id="TfClasificacionNomEscoger" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="separate" max="-2" attributes="0"/>
                           <Component id="jButton2" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
+                          <EmptySpace pref="25" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JLabel" name="jLabel5">
+                <Component class="javax.swing.JLabel" name="LblClasificacionEscoger">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Dialog" size="14" style="1"/>
@@ -1411,12 +1416,12 @@
                     <Property name="text" type="java.lang.String" value="Clasificacion"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTextField4">
+                <Component class="javax.swing.JTextField" name="TfClasificacionCodEscoger">
                   <Properties>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTextField5">
+                <Component class="javax.swing.JTextField" name="TfClasificacionNomEscoger">
                   <Properties>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
@@ -1428,7 +1433,7 @@
                 </Component>
               </SubComponents>
             </Container>
-            <Container class="javax.swing.JPanel" name="jPanel3">
+            <Container class="javax.swing.JPanel" name="PanelAutoresEscoger">
               <Properties>
                 <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
                   <Border info="org.netbeans.modules.form.compat2.border.LineBorderInfo">
@@ -1442,23 +1447,29 @@
               <Layout>
                 <DimensionLayout dim="0">
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <EmptySpace min="-2" pref="47" max="-2" attributes="0"/>
-                          <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="32767" attributes="0"/>
-                      </Group>
+                      <Component id="TbCRUDNavAutoresEscoger" alignment="0" pref="166" max="32767" attributes="0"/>
                       <Group type="102" attributes="0">
-                          <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jTextField7" max="32767" attributes="0"/>
-                              <Component id="jTextField6" max="32767" attributes="0"/>
                               <Group type="102" attributes="0">
-                                  <Component id="jButton8" min="-2" pref="55" max="-2" attributes="0"/>
-                                  <EmptySpace type="separate" max="-2" attributes="0"/>
-                                  <Component id="jButton9" min="-2" pref="53" max="-2" attributes="0"/>
+                                  <EmptySpace max="-2" attributes="0"/>
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Component id="TfAutoresNomEscoger" max="32767" attributes="0"/>
+                                      <Component id="TfAutoresCodEscoger" max="32767" attributes="0"/>
+                                  </Group>
+                              </Group>
+                              <Group type="102" attributes="0">
+                                  <Group type="103" groupAlignment="0" attributes="0">
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="54" max="-2" attributes="0"/>
+                                          <Component id="LblAutoresEscoger" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                      <Group type="102" alignment="0" attributes="0">
+                                          <EmptySpace min="-2" pref="63" max="-2" attributes="0"/>
+                                          <Component id="LblAutoresEscogerAmount" min="-2" max="-2" attributes="0"/>
+                                      </Group>
+                                  </Group>
                                   <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               </Group>
-                              <Component id="jToolBar2" alignment="0" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -1468,25 +1479,22 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
-                          <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
+                          <Component id="LblAutoresEscoger" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jTextField6" min="-2" max="-2" attributes="0"/>
+                          <Component id="TfAutoresCodEscoger" min="-2" max="-2" attributes="0"/>
                           <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                          <Component id="jTextField7" min="-2" max="-2" attributes="0"/>
-                          <EmptySpace max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="3" attributes="0">
-                              <Component id="jButton8" alignment="3" min="-2" max="-2" attributes="0"/>
-                              <Component id="jButton9" alignment="3" min="-2" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace pref="6" max="32767" attributes="0"/>
-                          <Component id="jToolBar2" min="-2" pref="25" max="-2" attributes="0"/>
+                          <Component id="TfAutoresNomEscoger" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace max="32767" attributes="0"/>
+                          <Component id="LblAutoresEscogerAmount" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                          <Component id="TbCRUDNavAutoresEscoger" min="-2" pref="25" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
                   </Group>
                 </DimensionLayout>
               </Layout>
               <SubComponents>
-                <Component class="javax.swing.JLabel" name="jLabel6">
+                <Component class="javax.swing.JLabel" name="LblAutoresEscoger">
                   <Properties>
                     <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
                       <Font name="Dialog" size="14" style="1"/>
@@ -1494,24 +1502,35 @@
                     <Property name="text" type="java.lang.String" value="Autores"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTextField6">
+                <Component class="javax.swing.JTextField" name="TfAutoresCodEscoger">
                   <Properties>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                 </Component>
-                <Component class="javax.swing.JTextField" name="jTextField7">
+                <Component class="javax.swing.JTextField" name="TfAutoresNomEscoger">
                   <Properties>
                     <Property name="enabled" type="boolean" value="false"/>
                   </Properties>
                 </Component>
-                <Container class="javax.swing.JToolBar" name="jToolBar2">
+                <Container class="javax.swing.JToolBar" name="TbCRUDNavAutoresEscoger">
                   <Properties>
                     <Property name="rollover" type="boolean" value="true"/>
                   </Properties>
 
                   <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
                   <SubComponents>
-                    <Component class="javax.swing.JButton" name="jButton5">
+                    <Component class="javax.swing.JButton" name="BtnAutoresEscogerPrev">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="&lt;"/>
+                        <Property name="focusable" type="boolean" value="false"/>
+                        <Property name="horizontalTextPosition" type="int" value="0"/>
+                        <Property name="verticalTextPosition" type="int" value="3"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnAutoresEscogerPrevActionPerformed"/>
+                      </Events>
+                    </Component>
+                    <Component class="javax.swing.JButton" name="BtnAutoresEscogerAdd">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Add"/>
                         <Property name="focusable" type="boolean" value="false"/>
@@ -1519,7 +1538,7 @@
                         <Property name="verticalTextPosition" type="int" value="3"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton6">
+                    <Component class="javax.swing.JButton" name="BtnAutoresEscogerDelete">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Del"/>
                         <Property name="focusable" type="boolean" value="false"/>
@@ -1527,7 +1546,7 @@
                         <Property name="verticalTextPosition" type="int" value="3"/>
                       </Properties>
                     </Component>
-                    <Component class="javax.swing.JButton" name="jButton7">
+                    <Component class="javax.swing.JButton" name="BtnAutoresEscogerEdit">
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Edit"/>
                         <Property name="focusable" type="boolean" value="false"/>
@@ -1535,20 +1554,26 @@
                         <Property name="verticalTextPosition" type="int" value="3"/>
                       </Properties>
                     </Component>
+                    <Component class="javax.swing.JButton" name="BtnAutoresEscogerNext">
+                      <Properties>
+                        <Property name="text" type="java.lang.String" value="&gt;"/>
+                        <Property name="focusable" type="boolean" value="false"/>
+                        <Property name="horizontalTextPosition" type="int" value="0"/>
+                        <Property name="verticalTextPosition" type="int" value="3"/>
+                      </Properties>
+                      <Events>
+                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnAutoresEscogerNextActionPerformed"/>
+                      </Events>
+                    </Component>
                   </SubComponents>
                 </Container>
-                <Component class="javax.swing.JButton" name="jButton8">
+                <Component class="javax.swing.JLabel" name="LblAutoresEscogerAmount">
                   <Properties>
-                    <Property name="text" type="java.lang.String" value="&lt;&lt;"/>
+                    <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+                      <Font name="Dialog" size="12" style="1"/>
+                    </Property>
+                    <Property name="text" type="java.lang.String" value="0 de 0"/>
                   </Properties>
-                </Component>
-                <Component class="javax.swing.JButton" name="jButton9">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="&gt;&gt;"/>
-                  </Properties>
-                  <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton9ActionPerformed"/>
-                  </Events>
                 </Component>
               </SubComponents>
             </Container>
@@ -1559,7 +1584,7 @@
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
               <SubComponents>
-                <Component class="javax.swing.JButton" name="BtnLimpiarClasi1">
+                <Component class="javax.swing.JButton" name="BtnLimpiarLibro">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/iconos/nuevo-producto.png"/>
@@ -1573,10 +1598,10 @@
                     <Property name="verticalTextPosition" type="int" value="3"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnLimpiarClasi1ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnLimpiarLibroActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JButton" name="BtnAgregarClasi1">
+                <Component class="javax.swing.JButton" name="BtnAgregarLibro">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/iconos/disquete.png"/>
@@ -1590,10 +1615,10 @@
                     <Property name="verticalTextPosition" type="int" value="3"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnAgregarClasi1ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnAgregarLibroActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JButton" name="BtnEditarClasi1">
+                <Component class="javax.swing.JButton" name="BtnEditarLibro">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/iconos/editar.png"/>
@@ -1608,10 +1633,10 @@
                     <Property name="verticalTextPosition" type="int" value="3"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnEditarClasi1ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnEditarLibroActionPerformed"/>
                   </Events>
                 </Component>
-                <Component class="javax.swing.JButton" name="BtnEliminarClasi1">
+                <Component class="javax.swing.JButton" name="BtnEliminarLibro">
                   <Properties>
                     <Property name="icon" type="javax.swing.Icon" editor="org.netbeans.modules.form.editors2.IconEditor">
                       <Image iconType="3" name="/iconos/boton-eliminar.png"/>
@@ -1626,7 +1651,7 @@
                     <Property name="verticalTextPosition" type="int" value="3"/>
                   </Properties>
                   <Events>
-                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnEliminarClasi1ActionPerformed"/>
+                    <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="BtnEliminarLibroActionPerformed"/>
                   </Events>
                 </Component>
               </SubComponents>
