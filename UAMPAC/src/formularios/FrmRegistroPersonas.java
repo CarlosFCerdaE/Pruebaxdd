@@ -589,7 +589,8 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         
         if (f == 1){
             try {
-                carrera.add(WIDTH, element);
+                Carrera test1 = new Carrera();
+                carrera.add(WIDTH, test1);
                 
                 Estudiante a = new Estudiante(
                     this.TfCatId.getText(),
