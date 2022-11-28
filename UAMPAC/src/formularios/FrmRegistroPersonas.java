@@ -8,6 +8,10 @@ import dao.*;
 import java.awt.HeadlessException;
 import javax.swing.JOptionPane;
 import entidades.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
@@ -182,6 +186,23 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         this.BtnEditar.setEnabled(true);
         this.BtnEliminar.setEnabled(true);
        /* this.TfNomAutor.requestFocus();*/
+    }
+    
+    public void carreraCBllenar(){
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            String databaseURL = "jdbc:mysql://localhost:3306/busm";
+            Connection con = DriverManager.getConnection(databaseURL, "root", "");
+            Statement stat = con.createStatement();
+            String selectQuery="select nom_carrera from [RRHH].[Carrera]";
+            ResultSet rs=stat.executeQuery(selectQuery);
+            while(rs.next()){
+                jCBRoleID.addItem(rs.getString("nom_carrera"));
+            }
+        }
+        catch(Exception e){
+            System.out.println(e);
+        }
     }
     
     
@@ -600,7 +621,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         
         if (f == 1){
             try {
-                
+                //carrera.add()
                 Carrera test1 = new Carrera();
                 test1.equals(this.jCBRoleID.getSelectedItem());
                 carrera.add(WIDTH, test1);
