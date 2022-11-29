@@ -11,7 +11,9 @@ import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
 import javax.swing.RowFilter;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 
@@ -77,11 +79,6 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         llenarTablaLibros();
     }
     
-    private void methodEditorial() {
-        this.TfEditorialCodEscoger.setText(pass_codEdi);
-        this.TfEditorialNomEscoger.setText(pass_nomEdi);
-    }
-    
     //metodos limpiar tabs
     private void limpiarEditorial() {
         this.TfCodEditorial.setText("");
@@ -111,6 +108,21 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         this.TfCodUbi.setEnabled(true);
     }
     
+    private void limpiarLibro() {
+        this.TfISBN.setText("");
+        this.TfISBN.setEnabled(true);
+        this.TfTitulo.setText("");
+        this.TfMFN.setText("");
+        this.TfMFN.setEnabled(true);
+        this.TfEditorialCodEscoger.setText("");
+        this.TfEditorialNomEscoger.setText("");
+        this.TfClasificacionCodEscoger.setText("");
+        this.TfClasificacionNomEscoger.setText("");
+        this.TfAutoresCodEscoger.setText("");
+        this.TfAutoresNomEscoger.setText("");
+        this.listaLibroAutores.clear();
+    }
+    
     //metodos actualizar tablas tabs
     private void actualizarTablaAutores() {
         llenarTablaAutores();
@@ -134,6 +146,12 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         llenarTablaUbicaciones();
         this.TpLibros.setSelectedIndex(3);
         limpiarUbicacion();
+    }
+    
+    private void actualizarTablaLibros() {
+        llenarTablaLibros();
+        this.TpLibros.setSelectedIndex(4);
+        limpiarLibro();
     }
     
     //metodos actualizar botones cuando se hace update o delete en cada tab
@@ -163,6 +181,19 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         this.BtnEliminarUbi.setEnabled(false);
         this.BtnEditarUbi.setEnabled(false);
         this.TfCodUbi.setEnabled(true);
+    }
+    
+    public void actualizarBotonesLibroUD() {
+        this.BtnAgregarLibro.setEnabled(true);
+        this.BtnEliminarLibro.setEnabled(false);
+        this.BtnEditarLibro.setEnabled(false);
+        this.BtnAutoresEscogerPrev.setEnabled(false);
+        this.BtnAutoresEscogerNext.setEnabled(false);
+        this.TfISBN.setEnabled(true);
+        this.TfMFN.setEnabled(true);
+        this.listaAutores.clear();
+        pos = 0;
+        this.LblAutoresEscogerAmount.setText(pos + " de " + this.listaAutores.size());
     }
     
     //métodos llenar array lists con datos de tablas
@@ -202,6 +233,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         listaLibros = dLibro.listarLibro();
     }
     
+    /*
     private void llenarListaLibroAutores(String x) {
         if(listaLibroAutores.isEmpty()) {
             listaLibroAutores.clear();
@@ -209,6 +241,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         
         listaLibroAutores = dLibro.listarAutor(x);
     }
+    */
     
     //métodos llenar tablas tabs con sus datos respectivos
     private void llenarTablaEditoriales() {
@@ -452,6 +485,58 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         return true;
     }
     
+    private boolean verificarDatosVaciosLibro() {
+        if (this.TfISBN.getText().equals("") || this.TfISBN.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this, "Por favor verifique que el ISBN" 
+                + " no esté vacío.", "Libro", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        
+        if (this.TfTitulo.getText().equals("") || this.TfTitulo.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this, "Por favor verifique que el titulo" 
+                + " no esté vacío.", "Libro", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        
+        if (this.TfMFN.getText().equals("") || this.TfMFN.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this, "Por favor verifique que el MFN" 
+                + " no esté vacío.", "Libro", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        
+        if (this.TfEditorialCodEscoger.getText().equals("") || this.TfEditorialCodEscoger.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this, "Por favor verifique que el código de editorial" 
+                + " no esté vacío.", "Libro", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        
+        if (this.TfEditorialNomEscoger.getText().equals("") || this.TfEditorialNomEscoger.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this, "Por favor verifique que el nombre de editorial" 
+                + " no esté vacío.", "Libro", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        
+        if (this.TfClasificacionCodEscoger.getText().equals("") || this.TfClasificacionCodEscoger.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this, "Por favor verifique que el código de clasificación" 
+                + " no esté vacío.", "Libro", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        
+        if (this.TfClasificacionNomEscoger.getText().equals("") || this.TfClasificacionNomEscoger.getText().length() == 0) {
+            JOptionPane.showMessageDialog(this, "Por favor verifique que el nombre de clasificación" 
+                + " no esté vacío.", "Libro", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        
+        if (this.listaLibroAutores.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor verifique que tenga por lo menos 1 autor", 
+                "Libro", JOptionPane.WARNING_MESSAGE);
+            return false;
+        }
+        
+        return true;
+    }
+    
     //métodos ubicar datos tabs
     private void ubicarDatosEditorial() {
         int fila = this.TblRegEditoriales.getSelectedRow();
@@ -549,6 +634,9 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         titulo = String.valueOf(book_title);
         mfn = String.valueOf(book_mfn);
         
+        //se llena la lista con los autres de cada libro 
+        //conseguido con listarAutor de DLibro (parámetro: ISBN)
+        //(select * from vista where isbn like...)
         listaLibroAutores = dLibro.listarAutor(isbn);
         
         cod_clasi = String.valueOf(book_category_code);
@@ -576,7 +664,12 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         this.TfAutoresNomEscoger.setText(listaLibroAutores.get(0).getNombre_autor());
         
         this.LblAutoresEscogerAmount.setText(pos + 1 + " de " + listaLibroAutores.size());
-        //pos = 0;
+
+        this.BtnAgregarLibro.setEnabled(false);
+        this.BtnEditarLibro.setEnabled(true);
+        this.BtnEliminarLibro.setEnabled(true);
+        this.BtnAutoresEscogerPrev.setEnabled(true);
+        this.BtnAutoresEscogerNext.setEnabled(true);
     }
     
     /**
@@ -1762,7 +1855,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
                                         .addGroup(PanelListadoLibrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(TfTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
                                             .addComponent(TfMFN))))
-                                .addGap(0, 5, Short.MAX_VALUE))
+                                .addGap(0, 6, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelListadoLibrosLayout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(ToolbarCRUDEditorial4, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -1788,7 +1881,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
                     .addComponent(TfDatoBuscarLibro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(LblBuscarLibro))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 218, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(PanelListadoLibrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(PanelListadoLibrosLayout.createSequentialGroup()
@@ -2346,10 +2439,101 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
 
     private void BtnLimpiarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarLibroActionPerformed
         // TODO add your handling code here:
+        this.limpiarLibro();
+        this.actualizarBotonesLibroUD();
     }//GEN-LAST:event_BtnLimpiarLibroActionPerformed
 
     private void BtnAgregarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarLibroActionPerformed
         // TODO add your handling code here:
+        //Tomado de StackOverflow
+        
+        //parámetros de SpinnerNumberModel: (valor inicial, min, max, incremento)
+        SpinnerNumberModel sModel = new SpinnerNumberModel(1, 1, 9, 1);
+        JSpinner spinner = new JSpinner(sModel);
+        
+        if(this.verificarDatosVaciosLibro()) {
+            
+            llenarListaUbicaciones();            
+            Object[] codUbis = new Object[listaUbicaciones.size()];
+            int cont = 0;
+            
+            for(Ubicacion ubiTest: listaUbicaciones) {
+                codUbis[cont] = ((Object) ubiTest.getCod_ubicacion());
+                cont++;
+            }
+            
+            Object obj_selected_codUbi = JOptionPane.showInputDialog(this, "Código: ", 
+                    "Escoger ubicación de ejemplares", JOptionPane.QUESTION_MESSAGE, null, codUbis, 
+                    codUbis[0]);
+            
+            String selected_codUbi = String.valueOf(obj_selected_codUbi);
+            String correspondingName_selected_codUbi = "-";
+            
+            for(Ubicacion ubiTest2: listaUbicaciones) {
+                if (ubiTest2.getCod_ubicacion().equals(selected_codUbi)) {
+                    correspondingName_selected_codUbi = ubiTest2.getNombre_ubi(); 
+                }
+            }
+            
+            int option = JOptionPane.showOptionDialog(this, spinner,
+                    "Ingrese cantidad de ejemplares", JOptionPane.OK_CANCEL_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null, null, null);
+            
+            if (option == JOptionPane.CANCEL_OPTION)
+                return;
+            
+            else if (option == JOptionPane.OK_OPTION) {
+                int cant_ejemplares = (int) spinner.getValue();
+                
+                try {
+                    //crea un objeto ubicacion con los datos de la selección
+                    Ubicacion ejemplarUbi = new Ubicacion(selected_codUbi, 
+                        correspondingName_selected_codUbi);
+                    
+                    //crea un objeto Editorial para el ejemplar según selección en form
+                    Clasificacion ejemplarClasi = new Clasificacion(this.TfClasificacionCodEscoger.getText(),
+                        this.TfClasificacionNomEscoger.getText());
+                    
+                    //crea un objeto Editorial para el ejemplar según selección en form
+                    Editorial ejemplarEdit = new Editorial(this.TfEditorialCodEscoger.getText(),
+                        this.TfEditorialNomEscoger.getText());
+                    
+                    //ciclo for para agregar los ejemplares
+                    for (int i = 0; i < cant_ejemplares; i++) {
+                        
+                        //nuevo ejemplar(es) con toditas los datos
+                        Ejemplar ejem = new Ejemplar(this.TfMFN.getText() + "00" + (i + 1),
+                        true,
+                        i + 1,
+                        ejemplarUbi,
+                        this.TfISBN.getText(),
+                        this.TfTitulo.getText(),
+                        this.TfMFN.getText(),
+                        ejemplarClasi,
+                        ejemplarEdit,
+                        listaLibroAutores
+                        );
+                        
+                        if (dEjemplar.guardarEjemplar(ejem)) {
+                            JOptionPane.showMessageDialog(this, "Registro Guardado.",
+                            "Ejemplar de Libro", JOptionPane.INFORMATION_MESSAGE);
+                            actualizarTablaLibros();
+                            
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Error al guardar",
+                              "Ejemplar de Libro", JOptionPane.WARNING_MESSAGE);
+                        }
+                    }
+                    //System.out.println(obj_selected_codUbi);
+                    //System.out.println(cant_ejemplares);
+                } catch (Exception ex) {
+                    System.out.println(ex.getMessage());
+                }
+            }
+        } else {
+            this.actualizarBotonesLibroUD();
+        }
+   
     }//GEN-LAST:event_BtnAgregarLibroActionPerformed
 
     private void BtnEditarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarLibroActionPerformed
@@ -2426,6 +2610,8 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         if (!pass_codEdi.equals("---") && !pass_nomEdi.equals("---")) {
             this.TfEditorialCodEscoger.setText(pass_codEdi);
             this.TfEditorialNomEscoger.setText(pass_nomEdi);
+        } else {
+            FrmEscogerDatos.getObjEdit().dispose();
         }
         pass_codEdi = "---";
         pass_nomEdi = "---";
@@ -2437,6 +2623,8 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         if (!pass_codClasi.equals("---") && !pass_nomClasi.equals("---")) {
             this.TfClasificacionCodEscoger.setText(pass_codClasi);
             this.TfClasificacionNomEscoger.setText(pass_nomClasi);
+        } else {
+            FrmEscogerDatos.getObjClasi().dispose();
         }
         pass_codClasi = "---";
         pass_nomClasi = "---";
@@ -2448,10 +2636,41 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         if (!pass_codAut.equals("---") && !pass_nomAut.equals("---")) {
             this.TfAutoresCodEscoger.setText(pass_codAut);
             this.TfAutoresNomEscoger.setText(pass_nomAut);
+        } else {
+            FrmEscogerDatos.getObjAut().dispose();
+            this.BtnAutoresEscogerSet.setEnabled(false);
+            
+            if(listaLibroAutores.isEmpty()) {
+                this.BtnAutoresEscogerPrev.setEnabled(false);
+                this.BtnAutoresEscogerNext.setEnabled(false);
+            }
+            
+            return;
         }
         pass_codAut = "---";
         pass_nomAut = "---";
         this.BtnAutoresEscogerSet.setEnabled(false);
+        
+        listaLibroAutores.add(new Autor(this.TfAutoresCodEscoger.getText(),
+        this.TfAutoresNomEscoger.getText()));
+        
+        //pos++;
+        //System.out.println(pos + " (" + listaLibroAutores.size());
+        
+        /*
+        if(listaLibroAutores.size() > 1)
+            pos++;
+        */
+        
+        pos = listaLibroAutores.size() - 1;
+        
+        this.LblAutoresEscogerAmount.setText(listaLibroAutores.size()  + 
+                " de " + listaLibroAutores.size());
+        
+        //System.out.println(pos + " (" + listaLibroAutores.size());
+        
+        this.BtnAutoresEscogerPrev.setEnabled(true);
+        this.BtnAutoresEscogerNext.setEnabled(true);
     }//GEN-LAST:event_BtnAutoresEscogerSetActionPerformed
 
 
