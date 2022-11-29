@@ -2517,13 +2517,14 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
                         if (dEjemplar.guardarEjemplar(ejem)) {
                             JOptionPane.showMessageDialog(this, "Registro Guardado.",
                             "Ejemplar de Libro", JOptionPane.INFORMATION_MESSAGE);
-                            actualizarTablaLibros();
+                            //actualizarTablaLibros();
                             
                         } else {
                             JOptionPane.showMessageDialog(this, "Error al guardar",
                               "Ejemplar de Libro", JOptionPane.WARNING_MESSAGE);
                         }
                     }
+                    actualizarTablaLibros();
                     //System.out.println(obj_selected_codUbi);
                     //System.out.println(cant_ejemplares);
                 } catch (Exception ex) {

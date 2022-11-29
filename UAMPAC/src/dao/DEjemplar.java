@@ -123,10 +123,14 @@ public class DEjemplar {
 
     public boolean guardarEjemplar(Ejemplar a) {
         boolean guardado = false;
-        this.obtRegistros("Select * from [CATALOGO].[Ejemplar]");
+        //this.obtRegistros("Select * from [CATALOGO].[Ejemplar]");
         DLibro dlibro = new DLibro();
+        
+        //ya commentariado
         boolean existeLibro = dlibro.existeLibro(a.getIsbn());
         if(!existeLibro){
+            
+            //ya comentariado
             dlibro.guardarLibro(new Libro(a.getIsbn(),
                     a.getTitulo_libro(),
                     a.getMfn(),
@@ -136,7 +140,8 @@ public class DEjemplar {
             ));
             existeLibro = true;
         }
-        else if(existeLibro){
+        if(existeLibro){
+            this.obtRegistros("Select * from [CATALOGO].[Ejemplar]");
             try {
                 rs.moveToInsertRow();
                 rs.updateString("codigo_inventario", a.getCod_inventario());
