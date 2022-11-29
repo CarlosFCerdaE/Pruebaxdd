@@ -121,6 +121,9 @@
               </Properties>
             </Component>
             <Component class="javax.swing.JTextField" name="TfDatoPersona">
+              <Events>
+                <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="TfDatoPersonaKeyTyped"/>
+              </Events>
             </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPane1">
               <AuxValues>
@@ -135,6 +138,10 @@
                       <Table columnCount="0" rowCount="0"/>
                     </Property>
                   </Properties>
+                  <Events>
+                    <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="TblRegistroPersonasMouseClicked"/>
+                    <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="TblRegistroPersonasKeyReleased"/>
+                  </Events>
                 </Component>
               </SubComponents>
             </Container>

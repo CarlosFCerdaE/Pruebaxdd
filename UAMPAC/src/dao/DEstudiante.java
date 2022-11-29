@@ -22,8 +22,12 @@ import javax.swing.JOptionPane;
 public class DEstudiante {
 
     private Connection conn = null;
+    private Connection conn2 = null;
     private PreparedStatement ps = null;
-    private ResultSet rs = null;
+    private ResultSet rs = null; 
+    
+    private PreparedStatement ps2 = null;
+    private ResultSet rs2 = null; 
 
     public void obtRegistros(String x) {
             try {
@@ -38,26 +42,45 @@ public class DEstudiante {
             }
     }
     
-
+    public void obtRegistros2(String x) {
+        try {
+            conn2 = Conexion.obtConexion();
+            String tSQL = x;
+            ps2 = conn2.prepareStatement(tSQL, ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE,
+                    ResultSet.HOLD_CURSORS_OVER_COMMIT);
+            rs2 = ps2.executeQuery();
+        } catch (SQLException ex) {
+            System.out.println("Error al obtener registros: " + ex.getMessage());
+        }
+    }
+    
     public ArrayList<Estudiante> listarEstudiante() {
         ArrayList<Estudiante> lista = new ArrayList<>();
         try {
-            this.obtRegistros("Select * from [RRHH].[VW_ESTUDIANTES]");
-            while (rs.next()) {
-                ArrayList<Carrera> carreras = listarCarrera(rs.getString("CIF_Estudiante"));
-                lista.add(new Estudiante(rs.getString("CIF_Estudiante"),
-                        carreras,
-                        rs.getString("Cedula"),
-                        rs.getString("Nombres"),
-                        rs.getString("Apellidos"),
-                        rs.getString("telefono")
+            this.obtRegistros2("Select * from [CATALOGO].[VW_ESTUDIANTES]");
+            while (rs2.next()) {
+              ArrayList<Carrera> carrera = listarCarrera(rs2.getString("CIF_Estudiante"));
+                
+                lista.add(new Estudiante(rs2.getString("CIF_Estudiante"),
+                        carrera,
+                        rs2.getString("Cedula"),
+                        rs2.getString("Nombres"),
+                        rs2.getString("Apellidos"),
+                        rs2.getString("telefono")
                         
                 ));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar la Estudiante " + ex.getMessage());
+            System.out.println("Error al listar Libro " + ex.getMessage());
         } finally {
             try {
+                if (rs2 != null) {
+                    rs2.close();
+                }
+                if (ps2 != null) {
+                    ps2.close();
+                }
                 if (rs != null) {
                     rs.close();
                 }
@@ -65,8 +88,8 @@ public class DEstudiante {
                     ps.close();
                 }
 
-                if (conn != null) {
-                    Conexion.cerrarConexion(conn);
+                if (conn2 != null) {
+                    Conexion.cerrarConexion(conn2);
                 }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
