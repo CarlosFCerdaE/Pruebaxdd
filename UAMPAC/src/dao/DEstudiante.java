@@ -110,7 +110,7 @@ public class DEstudiante {
             }
         } catch (SQLException ex) {
             System.out.println("Error al listar Carreras " + ex.getMessage());
-        } finally {
+        } /*finally {
             try {
                 if (rs != null) {
                     rs.close();
@@ -125,7 +125,7 @@ public class DEstudiante {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
-        }
+        }*/
         return lista;
     }
 

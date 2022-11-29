@@ -29,11 +29,11 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
     int f = 0;
     private String cod, nom, ape, num;
     
-    private int pos = 0;
-    
     
     DPersona dPersona = new DPersona();
     DEstudiante dEstudiante = new DEstudiante();
+    DDocente dDocente = new DDocente();
+    DPersonalActivo dPersonal = new DPersonalActivo();
     ArrayList<Persona> listaPersonas = new ArrayList<>();
     
     TableRowSorter filtroTablaPersonas;
@@ -146,6 +146,8 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         this.TfNombres.setText(nom);
         this.TfApellidos.setText(ape);
         this.TfTelefono.setText(num);
+        
+        this.TfCedula.setEnabled(false);
         
         
         this.BtnAgregar.setEnabled(false);
@@ -629,6 +631,8 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
     private void BtnAgregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarActionPerformed
         // TODO add your handling code here:
         ArrayList<Carrera> carrera = new ArrayList<>();
+        ArrayList<Facultad> facultad = new ArrayList<>();
+        ArrayList<Cargo> cargo = new ArrayList<>();
         this.verificarDatosVaciosAutor();
         
         if (RbEstudiante.isSelected()){
@@ -645,11 +649,13 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         
         if (f == 1){
             try {
-                //carrera.add()
+                //Estudiante
                 int l = jCBRoleID.getSelectedIndex();
                 Carrera test1 = new Carrera();
                 test1.setNombre_carrera(jCBRoleID.getSelectedItem().toString());
                 test1.setCod_carrera(Integer.toString(l));
+                String n = test1.getNombre_carrera()+ " " + test1.getCod_carrera();
+                System.out.println(n);
                 carrera.add(0, test1);
                 
                 
@@ -660,8 +666,6 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                     this.TfNombres.getText(),
                     this.TfApellidos.getText(),
                     this.TfTelefono.getText()
-
-
                 );
 
                 if (dEstudiante.guardarEstudiante(a)) {
@@ -681,15 +685,86 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
             }
         }
         
-        
+        if(f==2){
+            try {
+                
+                    //Docente
+                    int l = jCBRoleID.getSelectedIndex();
+                    Facultad test1 = new Facultad();
+                    test1.setNombre_facultad(jCBRoleID.getSelectedItem().toString());
+                    test1.setCod_facultad(Integer.toString(l));
+                    String n = test1.getNombre_facultad() + " " + test1.getCod_facultad();
+                    System.out.println(n);
+                    facultad.add(0, test1);
 
-        
+
+                    Docente a = new Docente(
+                        this.TfCatId.getText(),
+                        facultad,
+                        this.TfCedula.getText(),
+                        this.TfNombres.getText(),
+                        this.TfApellidos.getText(),
+                        this.TfTelefono.getText()
+                    );
+
+                    if (dDocente.guardarDocente(a)) {
+                        JOptionPane.showMessageDialog(this, "Registro Guardado.",
+                            "Docente", JOptionPane.INFORMATION_MESSAGE);
+                        actualizarTablaPersonas();
+
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Error al guardar",
+                            "Docente", JOptionPane.WARNING_MESSAGE);
+                        actualizarTablaPersonas();
+
+                    }
+                } catch (HeadlessException ex) {
+                    System.out.println("Error al intentar guardar: " + ex.getMessage());
+                }
+        }
+            if(f==3){
+                try {
+                    //PersonalActivo
+                    int l = jCBRoleID.getSelectedIndex();
+                    Cargo test1 = new Cargo();
+                    test1.setNombre_cargo(jCBRoleID.getSelectedItem().toString());
+                    test1.setCod_cargo(Integer.toString(l));
+                    String n = test1.getNombre_cargo()+ " " + test1.getCod_cargo();
+                    System.out.println(n);
+                    cargo.add(0, test1);
+
+
+                    PersonalActivo a = new PersonalActivo(
+                        this.TfCatId.getText(),
+                        cargo,
+                        this.TfCedula.getText(),
+                        this.TfNombres.getText(),
+                        this.TfApellidos.getText(),
+                        this.TfTelefono.getText()
+                    );
+
+                    if (dPersonal.guardarPersonalActivo(a)) {
+                        JOptionPane.showMessageDialog(this, "Registro Guardado.",
+                            "Cargo", JOptionPane.INFORMATION_MESSAGE);
+                        actualizarTablaPersonas();
+
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Error al guardar",
+                            "Cargo", JOptionPane.WARNING_MESSAGE);
+                        actualizarTablaPersonas();
+
+                    }
+                } catch (HeadlessException ex) {
+                    System.out.println("Error al intentar guardar: " + ex.getMessage());
+                }
+            }
     }//GEN-LAST:event_BtnAgregarActionPerformed
 
     private void BtnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnLimpiarActionPerformed
         // TODO add your handling code here:
         limpiar();
-        
+        actualizarTablaPersonas();
+        TpPersonas.setSelectedIndex(0);
     }//GEN-LAST:event_BtnLimpiarActionPerformed
 
     private void jCBRoleIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBRoleIDActionPerformed
