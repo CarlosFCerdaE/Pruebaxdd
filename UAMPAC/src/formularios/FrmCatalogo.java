@@ -25,7 +25,6 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
     private String nom;
     
     private String isbn, titulo, mfn, cod_edi, nom_edi, cod_clasi, nom_clasi;
-    //private String codes_autores, noms_autores;
     
     private int pos = 0;
     
@@ -59,6 +58,13 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
     TableRowSorter filtroTablaUbicaciones;
     TableRowSorter filtroTablaLibros;
     
+    public static String pass_codEdi = "---";
+    public static String pass_nomEdi = "---";
+    public static String pass_codClasi = "---";
+    public static String pass_nomClasi = "---";
+    public static String pass_codAut = "---";
+    public static String pass_nomAut = "---";
+    
     /**
      * Creates new form FrmLibros
      */
@@ -70,7 +76,12 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         llenarTablaUbicaciones();
         llenarTablaLibros();
     }
-
+    
+    private void methodEditorial() {
+        this.TfEditorialCodEscoger.setText(pass_codEdi);
+        this.TfEditorialNomEscoger.setText(pass_nomEdi);
+    }
+    
     //metodos limpiar tabs
     private void limpiarEditorial() {
         this.TfCodEditorial.setText("");
@@ -659,12 +670,14 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         LblEditorialEscoger = new javax.swing.JLabel();
         TfEditorialCodEscoger = new javax.swing.JTextField();
         TfEditorialNomEscoger = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        BtnEditorialEscoger = new javax.swing.JButton();
+        BtnChangeEdi = new javax.swing.JButton();
         PanelClasificacionEscoger = new javax.swing.JPanel();
         LblClasificacionEscoger = new javax.swing.JLabel();
         TfClasificacionCodEscoger = new javax.swing.JTextField();
         TfClasificacionNomEscoger = new javax.swing.JTextField();
-        jButton2 = new javax.swing.JButton();
+        BtnClasificacionEscoger = new javax.swing.JButton();
+        BtnChangeClasi = new javax.swing.JButton();
         PanelAutoresEscoger = new javax.swing.JPanel();
         LblAutoresEscoger = new javax.swing.JLabel();
         TfAutoresCodEscoger = new javax.swing.JTextField();
@@ -672,10 +685,12 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         TbCRUDNavAutoresEscoger = new javax.swing.JToolBar();
         BtnAutoresEscogerPrev = new javax.swing.JButton();
         BtnAutoresEscogerAdd = new javax.swing.JButton();
-        BtnAutoresEscogerDelete = new javax.swing.JButton();
-        BtnAutoresEscogerEdit = new javax.swing.JButton();
         BtnAutoresEscogerNext = new javax.swing.JButton();
         LblAutoresEscogerAmount = new javax.swing.JLabel();
+        jToolBar1 = new javax.swing.JToolBar();
+        BtnAutoresEscogerEditar = new javax.swing.JButton();
+        BtnAutoresEscogerSet = new javax.swing.JButton();
+        BtnAutoresEscogerDelete = new javax.swing.JButton();
         ToolbarCRUDEditorial4 = new javax.swing.JToolBar();
         BtnLimpiarLibro = new javax.swing.JButton();
         BtnAgregarLibro = new javax.swing.JButton();
@@ -1433,7 +1448,20 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
 
         TfEditorialNomEscoger.setEnabled(false);
 
-        jButton1.setText("Escoger");
+        BtnEditorialEscoger.setText("Escoger");
+        BtnEditorialEscoger.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEditorialEscogerActionPerformed(evt);
+            }
+        });
+
+        BtnChangeEdi.setText("Cambiar");
+        BtnChangeEdi.setEnabled(false);
+        BtnChangeEdi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnChangeEdiActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout PanelEditorialEscogerLayout = new javax.swing.GroupLayout(PanelEditorialEscoger);
         PanelEditorialEscoger.setLayout(PanelEditorialEscogerLayout);
@@ -1450,12 +1478,15 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
                         .addGap(0, 23, Short.MAX_VALUE))
                     .addGroup(PanelEditorialEscogerLayout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(TfEditorialNomEscoger)))
+                        .addGroup(PanelEditorialEscogerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(TfEditorialNomEscoger)
+                            .addGroup(PanelEditorialEscogerLayout.createSequentialGroup()
+                                .addGap(12, 12, 12)
+                                .addGroup(PanelEditorialEscogerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(BtnEditorialEscoger, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(BtnChangeEdi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelEditorialEscogerLayout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(26, 26, 26))
         );
         PanelEditorialEscogerLayout.setVerticalGroup(
             PanelEditorialEscogerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1464,44 +1495,58 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
                 .addComponent(LblEditorialEscoger)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(TfEditorialCodEscoger, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(TfEditorialNomEscoger, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(BtnEditorialEscoger)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(BtnChangeEdi)
+                .addContainerGap())
         );
 
         PanelClasificacionEscoger.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
 
         LblClasificacionEscoger.setFont(new java.awt.Font("Dialog", 1, 14)); // NOI18N
         LblClasificacionEscoger.setText("Clasificacion");
+        LblClasificacionEscoger.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
 
         TfClasificacionCodEscoger.setEnabled(false);
 
         TfClasificacionNomEscoger.setEnabled(false);
 
-        jButton2.setText("Escoger");
+        BtnClasificacionEscoger.setText("Escoger");
+        BtnClasificacionEscoger.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnClasificacionEscogerActionPerformed(evt);
+            }
+        });
+
+        BtnChangeClasi.setText("Cambiar");
+        BtnChangeClasi.setEnabled(false);
+        BtnChangeClasi.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnChangeClasiActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout PanelClasificacionEscogerLayout = new javax.swing.GroupLayout(PanelClasificacionEscoger);
         PanelClasificacionEscoger.setLayout(PanelClasificacionEscogerLayout);
         PanelClasificacionEscogerLayout.setHorizontalGroup(
             PanelClasificacionEscogerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(PanelClasificacionEscogerLayout.createSequentialGroup()
+                .addContainerGap()
                 .addGroup(PanelClasificacionEscogerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelClasificacionEscogerLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(PanelClasificacionEscogerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(TfClasificacionNomEscoger, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(TfClasificacionCodEscoger, javax.swing.GroupLayout.Alignment.TRAILING)))
+                    .addComponent(TfClasificacionNomEscoger, javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(TfClasificacionCodEscoger, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(PanelClasificacionEscogerLayout.createSequentialGroup()
+                        .addGap(12, 12, 12)
                         .addGroup(PanelClasificacionEscogerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(PanelClasificacionEscogerLayout.createSequentialGroup()
-                                .addGap(22, 22, 22)
-                                .addComponent(jButton2))
-                            .addGroup(PanelClasificacionEscogerLayout.createSequentialGroup()
-                                .addContainerGap()
-                                .addComponent(LblClasificacionEscoger)))
-                        .addGap(0, 12, Short.MAX_VALUE)))
+                            .addComponent(BtnChangeClasi)
+                            .addComponent(BtnClasificacionEscoger))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelClasificacionEscogerLayout.createSequentialGroup()
+                        .addGap(0, 12, Short.MAX_VALUE)
+                        .addComponent(LblClasificacionEscoger)))
                 .addContainerGap())
         );
         PanelClasificacionEscogerLayout.setVerticalGroup(
@@ -1509,13 +1554,15 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
             .addGroup(PanelClasificacionEscogerLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(LblClasificacionEscoger)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(TfClasificacionCodEscoger, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(TfClasificacionNomEscoger, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addComponent(BtnClasificacionEscoger)
+                .addGap(12, 12, 12)
+                .addComponent(BtnChangeClasi)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         PanelAutoresEscoger.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(102, 102, 102)));
@@ -1529,7 +1576,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
 
         TbCRUDNavAutoresEscoger.setRollover(true);
 
-        BtnAutoresEscogerPrev.setText("<");
+        BtnAutoresEscogerPrev.setText(" < <");
         BtnAutoresEscogerPrev.setFocusable(false);
         BtnAutoresEscogerPrev.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BtnAutoresEscogerPrev.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -1544,21 +1591,14 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         BtnAutoresEscogerAdd.setFocusable(false);
         BtnAutoresEscogerAdd.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BtnAutoresEscogerAdd.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtnAutoresEscogerAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAutoresEscogerAddActionPerformed(evt);
+            }
+        });
         TbCRUDNavAutoresEscoger.add(BtnAutoresEscogerAdd);
 
-        BtnAutoresEscogerDelete.setText("Del");
-        BtnAutoresEscogerDelete.setFocusable(false);
-        BtnAutoresEscogerDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        BtnAutoresEscogerDelete.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        TbCRUDNavAutoresEscoger.add(BtnAutoresEscogerDelete);
-
-        BtnAutoresEscogerEdit.setText("Edit");
-        BtnAutoresEscogerEdit.setFocusable(false);
-        BtnAutoresEscogerEdit.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        BtnAutoresEscogerEdit.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
-        TbCRUDNavAutoresEscoger.add(BtnAutoresEscogerEdit);
-
-        BtnAutoresEscogerNext.setText(">");
+        BtnAutoresEscogerNext.setText(" > >");
         BtnAutoresEscogerNext.setFocusable(false);
         BtnAutoresEscogerNext.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BtnAutoresEscogerNext.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
@@ -1572,27 +1612,56 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         LblAutoresEscogerAmount.setFont(new java.awt.Font("Dialog", 1, 12)); // NOI18N
         LblAutoresEscogerAmount.setText("0 de 0");
 
+        jToolBar1.setRollover(true);
+
+        BtnAutoresEscogerEditar.setText("Edit");
+        BtnAutoresEscogerEditar.setEnabled(false);
+        BtnAutoresEscogerEditar.setFocusable(false);
+        BtnAutoresEscogerEditar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnAutoresEscogerEditar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(BtnAutoresEscogerEditar);
+
+        BtnAutoresEscogerSet.setText("Set");
+        BtnAutoresEscogerSet.setEnabled(false);
+        BtnAutoresEscogerSet.setFocusable(false);
+        BtnAutoresEscogerSet.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnAutoresEscogerSet.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtnAutoresEscogerSet.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAutoresEscogerSetActionPerformed(evt);
+            }
+        });
+        jToolBar1.add(BtnAutoresEscogerSet);
+
+        BtnAutoresEscogerDelete.setText("Delete");
+        BtnAutoresEscogerDelete.setEnabled(false);
+        BtnAutoresEscogerDelete.setFocusable(false);
+        BtnAutoresEscogerDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        BtnAutoresEscogerDelete.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        jToolBar1.add(BtnAutoresEscogerDelete);
+
         javax.swing.GroupLayout PanelAutoresEscogerLayout = new javax.swing.GroupLayout(PanelAutoresEscoger);
         PanelAutoresEscoger.setLayout(PanelAutoresEscogerLayout);
         PanelAutoresEscogerLayout.setHorizontalGroup(
             PanelAutoresEscogerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(TbCRUDNavAutoresEscoger, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
             .addGroup(PanelAutoresEscogerLayout.createSequentialGroup()
                 .addGroup(PanelAutoresEscogerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(PanelAutoresEscogerLayout.createSequentialGroup()
-                        .addContainerGap()
-                        .addGroup(PanelAutoresEscogerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(TfAutoresNomEscoger)
-                            .addComponent(TfAutoresCodEscoger)))
                     .addGroup(PanelAutoresEscogerLayout.createSequentialGroup()
                         .addGroup(PanelAutoresEscogerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(PanelAutoresEscogerLayout.createSequentialGroup()
                                 .addGap(54, 54, 54)
                                 .addComponent(LblAutoresEscoger))
                             .addGroup(PanelAutoresEscogerLayout.createSequentialGroup()
-                                .addGap(63, 63, 63)
+                                .addGap(66, 66, 66)
                                 .addComponent(LblAutoresEscogerAmount)))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addGroup(PanelAutoresEscogerLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(PanelAutoresEscogerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jToolBar1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
+                            .addComponent(TfAutoresNomEscoger)
+                            .addComponent(TfAutoresCodEscoger)
+                            .addComponent(TbCRUDNavAutoresEscoger, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addContainerGap())
         );
         PanelAutoresEscogerLayout.setVerticalGroup(
@@ -1604,11 +1673,13 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
                 .addComponent(TfAutoresCodEscoger, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(TfAutoresNomEscoger, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(LblAutoresEscogerAmount)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(TbCRUDNavAutoresEscoger, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jToolBar1, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6))
         );
 
         ToolbarCRUDEditorial4.setRollover(true);
@@ -1691,7 +1762,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
                                         .addGroup(PanelListadoLibrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                             .addComponent(TfTitulo, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
                                             .addComponent(TfMFN))))
-                                .addGap(0, 6, Short.MAX_VALUE))
+                                .addGap(0, 5, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, PanelListadoLibrosLayout.createSequentialGroup()
                                 .addGap(0, 0, Short.MAX_VALUE)
                                 .addComponent(ToolbarCRUDEditorial4, javax.swing.GroupLayout.PREFERRED_SIZE, 203, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -1717,7 +1788,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
                     .addComponent(TfDatoBuscarLibro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(LblBuscarLibro))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 235, Short.MAX_VALUE)
+                .addComponent(jScrollPane6, javax.swing.GroupLayout.DEFAULT_SIZE, 206, Short.MAX_VALUE)
                 .addGap(18, 18, 18)
                 .addGroup(PanelListadoLibrosLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addGroup(PanelListadoLibrosLayout.createSequentialGroup()
@@ -2317,6 +2388,72 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         this.LblAutoresEscogerAmount.setText(pos + 1 + " de " + listaLibroAutores.size());
     }//GEN-LAST:event_BtnAutoresEscogerNextActionPerformed
 
+    private void BtnEditorialEscogerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditorialEscogerActionPerformed
+        // TODO add your handling code here:
+        //FrmEscogerDatos frmEscoger = new FrmEscogerDatos(0);
+        
+        FrmEscogerDatos.getObjEdit().setVisible(true);
+        
+        //frmEscoger.setVisible(true);    
+        
+        this.BtnChangeEdi.setEnabled(true);
+    }//GEN-LAST:event_BtnEditorialEscogerActionPerformed
+
+    private void BtnClasificacionEscogerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnClasificacionEscogerActionPerformed
+        // TODO add your handling code here:
+        //FrmEscogerDatos frmEscoger = new FrmEscogerDatos(1);
+        
+        FrmEscogerDatos.getObjClasi().setVisible(true);
+        
+        //frmEscoger.setVisible(true);
+        
+        this.BtnChangeClasi.setEnabled(true);
+    }//GEN-LAST:event_BtnClasificacionEscogerActionPerformed
+
+    private void BtnAutoresEscogerAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAutoresEscogerAddActionPerformed
+        // TODO add your handling code here:
+        //FrmEscogerDatos frmEscoger = new FrmEscogerDatos(2);
+        
+        FrmEscogerDatos.getObjAut().setVisible(true);
+        
+        //frmEscoger.setVisible(true);
+        
+        this.BtnAutoresEscogerSet.setEnabled(true);
+    }//GEN-LAST:event_BtnAutoresEscogerAddActionPerformed
+
+    private void BtnChangeEdiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnChangeEdiActionPerformed
+        // TODO add your handling code here:
+        if (!pass_codEdi.equals("---") && !pass_nomEdi.equals("---")) {
+            this.TfEditorialCodEscoger.setText(pass_codEdi);
+            this.TfEditorialNomEscoger.setText(pass_nomEdi);
+        }
+        pass_codEdi = "---";
+        pass_nomEdi = "---";
+        this.BtnChangeEdi.setEnabled(false);
+    }//GEN-LAST:event_BtnChangeEdiActionPerformed
+
+    private void BtnChangeClasiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnChangeClasiActionPerformed
+        // TODO add your handling code here:
+        if (!pass_codClasi.equals("---") && !pass_nomClasi.equals("---")) {
+            this.TfClasificacionCodEscoger.setText(pass_codClasi);
+            this.TfClasificacionNomEscoger.setText(pass_nomClasi);
+        }
+        pass_codClasi = "---";
+        pass_nomClasi = "---";
+        this.BtnChangeClasi.setEnabled(false);
+    }//GEN-LAST:event_BtnChangeClasiActionPerformed
+
+    private void BtnAutoresEscogerSetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAutoresEscogerSetActionPerformed
+        // TODO add your handling code here:
+        if (!pass_codAut.equals("---") && !pass_nomAut.equals("---")) {
+            this.TfAutoresCodEscoger.setText(pass_codAut);
+            this.TfAutoresNomEscoger.setText(pass_nomAut);
+        }
+        pass_codAut = "---";
+        pass_nomAut = "---";
+        this.BtnAutoresEscogerSet.setEnabled(false);
+    }//GEN-LAST:event_BtnAutoresEscogerSetActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnAgregarAutor;
@@ -2326,14 +2463,19 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
     private javax.swing.JButton BtnAgregarUbi;
     private javax.swing.JButton BtnAutoresEscogerAdd;
     private javax.swing.JButton BtnAutoresEscogerDelete;
-    private javax.swing.JButton BtnAutoresEscogerEdit;
+    private javax.swing.JButton BtnAutoresEscogerEditar;
     private javax.swing.JButton BtnAutoresEscogerNext;
     private javax.swing.JButton BtnAutoresEscogerPrev;
+    private javax.swing.JButton BtnAutoresEscogerSet;
+    private javax.swing.JButton BtnChangeClasi;
+    private javax.swing.JButton BtnChangeEdi;
+    private javax.swing.JButton BtnClasificacionEscoger;
     private javax.swing.JButton BtnEditarAutor;
     private javax.swing.JButton BtnEditarClasi;
     private javax.swing.JButton BtnEditarEdit;
     private javax.swing.JButton BtnEditarLibro;
     private javax.swing.JButton BtnEditarUbi;
+    private javax.swing.JButton BtnEditorialEscoger;
     private javax.swing.JButton BtnEliminarAutor;
     private javax.swing.JButton BtnEliminarClasi;
     private javax.swing.JButton BtnEliminarEdit;
@@ -2415,13 +2557,12 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
     private javax.swing.JToolBar ToolbarCRUDEditorial3;
     private javax.swing.JToolBar ToolbarCRUDEditorial4;
     private javax.swing.JTabbedPane TpLibros;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
+    private javax.swing.JToolBar jToolBar1;
     // End of variables declaration//GEN-END:variables
 }
