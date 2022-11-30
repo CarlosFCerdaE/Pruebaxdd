@@ -183,7 +183,7 @@ public class DPersonalActivo {
 
     public boolean editarPersonalActivo(PersonalActivo pa) {
         boolean resp = false;
-        this.obtRegistros("Select * from [RRHH].[PersonalActivo]");
+        this.obtRegistros("Select * from [CATALOGO].[PersonalActivo]");
        DPersona dpersona = new DPersona();
        DPersonalActivoxCargo dpaxc = new DPersonalActivoxCargo();
         if(dpersona.existePersona(pa.getId_pers())){
