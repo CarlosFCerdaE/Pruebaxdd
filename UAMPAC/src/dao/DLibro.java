@@ -211,7 +211,7 @@ public class DLibro {
 
     }
 
-    public boolean editarLibro(Libro a, ArrayList<Autor> original) {
+    public boolean editarLibro(Libro a) {
         boolean resp = false;
         this.obtRegistros("SELECT * FROM[CATALOGO].[Libro]");
         DAutorxLibro daxl = new DAutorxLibro();
@@ -224,6 +224,13 @@ public class DLibro {
                     rs.updateString("codigo_editorial", a.getEditorial().getCod_editorial());
                     rs.updateString("codigo_clasificacion", a.getClasificacion().getCod_clasificacion());
                     rs.updateRow();
+                    
+                    daxl.eliminarTodoAutorxLibro(a.getIsbn());
+                    
+                    
+                    for(Autor aut: a.getAutores()) {
+                        daxl.guardarAutorxLibro(a.getIsbn(), aut.getCodigo_autor());       
+                    }
                     
                     //hay un problema aqui, solo edita 1 autor (quita los otros si tiene mas)
                     //nuevo
@@ -239,6 +246,7 @@ public class DLibro {
                         //daxl.editarAutorxLibro(a.getIsbn(), aut.getCodigo_autor(), cod_autorNuevo);
                     } */
                     
+                    /*
                     for (int i = 0; i < a.getAutores().size(); i++) {
                         //System.out.println(a.getAutores().get(i).getCodigo_autor() + " " + original.get(i).getCodigo_autor());
                         
@@ -264,7 +272,9 @@ public class DLibro {
                             System.out.println("estoy en el else");
                         }
                         
-                    }
+                        
+                    } */
+                    
                     resp = true;
                     break;
                 }

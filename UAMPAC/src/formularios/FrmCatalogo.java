@@ -53,7 +53,8 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
     ArrayList<Libro> listaLibros = new ArrayList<>();
     ArrayList<Ejemplar> listaEjemplares = new ArrayList<>();
     ArrayList<Autor> listaLibroAutores = new ArrayList<>();
-    ArrayList<Autor> copiaListaLibroAutores = new ArrayList<>();
+    
+//ArrayList<Autor> copiaListaLibroAutores = new ArrayList<>();
     
     //objetos filtros tablas
     TableRowSorter filtroTablaEditorial;
@@ -642,7 +643,6 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         //conseguido con listarAutor de DLibro (parámetro: ISBN)
         //(select * from vista where isbn like...)
         listaLibroAutores = dLibro.listarAutor(isbn);
-        copiaListaLibroAutores = dLibro.listarAutor(isbn);
         
         cod_clasi = String.valueOf(book_category_code);
         nom_clasi = String.valueOf(book_category_name);
@@ -2557,7 +2557,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
 
     private void BtnEditarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarLibroActionPerformed
         // TODO add your handling code here:
-        if(this.verificarDatosVaciosLibro()) {
+        if(this.verificarDatosVaciosLibro() && !listaLibroAutores.isEmpty()) {
             Clasificacion editClasificacion = new Clasificacion(this.TfClasificacionCodEscoger.getText(),
                     this.TfClasificacionNomEscoger.getText());
 
@@ -2571,7 +2571,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
             editEditorial,
             listaLibroAutores); 
             
-            if (dLibro.editarLibro(editLibro, copiaListaLibroAutores)) {
+            if (dLibro.editarLibro(editLibro)) {
                 JOptionPane.showMessageDialog(this, "Registro Editado.",
                     "Libro", JOptionPane.INFORMATION_MESSAGE);
                 actualizarBotonesLibroUD();
@@ -2743,6 +2743,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         this.BtnAutoresEscogerNext.setEnabled(true);
         this.BtnAutoresEscogerEditar.setEnabled(true);
         this.BtnAutoresEscogerDelete.setEnabled(true);
+        //System.out.println(listaLibroAutores);
     }//GEN-LAST:event_BtnAutoresEscogerSetActionPerformed
 
     private void BtnAutoresEscogerEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAutoresEscogerEditarActionPerformed
@@ -2772,6 +2773,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
             
             this.TfAutoresCodEscoger.setText(listaLibroAutores.get(pos).getCodigo_autor());
             this.TfAutoresNomEscoger.setText(listaLibroAutores.get(pos).getNombre_autor());
+            //System.out.println(listaLibroAutores);
         }
     }//GEN-LAST:event_BtnAutoresEscogerDeleteActionPerformed
 

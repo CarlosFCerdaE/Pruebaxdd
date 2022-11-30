@@ -21,10 +21,10 @@ public class DAutorxLibro {
     private PreparedStatement ps = null;
     private ResultSet rs = null;
 
-    public void obtRegistros() {
+    public void obtRegistros(String x) {
         try {
             conn = Conexion.obtConexion();
-            String tSQL = "Select * from [CATALOGO].[AutorXLibro]";
+            String tSQL = x;
             ps = conn.prepareStatement(tSQL, ResultSet.TYPE_SCROLL_SENSITIVE,
                     ResultSet.CONCUR_UPDATABLE,
                     ResultSet.HOLD_CURSORS_OVER_COMMIT);
@@ -36,9 +36,9 @@ public class DAutorxLibro {
 
     
 
-    public boolean guardarAutorxLibro(String ISBN,String Cod_autor) {
+    public boolean guardarAutorxLibro(String ISBN, String Cod_autor) {
         boolean guardado = false;
-        this.obtRegistros();
+        this.obtRegistros("Select * from [CATALOGO].[AutorXLibro]");
         try {
             rs.moveToInsertRow();
             rs.updateString("ISBN", ISBN);
@@ -65,9 +65,10 @@ public class DAutorxLibro {
         } */
         return guardado;
     }
+    
     public boolean editarAutorxLibro(String ISBN, String Cod_autor, String cod_autorNuevo) {
         boolean resp = false;
-        this.obtRegistros();
+        this.obtRegistros("Select * from [CATALOGO].[AutorXLibro]");
 
         try {
             rs.beforeFirst();
@@ -103,19 +104,21 @@ public class DAutorxLibro {
         return resp;
     }
 
-    
-    public boolean eliminarAutorxLibro(String id, String cod) {
+  
+    public boolean eliminarTodoAutorxLibro(String isbn) {
         boolean resp = false;
-        this.obtRegistros();
+        this.obtRegistros("Select * from [CATALOGO].[AutorXLibro]" + " WHERE ISBN LIKE '" + isbn + "'");
         try {
             rs.beforeFirst();
             while (rs.next()) {
-                if (rs.getString("ISBN").equals(id) && rs.getString("codigo_autor").equals(cod)) {
+                if (rs.getString("ISBN").equals(isbn) /*&& rs.getString("codigo_autor").equals(cod) */ ) {
                     rs.deleteRow();
-                    resp = true;
-                    break;
+                    //resp = true;
+                    //break;
                 }
             }
+            resp = true;
+
         } catch (SQLException ex) {
             System.out.println("Error al eliminar Libro" + ex.getMessage());
         } /*finally {
