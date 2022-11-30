@@ -29,6 +29,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
     private String isbn, titulo, mfn, cod_edi, nom_edi, cod_clasi, nom_clasi;
     
     private int pos = 0;
+    private int setEditAdd = 0;
     
     //objetos editorial
     DEditorial dEditorial = new DEditorial();
@@ -121,6 +122,8 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         this.TfAutoresCodEscoger.setText("");
         this.TfAutoresNomEscoger.setText("");
         this.listaLibroAutores.clear();
+        this.BtnAutoresEscogerEditar.setEnabled(false);
+        this.BtnAutoresEscogerDelete.setEnabled(false);
     }
     
     //metodos actualizar tablas tabs
@@ -670,6 +673,8 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         this.BtnEliminarLibro.setEnabled(true);
         this.BtnAutoresEscogerPrev.setEnabled(true);
         this.BtnAutoresEscogerNext.setEnabled(true);
+        this.BtnAutoresEscogerEditar.setEnabled(true);
+        this.BtnAutoresEscogerDelete.setEnabled(true);
     }
     
     /**
@@ -1712,6 +1717,11 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         BtnAutoresEscogerEditar.setFocusable(false);
         BtnAutoresEscogerEditar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BtnAutoresEscogerEditar.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtnAutoresEscogerEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAutoresEscogerEditarActionPerformed(evt);
+            }
+        });
         jToolBar1.add(BtnAutoresEscogerEditar);
 
         BtnAutoresEscogerSet.setText("Set");
@@ -1731,6 +1741,11 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         BtnAutoresEscogerDelete.setFocusable(false);
         BtnAutoresEscogerDelete.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
         BtnAutoresEscogerDelete.setVerticalTextPosition(javax.swing.SwingConstants.BOTTOM);
+        BtnAutoresEscogerDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnAutoresEscogerDeleteActionPerformed(evt);
+            }
+        });
         jToolBar1.add(BtnAutoresEscogerDelete);
 
         javax.swing.GroupLayout PanelAutoresEscogerLayout = new javax.swing.GroupLayout(PanelAutoresEscoger);
@@ -2525,10 +2540,11 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
                         }
                     }
                     actualizarTablaLibros();
+                    this.actualizarBotonesLibroUD();
                     //System.out.println(obj_selected_codUbi);
                     //System.out.println(cant_ejemplares);
-                } catch (Exception ex) {
-                    System.out.println(ex.getMessage());
+                } catch (HeadlessException ex) {
+                System.out.println("Error al intentar guardar: " + ex.getMessage());
                 }
             }
         } else {
@@ -2539,10 +2555,50 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
 
     private void BtnEditarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarLibroActionPerformed
         // TODO add your handling code here:
+        if(this.verificarDatosVaciosLibro()) {
+            Clasificacion editClasificacion = new Clasificacion(this.TfClasificacionCodEscoger.getText(),
+                    this.TfClasificacionNomEscoger.getText());
+
+            Editorial editEditorial = new Editorial(this.TfEditorialCodEscoger.getText(),
+                    this.TfEditorialNomEscoger.getText());
+
+            Libro editLibro = new Libro(this.TfISBN.getText(),
+            this.TfTitulo.getText(),
+            this.TfMFN.getText(),
+            editClasificacion,
+            editEditorial,
+            listaLibroAutores); 
+            
+            if (dLibro.editarLibro(editLibro)) {
+                JOptionPane.showMessageDialog(this, "Registro Editado.",
+                    "Libro", JOptionPane.INFORMATION_MESSAGE);
+                actualizarBotonesLibroUD();
+                actualizarTablaLibros();
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al editar",
+                    "Libro", JOptionPane.WARNING_MESSAGE);
+                actualizarBotonesLibroUD();
+            }
+        }
     }//GEN-LAST:event_BtnEditarLibroActionPerformed
 
     private void BtnEliminarLibroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarLibroActionPerformed
         // TODO add your handling code here:
+        int resp = JOptionPane.showConfirmDialog(this, "¿Desea eliminar este registro?",
+            "Libro", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (resp == 0) {
+            if (dLibro.eliminarLibro(isbn)) {
+                JOptionPane.showMessageDialog(this, "Registro eliminado satisfactoriamente",
+                    "Libro", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al eliminar.",
+                    "Libro", JOptionPane.WARNING_MESSAGE);
+                actualizarBotonesLibroUD();
+            }
+        }
+        actualizarBotonesLibroUD();
+        actualizarTablaLibros();
     }//GEN-LAST:event_BtnEliminarLibroActionPerformed
 
     private void TfISBNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TfISBNActionPerformed
@@ -2599,11 +2655,14 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         //FrmEscogerDatos frmEscoger = new FrmEscogerDatos(2);
         
-        FrmEscogerDatos.getObjAut().setVisible(true);
+        //FrmEscogerDatos.getObjAut().setVisible(true);
         
         //frmEscoger.setVisible(true);
-        
+        setEditAdd = 1;
+        FrmEscogerDatos.getObjAut().setVisible(true);
         this.BtnAutoresEscogerSet.setEnabled(true);
+        this.BtnAutoresEscogerEditar.setEnabled(false);
+        this.BtnAutoresEscogerDelete.setEnabled(false);
     }//GEN-LAST:event_BtnAutoresEscogerAddActionPerformed
 
     private void BtnChangeEdiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnChangeEdiActionPerformed
@@ -2650,29 +2709,63 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         }
         pass_codAut = "---";
         pass_nomAut = "---";
+        
         this.BtnAutoresEscogerSet.setEnabled(false);
         
-        listaLibroAutores.add(new Autor(this.TfAutoresCodEscoger.getText(),
-        this.TfAutoresNomEscoger.getText()));
-        
-        //pos++;
-        //System.out.println(pos + " (" + listaLibroAutores.size());
-        
-        /*
-        if(listaLibroAutores.size() > 1)
-            pos++;
-        */
-        
-        pos = listaLibroAutores.size() - 1;
-        
-        this.LblAutoresEscogerAmount.setText(listaLibroAutores.size()  + 
+        if(setEditAdd == 1) {
+            listaLibroAutores.add(new Autor(this.TfAutoresCodEscoger.getText(),
+            this.TfAutoresNomEscoger.getText()));
+            pos = listaLibroAutores.size() - 1;
+            
+            this.LblAutoresEscogerAmount.setText(listaLibroAutores.size()  + 
                 " de " + listaLibroAutores.size());
+            
+        } else {
+            Autor aEdit = new Autor(this.TfAutoresCodEscoger.getText(),
+            this.TfAutoresNomEscoger.getText());
+            listaLibroAutores.set(pos, aEdit);
+            
+            this.LblAutoresEscogerAmount.setText(pos + 1 +
+                " de " + listaLibroAutores.size());
+        }
         
-        //System.out.println(pos + " (" + listaLibroAutores.size());
+        setEditAdd = 0;
         
         this.BtnAutoresEscogerPrev.setEnabled(true);
         this.BtnAutoresEscogerNext.setEnabled(true);
+        this.BtnAutoresEscogerEditar.setEnabled(true);
+        this.BtnAutoresEscogerDelete.setEnabled(true);
     }//GEN-LAST:event_BtnAutoresEscogerSetActionPerformed
+
+    private void BtnAutoresEscogerEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAutoresEscogerEditarActionPerformed
+        // TODO add your handling code here:
+        FrmEscogerDatos.getObjAut().setVisible(true);
+        this.BtnAutoresEscogerSet.setEnabled(true);
+        this.BtnAutoresEscogerDelete.setEnabled(isIcon);
+    }//GEN-LAST:event_BtnAutoresEscogerEditarActionPerformed
+
+    private void BtnAutoresEscogerDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAutoresEscogerDeleteActionPerformed
+        // TODO add your handling code here:        
+        listaLibroAutores.remove(pos);
+        pos = 0;
+        
+        if(listaLibroAutores.isEmpty()) {
+            this.LblAutoresEscogerAmount.setText(0 +
+                    " de " + 0);
+            this.TfAutoresCodEscoger.setText("");
+            this.TfAutoresNomEscoger.setText("");
+            this.BtnAutoresEscogerEditar.setEnabled(false);
+            this.BtnAutoresEscogerDelete.setEnabled(false);
+            this.BtnAutoresEscogerPrev.setEnabled(false);
+            this.BtnAutoresEscogerNext.setEnabled(false);
+        } else {
+            this.LblAutoresEscogerAmount.setText(pos + 1 +
+                    " de " + listaLibroAutores.size());
+            
+            this.TfAutoresCodEscoger.setText(listaLibroAutores.get(pos).getCodigo_autor());
+            this.TfAutoresNomEscoger.setText(listaLibroAutores.get(pos).getNombre_autor());
+        }
+    }//GEN-LAST:event_BtnAutoresEscogerDeleteActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -150,6 +150,7 @@ public class DLibro {
             rs.updateString("codigo_clasificacion", a.getClasificacion().getCod_clasificacion());
             rs.insertRow();
             rs.moveToCurrentRow();
+            
             for(Autor aut:a.getAutores()){
                 daxl.guardarAutorxLibro(a.getIsbn(), aut.getCodigo_autor());
             }
@@ -157,21 +158,21 @@ public class DLibro {
             guardado = true;
         } catch (SQLException ex) {
             System.out.println("Error al guardar Libro:" + ex.getMessage());
-        } finally {
+        } /*finally {
             try {
-                if (rs != null) {
-                    rs.close();
+                if (this.rs != null) {
+                    this.rs.close();
                 }
-                if (ps != null) {
-                    ps.close();
+                if (this.ps != null) {
+                    this.ps.close();
                 }
-                if (conn != null) {
-                    Conexion.cerrarConexion(conn);
+                if (this.conn != null) {
+                    Conexion.cerrarConexion(this.conn);
                 }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
-        }
+        }*/
         return guardado;
     }
 
@@ -188,7 +189,7 @@ public class DLibro {
             }
         } catch (SQLException ex) {
             System.out.println("Error al buscar Libro: " + ex.getMessage());
-        } finally {
+        } /*finally {
             try {
                 if (rs != null) {
                     rs.close();
@@ -204,7 +205,7 @@ public class DLibro {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
-        }
+        }*/
 
         return resp;
 
@@ -223,6 +224,8 @@ public class DLibro {
                     rs.updateString("codigo_editorial", a.getEditorial().getCod_editorial());
                     rs.updateString("codigo_clasificacion", a.getClasificacion().getCod_clasificacion());
                     rs.updateRow();
+                    
+                    //hay un problema aqui, solo edita 1 autor (quita los otros si tiene mas)
                     for(Autor aut:a.getAutores()){
                         daxl.editarAutorxLibro(a.getIsbn(), aut.getCodigo_autor());
                     }

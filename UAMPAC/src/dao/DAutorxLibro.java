@@ -72,7 +72,8 @@ public class DAutorxLibro {
         try {
             rs.beforeFirst();
             while (rs.next()) {
-                if (rs.getString("ISBN").equals(ISBN) && rs.getString("codigo_autor").equals(Cod_autor)) {
+                if (rs.getString("ISBN").equals(ISBN) /*&& rs.getString("codigo_autor").equals(Cod_autor)*/) {
+                    //System.out.println(ISBN + " " + Cod_autor);
                     rs.updateString("ISBN", ISBN);
                     rs.updateString("codigo_autor", Cod_autor);
                     rs.updateRow();
