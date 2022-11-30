@@ -46,7 +46,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         llenarTablaPersonas();
     }
     
-    private void verificarDatosVaciosAutor() {
+    private boolean verificarDatosVacios() {
         
         if (this.TfCedula.getText().equals("") || this.TfCedula.getText().length() == 0
                 && this.TfNombres.getText().equals("") || this.TfNombres.getText().length() == 0
@@ -56,9 +56,11 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                 && this.jCBRoleID.getSelectedIndex()==0) {
             JOptionPane.showMessageDialog(this , "Por favor no dejar espacios vacios.",
                     "Estudiante", JOptionPane.WARNING_MESSAGE);
+            return false;
         }
-        
         this.TfCedula.requestFocus();
+        
+        return true;
     }
     
     private void llenarListaPersonas() {
@@ -416,7 +418,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
 
         BtnLimpiar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/nuevo-producto.png"))); // NOI18N
         BtnLimpiar.setToolTipText("Limpiar");
-        BtnLimpiar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnLimpiar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         BtnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnLimpiarActionPerformed(evt);
@@ -426,7 +428,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
 
         BtnAgregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/disquete.png"))); // NOI18N
         BtnAgregar.setToolTipText("Guardar");
-        BtnAgregar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnAgregar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         BtnAgregar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 BtnAgregarActionPerformed(evt);
@@ -436,14 +438,24 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
 
         BtnEditar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/editar.png"))); // NOI18N
         BtnEditar.setToolTipText("Editar");
-        BtnEditar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnEditar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         BtnEditar.setEnabled(false);
+        BtnEditar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEditarActionPerformed(evt);
+            }
+        });
         ToolBarClud.add(BtnEditar);
 
         BtnEliminar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/iconos/boton-eliminar.png"))); // NOI18N
         BtnEliminar.setToolTipText("Eliminar");
-        BtnEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         BtnEliminar.setEnabled(false);
+        BtnEliminar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnEliminarActionPerformed(evt);
+            }
+        });
         ToolBarClud.add(BtnEliminar);
 
         LblRoleID.setFont(new java.awt.Font("Dialog", 1, 18)); // NOI18N
@@ -633,7 +645,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         ArrayList<Carrera> carrera = new ArrayList<>();
         ArrayList<Facultad> facultad = new ArrayList<>();
         ArrayList<Cargo> cargo = new ArrayList<>();
-        this.verificarDatosVaciosAutor();
+        this.verificarDatosVacios();
         
         if (RbEstudiante.isSelected()){
             f = 1;
@@ -650,6 +662,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         if (f == 1){
             try {
                 //Estudiante
+                if(this.verificarDatosVacios()){
                 int l = jCBRoleID.getSelectedIndex();
                 Carrera test1 = new Carrera();
                 test1.setNombre_carrera(jCBRoleID.getSelectedItem().toString());
@@ -679,16 +692,18 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                     actualizarTablaPersonas();
 
                 }
-
+            }
             } catch (HeadlessException ex) {
                 System.out.println("Error al intentar guardar: " + ex.getMessage());
             }
+            
         }
         
         if(f==2){
             try {
                 
                     //Docente
+                    if(this.verificarDatosVacios()){
                     int l = jCBRoleID.getSelectedIndex();
                     Facultad test1 = new Facultad();
                     test1.setNombre_facultad(jCBRoleID.getSelectedItem().toString());
@@ -716,7 +731,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                         JOptionPane.showMessageDialog(this, "Error al guardar",
                             "Docente", JOptionPane.WARNING_MESSAGE);
                         actualizarTablaPersonas();
-
+                    }
                     }
                 } catch (HeadlessException ex) {
                     System.out.println("Error al intentar guardar: " + ex.getMessage());
@@ -724,6 +739,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         }
             if(f==3){
                 try {
+                    if(this.verificarDatosVacios()){
                     //PersonalActivo
                     int l = jCBRoleID.getSelectedIndex();
                     Cargo test1 = new Cargo();
@@ -752,7 +768,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                         JOptionPane.showMessageDialog(this, "Error al guardar",
                             "Cargo", JOptionPane.WARNING_MESSAGE);
                         actualizarTablaPersonas();
-
+                    }
                     }
                 } catch (HeadlessException ex) {
                     System.out.println("Error al intentar guardar: " + ex.getMessage());
@@ -803,6 +819,144 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
             ubicarDatosLibro();
         }
     }//GEN-LAST:event_TblRegistroPersonasKeyReleased
+
+    private void BtnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEliminarActionPerformed
+        // TODO add your handling code here:
+        int resp = JOptionPane.showConfirmDialog(this, "¿Desea eliminar este registro?",
+            "Persona", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+        if (resp == 0) {
+            if (dPersona.eliminarPersona(cod)) {
+                JOptionPane.showMessageDialog(this, "Registro eliminado satisfactoriamente",
+                    "Persona", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(this, "Error al eliminar.",
+                    "Libro", JOptionPane.WARNING_MESSAGE);
+                limpiar();
+            }
+        }
+        limpiar();
+        actualizarTablaPersonas();
+    }//GEN-LAST:event_BtnEliminarActionPerformed
+
+    private void BtnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarActionPerformed
+        // TODO add your handling code here:
+        ArrayList<Carrera> carrera = new ArrayList<>();
+        ArrayList<Facultad> facultad = new ArrayList<>();
+        ArrayList<Cargo> cargo = new ArrayList<>();
+        this.verificarDatosVacios();
+        
+        if (RbEstudiante.isSelected()){
+            f = 1;
+        }
+        
+        if (RbDocente.isSelected()){
+            f = 2;
+        }
+        
+        if (RbPersonal.isSelected()){
+            f = 3;
+        }
+        
+        if(f==1){
+            if(this.verificarDatosVacios()) {
+                int l = jCBRoleID.getSelectedIndex();
+                Carrera test1 = new Carrera();
+                test1.setNombre_carrera(jCBRoleID.getSelectedItem().toString());
+                test1.setCod_carrera(Integer.toString(l));
+                String n = test1.getNombre_carrera()+ " " + test1.getCod_carrera();
+                System.out.println(n);
+                carrera.add(0, test1);
+                
+                
+                Estudiante a = new Estudiante(
+                    this.TfCatId.getText(),
+                    carrera,
+                    this.TfCedula.getText(),
+                    this.TfNombres.getText(),
+                    this.TfApellidos.getText(),
+                    this.TfTelefono.getText()
+                );
+
+                if (dPersona.editarPersona(a)) {
+                    JOptionPane.showMessageDialog(this, "Registro Editado.",
+                        "Estudiante", JOptionPane.INFORMATION_MESSAGE);
+                    actualizarTablaPersonas();
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error al editar",
+                        "Estudiante", JOptionPane.WARNING_MESSAGE);
+                    actualizarTablaPersonas();
+                }
+            }
+        }
+        if(f==2){
+            if(this.verificarDatosVacios()){
+                
+                    int l = jCBRoleID.getSelectedIndex();
+                    Facultad test1 = new Facultad();
+                    test1.setNombre_facultad(jCBRoleID.getSelectedItem().toString());
+                    test1.setCod_facultad(Integer.toString(l));
+                    String n = test1.getNombre_facultad() + " " + test1.getCod_facultad();
+                    System.out.println(n);
+                    facultad.add(0, test1);
+
+
+                    Docente a = new Docente(
+                        this.TfCatId.getText(),
+                        facultad,
+                        this.TfCedula.getText(),
+                        this.TfNombres.getText(),
+                        this.TfApellidos.getText(),
+                        this.TfTelefono.getText()
+                    );
+
+                    if (dDocente.editarDocente(a)) {
+                        JOptionPane.showMessageDialog(this, "Registro editado.",
+                            "Docente", JOptionPane.INFORMATION_MESSAGE);
+                        actualizarTablaPersonas();
+
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Error al editar",
+                            "Docente", JOptionPane.WARNING_MESSAGE);
+                        actualizarTablaPersonas();
+                    }
+            }
+        }
+        if(f==3){
+            if(this.verificarDatosVacios()){
+                
+                    //PersonalActivo
+                    int l = jCBRoleID.getSelectedIndex();
+                    Cargo test1 = new Cargo();
+                    test1.setNombre_cargo(jCBRoleID.getSelectedItem().toString());
+                    test1.setCod_cargo(Integer.toString(l));
+                    String n = test1.getNombre_cargo()+ " " + test1.getCod_cargo();
+                    System.out.println(n);
+                    cargo.add(0, test1);
+
+
+                    PersonalActivo a = new PersonalActivo(
+                        this.TfCatId.getText(),
+                        cargo,
+                        this.TfCedula.getText(),
+                        this.TfNombres.getText(),
+                        this.TfApellidos.getText(),
+                        this.TfTelefono.getText()
+                    );
+
+                    if (dPersonal.editarPersonalActivo(a)) {
+                        JOptionPane.showMessageDialog(this, "Registro Editado.",
+                            "Cargo", JOptionPane.INFORMATION_MESSAGE);
+                        actualizarTablaPersonas();
+
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Error al Editar",
+                            "Cargo", JOptionPane.WARNING_MESSAGE);
+                        actualizarTablaPersonas();
+                    }
+            }
+        }
+    }//GEN-LAST:event_BtnEditarActionPerformed
 
     private void filtrarTablaPersonas() {
         filtroTablaPersonas.setRowFilter(RowFilter.regexFilter("(?i)" + this.TfDatoPersona.getText()
