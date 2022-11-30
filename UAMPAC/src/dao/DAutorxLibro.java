@@ -48,7 +48,7 @@ public class DAutorxLibro {
             guardado = true;
         } catch (SQLException ex) {
             System.out.println("Error al guardar en tabla AutorXLibro: " + ex.getMessage());
-        } finally {
+        } /*finally {
             try {
                 if (rs != null) {
                     rs.close();
@@ -62,20 +62,20 @@ public class DAutorxLibro {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
-        }
+        } */
         return guardado;
     }
-    public boolean editarAutorxLibro(String ISBN,String Cod_autor) {
+    public boolean editarAutorxLibro(String ISBN, String Cod_autor, String cod_autorNuevo) {
         boolean resp = false;
         this.obtRegistros();
 
         try {
             rs.beforeFirst();
             while (rs.next()) {
-                if (rs.getString("ISBN").equals(ISBN) /*&& rs.getString("codigo_autor").equals(Cod_autor)*/) {
+                if (rs.getString("ISBN").equals(ISBN) && rs.getString("codigo_autor").equals(Cod_autor)) {
                     //System.out.println(ISBN + " " + Cod_autor);
-                    rs.updateString("ISBN", ISBN);
-                    rs.updateString("codigo_autor", Cod_autor);
+                    //rs.updateString("ISBN", ISBN);
+                    rs.updateString("codigo_autor", cod_autorNuevo);
                     rs.updateRow();
                     resp = true;
                     break;
@@ -83,7 +83,7 @@ public class DAutorxLibro {
             }
         } catch (SQLException ex) {
             System.out.println("Error al editar en tabla autorxlibro: " + ex.getMessage());
-        } finally {
+        } /*finally {
             try {
                 if (rs != null) {
                     rs.close();
@@ -99,9 +99,43 @@ public class DAutorxLibro {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
-        }
+        } */
         return resp;
     }
 
+    
+    public boolean eliminarAutorxLibro(String id, String cod) {
+        boolean resp = false;
+        this.obtRegistros();
+        try {
+            rs.beforeFirst();
+            while (rs.next()) {
+                if (rs.getString("ISBN").equals(id) && rs.getString("codigo_autor").equals(cod)) {
+                    rs.deleteRow();
+                    resp = true;
+                    break;
+                }
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al eliminar Libro" + ex.getMessage());
+        } /*finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+
+                if (ps != null) {
+                    ps.close();
+                }
+
+                if (conn != null) {
+                    Conexion.cerrarConexion(conn);
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        } */
+        return resp;
+    } 
     
 }

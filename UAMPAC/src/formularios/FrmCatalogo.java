@@ -53,6 +53,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
     ArrayList<Libro> listaLibros = new ArrayList<>();
     ArrayList<Ejemplar> listaEjemplares = new ArrayList<>();
     ArrayList<Autor> listaLibroAutores = new ArrayList<>();
+    ArrayList<Autor> copiaListaLibroAutores = new ArrayList<>();
     
     //objetos filtros tablas
     TableRowSorter filtroTablaEditorial;
@@ -641,6 +642,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         //conseguido con listarAutor de DLibro (parámetro: ISBN)
         //(select * from vista where isbn like...)
         listaLibroAutores = dLibro.listarAutor(isbn);
+        copiaListaLibroAutores = dLibro.listarAutor(isbn);
         
         cod_clasi = String.valueOf(book_category_code);
         nom_clasi = String.valueOf(book_category_name);
@@ -2569,7 +2571,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
             editEditorial,
             listaLibroAutores); 
             
-            if (dLibro.editarLibro(editLibro)) {
+            if (dLibro.editarLibro(editLibro, copiaListaLibroAutores)) {
                 JOptionPane.showMessageDialog(this, "Registro Editado.",
                     "Libro", JOptionPane.INFORMATION_MESSAGE);
                 actualizarBotonesLibroUD();
@@ -2712,6 +2714,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         
         this.BtnAutoresEscogerSet.setEnabled(false);
         
+        //aqui se edita la lista original
         if(setEditAdd == 1) {
             listaLibroAutores.add(new Autor(this.TfAutoresCodEscoger.getText(),
             this.TfAutoresNomEscoger.getText()));
@@ -2721,14 +2724,19 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
                 " de " + listaLibroAutores.size());
             
         } else {
+            //nuevo objeto autor para editar
             Autor aEdit = new Autor(this.TfAutoresCodEscoger.getText(),
             this.TfAutoresNomEscoger.getText());
+            
+            //cambiar autor 
             listaLibroAutores.set(pos, aEdit);
             
+            //actualizar label
             this.LblAutoresEscogerAmount.setText(pos + 1 +
                 " de " + listaLibroAutores.size());
         }
         
+        //reiniciar variable
         setEditAdd = 0;
         
         this.BtnAutoresEscogerPrev.setEnabled(true);
@@ -2741,7 +2749,7 @@ public class FrmCatalogo extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         FrmEscogerDatos.getObjAut().setVisible(true);
         this.BtnAutoresEscogerSet.setEnabled(true);
-        this.BtnAutoresEscogerDelete.setEnabled(isIcon);
+        this.BtnAutoresEscogerDelete.setEnabled(false);
     }//GEN-LAST:event_BtnAutoresEscogerEditarActionPerformed
 
     private void BtnAutoresEscogerDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAutoresEscogerDeleteActionPerformed

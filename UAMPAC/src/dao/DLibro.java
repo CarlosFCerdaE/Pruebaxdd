@@ -211,10 +211,10 @@ public class DLibro {
 
     }
 
-    public boolean editarLibro(Libro a) {
+    public boolean editarLibro(Libro a, ArrayList<Autor> original) {
         boolean resp = false;
         this.obtRegistros("SELECT * FROM[CATALOGO].[Libro]");
-        DAutorxLibro daxl= new DAutorxLibro();
+        DAutorxLibro daxl = new DAutorxLibro();
         try {
             rs.beforeFirst();
             while (rs.next()) {
@@ -226,8 +226,44 @@ public class DLibro {
                     rs.updateRow();
                     
                     //hay un problema aqui, solo edita 1 autor (quita los otros si tiene mas)
-                    for(Autor aut:a.getAutores()){
-                        daxl.editarAutorxLibro(a.getIsbn(), aut.getCodigo_autor());
+                    //nuevo
+                    /*
+                    for(Autor aut: a.getAutores()){
+                        //original
+                        for(Autor aut2: original) {
+                            if (aut.getCodigo_autor().equals(aut2.getCodigo_autor())) {
+                                System.out.println("hola");
+                                daxl.editarAutorxLibro(a.getIsbn(), aut2.getCodigo_autor(), aut.getCodigo_autor());
+                            }
+                        }
+                        //daxl.editarAutorxLibro(a.getIsbn(), aut.getCodigo_autor(), cod_autorNuevo);
+                    } */
+                    
+                    for (int i = 0; i < a.getAutores().size(); i++) {
+                        //System.out.println(a.getAutores().get(i).getCodigo_autor() + " " + original.get(i).getCodigo_autor());
+                        
+                        if (a.getAutores().size() < original.size()) {
+                            System.out.println("hola else if 2");
+                            daxl.eliminarAutorxLibro(a.getIsbn(), original.get(i).getCodigo_autor());
+                            
+                        }
+                        
+                        if (i < original.size()) {
+                            if ((!a.getAutores().get(i).getCodigo_autor().equals(original.get(i).getCodigo_autor()))) {
+                            
+                                System.out.println("iteracion " + i);
+
+                                daxl.editarAutorxLibro(a.getIsbn(), original.get(i).getCodigo_autor()
+                                , a.getAutores().get(i).getCodigo_autor());
+                            }   
+                        } else if (i >= original.size()) {
+                            System.out.println("hola");
+                            daxl.guardarAutorxLibro(a.getIsbn(), a.getAutores().get(i).getCodigo_autor());
+                            
+                        }  else  {
+                            System.out.println("estoy en el else");
+                        }
+                        
                     }
                     resp = true;
                     break;
