@@ -112,7 +112,7 @@ public class DPersona {
             }
         } catch (SQLException ex) {
             System.out.println("Error al buscar Persona: " + ex.getMessage());
-        } finally {
+        }/* finally {
             try {
                 if (rs != null) {
                     rs.close();
@@ -128,7 +128,7 @@ public class DPersona {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
-        }
+        }*/
 
         return resp;
 
@@ -152,7 +152,7 @@ public class DPersona {
             }
         } catch (SQLException ex) {
             System.out.println("Error al editar: " + ex.getMessage());
-        } finally {
+        } /*finally {
             try {
                 if (rs != null) {
                     rs.close();
@@ -168,7 +168,7 @@ public class DPersona {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
-        }
+        }*/
         return resp;
     }
 

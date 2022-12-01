@@ -290,4 +290,33 @@ public class DEstudiante {
         }
         return resp;
     }
+    
+    public ArrayList<String> listarCif(String id_persona){
+        ArrayList<String> lista = new ArrayList<>();
+        try {
+            this.obtRegistros("Select cif from [RRHH].[Estudiante]"
+                    + " WHERE id_persona LIKE '"+id_persona+"'");
+            while (rs.next()) {
+                lista.add(rs.getString("cif"));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al listar el cif " + ex.getMessage());
+        } /*finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+
+                if (conn != null) {
+                    Conexion.cerrarConexion(conn);
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }*/
+        return lista;
+    }
 }

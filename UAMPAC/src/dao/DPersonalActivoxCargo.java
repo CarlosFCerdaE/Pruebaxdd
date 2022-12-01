@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -18,8 +19,12 @@ import java.sql.SQLException;
 public class DPersonalActivoxCargo {
 
     private Connection conn = null;
+    private Connection conn2 = null;
     private PreparedStatement ps = null;
-    private ResultSet rs = null;
+    private ResultSet rs = null; 
+    
+    private PreparedStatement ps2 = null;
+    private ResultSet rs2 = null; 
 
     public void obtRegistros() {
         try {
@@ -29,6 +34,19 @@ public class DPersonalActivoxCargo {
                     ResultSet.CONCUR_UPDATABLE,
                     ResultSet.HOLD_CURSORS_OVER_COMMIT);
             rs = ps.executeQuery();
+        } catch (SQLException ex) {
+            System.out.println("Error al obtener registros: " + ex.getMessage());
+        }
+    }
+    
+    public void obtRegistros2(String x) {
+        try {
+            conn2 = Conexion.obtConexion();
+            String tSQL = x;
+            ps2 = conn2.prepareStatement(tSQL, ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE,
+                    ResultSet.HOLD_CURSORS_OVER_COMMIT);
+            rs2 = ps2.executeQuery();
         } catch (SQLException ex) {
             System.out.println("Error al obtener registros: " + ex.getMessage());
         }
@@ -100,6 +118,35 @@ public class DPersonalActivoxCargo {
             }
         }
         return resp;
+    }
+    
+    public ArrayList<String> listarCargo(String cif){
+        ArrayList<String> lista = new ArrayList<>();
+        try {
+            this.obtRegistros2("Select codigo_cargo from [RRHH].[PersonalActivoXCargo]"
+                    + " WHERE id_personalactivo LIKE '"+cif+"'");
+            while (rs2.next()) {
+                lista.add(rs2.getString("codigo_cargo"));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al listar el codigo del cargo " + ex.getMessage());
+        } /*finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+
+                if (conn != null) {
+                    Conexion.cerrarConexion(conn);
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }*/
+        return lista;
     }
 
     

@@ -29,7 +29,7 @@ import java.awt.event.KeyEvent;
 public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
     
     int f = 0;
-    private String cod, nom, ape, num, tip;
+    private String cod, nom, ape, num, tip, cif;
     
     
     DPersona dPersona = new DPersona();
@@ -37,7 +37,12 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
     DDocente dDocente = new DDocente();
     DListadoPersonas dListado = new DListadoPersonas();
     DPersonalActivo dPersonal = new DPersonalActivo();
+    DEstudiantexCarrera dExC = new DEstudiantexCarrera();
+    DPersonalActivo dPxC = new DPersonalActivo();
+    DDocentexFacultad dDxF = new DDocentexFacultad();
     ArrayList<ListadoPersonas> listaPersonas = new ArrayList<>();
+    ArrayList<String> idcif = new ArrayList<>();
+    ArrayList<String> cifcarr = new ArrayList<>();
     ArrayList<Carrera> carr = new ArrayList<>();
     ArrayList<Facultad> fal = new ArrayList<>();
     ArrayList<Cargo> carg = new ArrayList<>();
@@ -179,6 +184,28 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
             carreraCBllenar();
             this.LblCatID.setText("CIF Estudiante:");
             this.LblRoleID.setText("Carrera:");
+            
+            //obteniendo cif
+            idcif = dEstudiante.listarCif(cod);
+            cif = String.valueOf(idcif);
+            String cifNew = cif.replace("[", "");
+            String cifNew2 = cifNew.replace("]", "");
+            this.TfCatId.setText(cifNew2);
+            
+            //obteniendo carreras
+            cifcarr = dExC.listarCarrera(cifNew2);
+            
+            String carr1 = String.valueOf(cifcarr.get(0));
+            int car1 = Integer.valueOf(carr1);
+            this.jCBRoleID.setSelectedIndex(car1);
+            
+            if(cifcarr.size()>1){
+                String carr2 = String.valueOf(cifcarr.get(1));
+                int car2 = Integer.valueOf(carr2);
+                this.jCBRoleID1.setSelectedIndex(car2);
+            }
+            
+            
         }
         
         if(tip.equals("Docente")){
@@ -194,17 +221,51 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
             facultadCBllenar();
             this.LblCatID.setText("CIF Docente:");
             this.LblRoleID.setText("Facultad:");
+            
+            //obteniendo cif
+            idcif = dDocente.listarCif(cod);
+            cif = String.valueOf(idcif);
+            String cifNew = cif.replace("[", "");
+            String cifNew2 = cifNew.replace("]", "");
+            this.TfCatId.setText(cifNew2);
+            
+            
+            //obteniendo carreras
+            cifcarr = dDxF.listarFacultad(cifNew2);
+            
+            String carr1 = String.valueOf(cifcarr.get(0));
+            int car1 = Integer.valueOf(carr1);
+            this.jCBRoleID.setSelectedIndex(car1);
+            if(cifcarr.size()>1){
+                String carr2 = String.valueOf(cifcarr.get(1));
+                int car2 = Integer.valueOf(carr2);
+                this.jCBRoleID1.setSelectedIndex(car2);
+            }
         }
         
         if(tip.equals("Personal Activo")){
             this.RbPersonal.setSelected(true);
             this.jCBRoleID.setEnabled(true);
+            this.jCBRoleID1.setEnabled(false);
             for(int i=jCBRoleID.getItemCount()-1;i>0;i--){
             jCBRoleID.removeItemAt(i);
             }
             cargoCBllenar();
             this.LblCatID.setText("ID Personal:");
             this.LblRoleID.setText("Cargo:");
+            
+            //obteniendo cif
+            idcif = dPersonal.listarCif(cod);
+            cif = String.valueOf(idcif);
+            String cifNew = cif.replace("[", "");
+            String cifNew2 = cifNew.replace("]", "");
+            this.TfCatId.setText(cifNew2);
+            
+            //obteniendo carreras
+            cifcarr = dDxF.listarFacultad(cifNew2);
+            String carr1 = String.valueOf(cifcarr.get(0));
+            int car1 = Integer.valueOf(carr1);
+            this.jCBRoleID.setSelectedIndex(car1);
         }
         
         
@@ -979,46 +1040,78 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         }
         
         if(f==1){
-            if(this.verificarDatosVacios()) {
-                int l = jCBRoleID.getSelectedIndex();
-                Carrera test1 = new Carrera(Integer.toString(l), jCBRoleID.getSelectedItem().toString());
-                //test1.setNombre_carrera(jCBRoleID.getSelectedItem().toString());
-                //test1.setCod_carrera(Integer.toString(l));
-                String n = test1.getNombre_carrera()+ " " + test1.getCod_carrera();
-                System.out.println(n);
-                carrera.add(0, test1);
-                
-                
-                Estudiante a = new Estudiante(
-                    this.TfCatId.getText(),
-                    carrera,
-                    this.TfCedula.getText(),
-                    this.TfNombres.getText(),
-                    this.TfApellidos.getText(),
-                    this.TfTelefono.getText()
-                );
+            try {
+                //Estudiante
+                if(this.verificarDatosVacios()==true){
+                    if(this.jCBRoleID1.getSelectedIndex()!=this.jCBRoleID.getSelectedIndex() && this.jCBRoleID.getSelectedIndex()!=0){
+                        int l = jCBRoleID.getSelectedIndex();
+                        Carrera test1 = new Carrera(Integer.toString(l), jCBRoleID.getSelectedItem().toString());
+                        //test1.setNombre_carrera(jCBRoleID.getSelectedItem().toString());
+                        //test1.setCod_carrera(Integer.toString(l));
+                        String n = test1.getNombre_carrera()+ " " + test1.getCod_carrera();
+                        System.out.println(n);
+                        carrera.add(0, test1);
 
-                if (dPersona.editarPersona(a)) {
-                    JOptionPane.showMessageDialog(this, "Registro Editado.",
-                        "Estudiante", JOptionPane.INFORMATION_MESSAGE);
-                    actualizarTablaPersonas();
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error al editar",
-                        "Estudiante", JOptionPane.WARNING_MESSAGE);
-                    actualizarTablaPersonas();
+                        if(this.jCBRoleID1.getSelectedIndex()!= 0){
+                            int k = jCBRoleID1.getSelectedIndex();
+                            Carrera test2 = new Carrera(Integer.toString(k), jCBRoleID1.getSelectedItem().toString());
+                            //test1.setNombre_carrera(jCBRoleID.getSelectedItem().toString());
+                            //test1.setCod_carrera(Integer.toString(l));
+                            String m = test2.getNombre_carrera()+ " " + test2.getCod_carrera();
+                            System.out.println(m);
+                            carrera.add(0, test2);
+                        }
+
+
+
+
+                        Estudiante a = new Estudiante(
+                            this.TfCatId.getText(),
+                            carrera,
+                            this.TfCedula.getText(),
+                            this.TfNombres.getText(),
+                            this.TfApellidos.getText(),
+                            this.TfTelefono.getText()
+                        );
+
+                        if (dEstudiante.editarEstudiante(a)) {
+                            JOptionPane.showMessageDialog(this, "Registro Guardado.",
+                                "Estudiante", JOptionPane.INFORMATION_MESSAGE);
+                            actualizarTablaPersonas();
+
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Error al guardar",
+                                "Estudiante", JOptionPane.WARNING_MESSAGE);
+                            actualizarTablaPersonas();
+                        }
+                    }else{
+                                JOptionPane.showMessageDialog(this , "Por favor, seleccionar una opcion en el primer cuadro y que no sea repetida.",
+                            "Estudiante", JOptionPane.WARNING_MESSAGE);
+                            }
                 }
+            } catch (HeadlessException ex) {
+                System.out.println("Error al intentar guardar: " + ex.getMessage());
             }
         }
         if(f==2){
-            if(this.verificarDatosVacios()){
+            try {
                 
+                    //Docente
+                    if(this.verificarDatosVacios()==true){
+                        if(this.jCBRoleID1.getSelectedIndex()!=this.jCBRoleID.getSelectedIndex() && this.jCBRoleID.getSelectedIndex()!=0){
                     int l = jCBRoleID.getSelectedIndex();
                     Facultad test1 = new Facultad(Integer.toString(l), jCBRoleID.getSelectedItem().toString());
-                    //test1.setNombre_facultad(jCBRoleID.getSelectedItem().toString());
-                    //test1.setCod_facultad(Integer.toString(l));
                     String n = test1.getNombre_facultad() + " " + test1.getCod_facultad();
                     System.out.println(n);
                     facultad.add(0, test1);
+                    
+                    if(this.jCBRoleID1.getSelectedIndex()!= 0){
+                        int k = jCBRoleID1.getSelectedIndex();
+                        Facultad test2 = new Facultad(Integer.toString(k), jCBRoleID1.getSelectedItem().toString());
+                        String m = test2.getNombre_facultad()+ " " + test2.getCod_facultad();
+                        System.out.println(m);
+                        facultad.add(0, test2);
+                    }
 
 
                     Docente a = new Docente(
@@ -1031,25 +1124,31 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                     );
 
                     if (dDocente.editarDocente(a)) {
-                        JOptionPane.showMessageDialog(this, "Registro editado.",
+                        JOptionPane.showMessageDialog(this, "Registro Guardado.",
                             "Docente", JOptionPane.INFORMATION_MESSAGE);
                         actualizarTablaPersonas();
 
                     } else {
-                        JOptionPane.showMessageDialog(this, "Error al editar",
+                        JOptionPane.showMessageDialog(this, "Error al guardar",
                             "Docente", JOptionPane.WARNING_MESSAGE);
                         actualizarTablaPersonas();
                     }
-            }
+                    }else{
+                            JOptionPane.showMessageDialog(this , "Por favor, seleccionar una opcion en el primer cuadro y que no sea repetida.",
+                    "Docente", JOptionPane.WARNING_MESSAGE);
+                        }
+                    }
+                } catch (HeadlessException ex) {
+                    System.out.println("Error al intentar guardar: " + ex.getMessage());
+                }
         }
         if(f==3){
-            if(this.verificarDatosVacios()){
-                
+            try {
+                    if(this.verificarDatosVacios()==true){
+                        if(this.jCBRoleID.getSelectedIndex()!=0){
                     //PersonalActivo
                     int l = jCBRoleID.getSelectedIndex();
                     Cargo test1 = new Cargo(Integer.toString(l), jCBRoleID.getSelectedItem().toString());
-                    //test1.setNombre_cargo(jCBRoleID.getSelectedItem().toString());
-                    //test1.setCod_cargo(Integer.toString(l));
                     String n = test1.getNombre_cargo()+ " " + test1.getCod_cargo();
                     System.out.println(n);
                     cargo.add(0, test1);
@@ -1065,16 +1164,23 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                     );
 
                     if (dPersonal.editarPersonalActivo(a)) {
-                        JOptionPane.showMessageDialog(this, "Registro Editado.",
+                        JOptionPane.showMessageDialog(this, "Registro Guardado.",
                             "Cargo", JOptionPane.INFORMATION_MESSAGE);
                         actualizarTablaPersonas();
 
                     } else {
-                        JOptionPane.showMessageDialog(this, "Error al Editar",
+                        JOptionPane.showMessageDialog(this, "Error al guardar",
                             "Cargo", JOptionPane.WARNING_MESSAGE);
                         actualizarTablaPersonas();
                     }
-            }
+                    } else{
+                            JOptionPane.showMessageDialog(this , "Por favor, seleccionar una opcion de Cargo.",
+                    "Personal Activo", JOptionPane.WARNING_MESSAGE);
+                        }
+                    }
+                } catch (HeadlessException ex) {
+                    System.out.println("Error al intentar guardar: " + ex.getMessage());
+                }
         }
     }//GEN-LAST:event_BtnEditarActionPerformed
 

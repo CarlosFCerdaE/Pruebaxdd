@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 /**
  *
@@ -18,8 +19,12 @@ import java.sql.SQLException;
 public class DEstudiantexCarrera {
 
     private Connection conn = null;
+    private Connection conn2 = null;
     private PreparedStatement ps = null;
-    private ResultSet rs = null;
+    private ResultSet rs = null; 
+    
+    private PreparedStatement ps2 = null;
+    private ResultSet rs2 = null; 
 
     public void obtRegistros() {
         try {
@@ -29,6 +34,19 @@ public class DEstudiantexCarrera {
                     ResultSet.CONCUR_UPDATABLE,
                     ResultSet.HOLD_CURSORS_OVER_COMMIT);
             rs = ps.executeQuery();
+        } catch (SQLException ex) {
+            System.out.println("Error al obtener registros: " + ex.getMessage());
+        }
+    }
+    
+    public void obtRegistros2(String x) {
+        try {
+            conn2 = Conexion.obtConexion();
+            String tSQL = x;
+            ps2 = conn2.prepareStatement(tSQL, ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE,
+                    ResultSet.HOLD_CURSORS_OVER_COMMIT);
+            rs2 = ps2.executeQuery();
         } catch (SQLException ex) {
             System.out.println("Error al obtener registros: " + ex.getMessage());
         }
@@ -82,7 +100,7 @@ public class DEstudiantexCarrera {
             }
         } catch (SQLException ex) {
             System.out.println("Error al editar en tabla EstudianteXCarrera: " + ex.getMessage());
-        } finally {
+        } /*finally {
             try {
                 if (rs != null) {
                     rs.close();
@@ -98,8 +116,37 @@ public class DEstudiantexCarrera {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
-        }
+        }*/
         return resp;
+    }
+    
+    public ArrayList<String> listarCarrera(String cif){
+        ArrayList<String> lista = new ArrayList<>();
+        try {
+            this.obtRegistros2("Select codigo_carrera from [RRHH].[EstudianteXCarrera]"
+                    + " WHERE cif LIKE '"+cif+"'");
+            while (rs2.next()) {
+                lista.add(rs2.getString("codigo_carrera"));
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al listar el codigo de la carrera " + ex.getMessage());
+        } /*finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+
+                if (conn != null) {
+                    Conexion.cerrarConexion(conn);
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }*/
+        return lista;
     }
 
     
