@@ -22,8 +22,12 @@ import javax.swing.JOptionPane;
 public class DPersonalActivo {
 
     private Connection conn = null;
+    private Connection conn2 = null;
     private PreparedStatement ps = null;
-    private ResultSet rs = null;
+    private ResultSet rs = null; 
+    
+    private PreparedStatement ps2 = null;
+    private ResultSet rs2 = null; 
 
     public void obtRegistros(String x) {
             try {
@@ -38,24 +42,45 @@ public class DPersonalActivo {
             }
     }
     
-
+    public void obtRegistros2(String x) {
+        try {
+            conn2 = Conexion.obtConexion();
+            String tSQL = x;
+            ps2 = conn2.prepareStatement(tSQL, ResultSet.TYPE_SCROLL_SENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE,
+                    ResultSet.HOLD_CURSORS_OVER_COMMIT);
+            rs2 = ps2.executeQuery();
+        } catch (SQLException ex) {
+            System.out.println("Error al obtener registros: " + ex.getMessage());
+        }
+    }
+    
     public ArrayList<PersonalActivo> listarPersonalActivo() {
         ArrayList<PersonalActivo> lista = new ArrayList<>();
         try {
-            this.obtRegistros("Select * from [CATALOGO].[VW_PERSONALACTIVO]");
-            while (rs.next()) {
-                ArrayList<Cargo> cargos = listarCargo(rs.getString("CIF_Cargo"));
-                lista.add(new PersonalActivo(rs.getString("CIF_Personal"),
-                        cargos,
-                        rs.getString("Cedula"),
-                        rs.getString("Nombres"),
-                        rs.getString("Apellidos"),
-                        rs.getString("telefono")));
+            this.obtRegistros2("Select * from [CATALOGO].[VW_PERSONALACTIVO]");
+            while (rs2.next()) {
+              ArrayList<Cargo> cargo = listarCargo(rs2.getString("CIF_Personal"));
+                
+                lista.add(new PersonalActivo(rs2.getString("CIF_Personal"),
+                        cargo,
+                        rs2.getString("Cedula"),
+                        rs2.getString("Nombres"),
+                        rs2.getString("Apellidos"),
+                        rs2.getString("telefono")
+                        
+                ));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar Personal Activo " + ex.getMessage());
+            System.out.println("Error al listar Libro " + ex.getMessage());
         } finally {
             try {
+                if (rs2 != null) {
+                    rs2.close();
+                }
+                if (ps2 != null) {
+                    ps2.close();
+                }
                 if (rs != null) {
                     rs.close();
                 }
@@ -63,8 +88,8 @@ public class DPersonalActivo {
                     ps.close();
                 }
 
-                if (conn != null) {
-                    Conexion.cerrarConexion(conn);
+                if (conn2 != null) {
+                    Conexion.cerrarConexion(conn2);
                 }
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
@@ -85,7 +110,7 @@ public class DPersonalActivo {
             }
         } catch (SQLException ex) {
             System.out.println("Error al listar Cargos " + ex.getMessage());
-        } finally {
+        } /*finally {
             try {
                 if (rs != null) {
                     rs.close();
@@ -100,13 +125,13 @@ public class DPersonalActivo {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
-        }
+        }*/
         return lista;
     }
 
     public boolean guardarPersonalActivo(PersonalActivo pa) {
         boolean guardado = false;
-        this.obtRegistros("Select * from [CATALOGO].[PersonalActivo]");
+        this.obtRegistros("Select * from [RRHH].[PersonalActivo]");
         DPersona dpersona = new DPersona();
         DPersonalActivoxCargo dpaxc= new DPersonalActivoxCargo();
         if(dpersona.guardarPersona(new Persona(pa.getId_pers(),pa.getNombre_pers(),pa.getApellidos_pers(),pa.getTelefono_pers()))){

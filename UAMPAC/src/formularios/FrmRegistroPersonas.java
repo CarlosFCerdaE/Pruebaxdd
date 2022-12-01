@@ -17,6 +17,8 @@ import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import complementos.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 
@@ -27,14 +29,18 @@ import java.awt.event.KeyEvent;
 public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
     
     int f = 0;
-    private String cod, nom, ape, num;
+    private String cod, nom, ape, num, tip;
     
     
     DPersona dPersona = new DPersona();
     DEstudiante dEstudiante = new DEstudiante();
     DDocente dDocente = new DDocente();
+    DListadoPersonas dListado = new DListadoPersonas();
     DPersonalActivo dPersonal = new DPersonalActivo();
-    ArrayList<Persona> listaPersonas = new ArrayList<>();
+    ArrayList<ListadoPersonas> listaPersonas = new ArrayList<>();
+    ArrayList<Carrera> carr = new ArrayList<>();
+    ArrayList<Facultad> fal = new ArrayList<>();
+    ArrayList<Cargo> carg = new ArrayList<>();
     
     TableRowSorter filtroTablaPersonas;
 
@@ -44,16 +50,17 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
     public FrmRegistroPersonas() {
         initComponents();
         llenarTablaPersonas();
+        
     }
     
     private boolean verificarDatosVacios() {
         
-        if (this.TfCedula.getText().equals("") || this.TfCedula.getText().length() == 0
+        if (jCBRoleID.getSelectedIndex()==0 
+                && this.TfCedula.getText().equals("") || this.TfCedula.getText().length() == 0
                 && this.TfNombres.getText().equals("") || this.TfNombres.getText().length() == 0
                 && this.TfApellidos.getText().equals("") || this.TfApellidos.getText().length() == 0
                 && this.TfTelefono.getText().equals("") || this.TfTelefono.getText().length() == 0
-                && this.TfCatId.getText().equals("") || this.TfCatId.getText().length() == 0
-                && this.jCBRoleID.getSelectedIndex()==0) {
+                && this.TfCatId.getText().equals("") || this.TfCatId.getText().length() == 0) {
             JOptionPane.showMessageDialog(this , "Por favor no dejar espacios vacios.",
                     "Estudiante", JOptionPane.WARNING_MESSAGE);
             return false;
@@ -67,7 +74,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         if(listaPersonas.isEmpty())
             listaPersonas.clear();
         
-        listaPersonas = dPersona.listarPersona();
+        listaPersonas = dListado.listarListadoPersonas();
     }
     
     private void actualizarTablaPersonas() {
@@ -91,6 +98,8 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         
         this.jCBRoleID.setSelectedIndex(0);
         this.jCBRoleID.setEnabled(false);
+        this.jCBRoleID1.setSelectedIndex(0);
+        this.jCBRoleID1.setEnabled(false);
     }
     
     private void limpiar() {
@@ -101,6 +110,9 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         limpiarbuton();
         this.TfCedula.requestFocus();
         this.TfCedula.setEnabled(true);
+        this.BtnAgregar.setEnabled(true);
+        this.BtnEditar.setEnabled(false);
+        this.BtnEliminar.setEnabled(false);
     }
     
     private void llenarTablaPersonas() {
@@ -111,17 +123,18 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
             }
         };
         
-        String titulos[] = {"ID", "Nombre", "Apellido", "Telefono"};
+        String titulos[] = {"ID", "Nombre", "Apellido", "Telefono", "Tipo"};
         
         dtm.setColumnIdentifiers(titulos);
         
-        for (Persona pers: listaPersonas) {
+        for (ListadoPersonas pers: listaPersonas) {
             
             Object[] fila = new Object[] {
-                pers.getId_pers(), 
-                pers.getNombre_pers(),
-                pers.getApellidos_pers(),
-                pers.getTelefono_pers()
+                pers.getId_persona(), 
+                pers.getNombres(),
+                pers.getApellidos(),
+                pers.getTelefono(),
+                pers.getCif()
             };
             dtm.addRow(fila);
         }
@@ -129,18 +142,22 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         this.TblRegistroPersonas.setModel(dtm);
     }
     
-    private void ubicarDatosLibro() {
+    private void ubicarDatosPersonas() {
         int fila = this.TblRegistroPersonas.getSelectedRow();
         
         Object id_persona = this.TblRegistroPersonas.getValueAt(fila, 0);
         Object nombres = this.TblRegistroPersonas.getValueAt(fila, 1);
         Object apellidos = this.TblRegistroPersonas.getValueAt(fila, 2);
         Object telefono = this.TblRegistroPersonas.getValueAt(fila, 3);
+        Object tipo = this.TblRegistroPersonas.getValueAt(fila, 4);
         
         cod = String.valueOf(id_persona);
         nom = String.valueOf(nombres);
         ape = String.valueOf(apellidos);
         num = String.valueOf(telefono);
+        tip = String.valueOf(tipo);
+        
+        
         
         
         //this.TfCodClasi.setEnabled(false);
@@ -149,7 +166,50 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         this.TfApellidos.setText(ape);
         this.TfTelefono.setText(num);
         
+        if(tip.equals("Estudiante")){
+            this.RbEstudiante.setSelected(true);
+            this.jCBRoleID.setEnabled(true);
+            this.jCBRoleID1.setEnabled(true);
+            for(int i=jCBRoleID.getItemCount()-1;i>0;i--){
+            jCBRoleID.removeItemAt(i);
+            }
+            for(int i=jCBRoleID1.getItemCount()-1;i>0;i--){
+            jCBRoleID1.removeItemAt(i);
+            }
+            carreraCBllenar();
+            this.LblCatID.setText("CIF Estudiante:");
+            this.LblRoleID.setText("Carrera:");
+        }
+        
+        if(tip.equals("Docente")){
+            this.RbDocente.setSelected(true);
+            this.jCBRoleID.setEnabled(true);
+            this.jCBRoleID1.setEnabled(true);
+            for(int i=jCBRoleID.getItemCount()-1;i>0;i--){
+            jCBRoleID.removeItemAt(i);
+            }
+            for(int i=jCBRoleID1.getItemCount()-1;i>0;i--){
+            jCBRoleID1.removeItemAt(i);
+            }
+            facultadCBllenar();
+            this.LblCatID.setText("CIF Docente:");
+            this.LblRoleID.setText("Facultad:");
+        }
+        
+        if(tip.equals("Personal Activo")){
+            this.RbPersonal.setSelected(true);
+            this.jCBRoleID.setEnabled(true);
+            for(int i=jCBRoleID.getItemCount()-1;i>0;i--){
+            jCBRoleID.removeItemAt(i);
+            }
+            cargoCBllenar();
+            this.LblCatID.setText("ID Personal:");
+            this.LblRoleID.setText("Cargo:");
+        }
+        
+        
         this.TfCedula.setEnabled(false);
+        this.TfCatId.setEnabled(false);
         
         
         this.BtnAgregar.setEnabled(false);
@@ -169,6 +229,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
             ResultSet rs=stat.executeQuery(selectQuery);
             while(rs.next()){
                 jCBRoleID.addItem(rs.getString("nombre_carrera"));
+                jCBRoleID1.addItem(rs.getString("nombre_carrera"));
             }
         }
         catch(Exception e){
@@ -207,6 +268,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
             ResultSet rs=stat.executeQuery(selectQuery);
             while(rs.next()){
                 jCBRoleID.addItem(rs.getString("nombre_facultad"));
+                jCBRoleID1.addItem(rs.getString("nombre_facultad"));
             }
         }
         catch(Exception e){
@@ -259,6 +321,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         BtnEliminar = new javax.swing.JButton();
         LblRoleID = new javax.swing.JLabel();
         jCBRoleID = new javax.swing.JComboBox<>();
+        jCBRoleID1 = new javax.swing.JComboBox<>();
 
         setClosable(true);
         setResizable(true);
@@ -464,9 +527,22 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
 
         jCBRoleID.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Escojer..." }));
         jCBRoleID.setEnabled(false);
+        jCBRoleID.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jCBRoleIDMouseClicked(evt);
+            }
+        });
         jCBRoleID.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jCBRoleIDActionPerformed(evt);
+            }
+        });
+
+        jCBRoleID1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Escojer..." }));
+        jCBRoleID1.setEnabled(false);
+        jCBRoleID1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBRoleID1ActionPerformed(evt);
             }
         });
 
@@ -502,7 +578,8 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                             .addComponent(LblCatID)
                             .addComponent(TfCatId, javax.swing.GroupLayout.DEFAULT_SIZE, 190, Short.MAX_VALUE)
                             .addComponent(LblRoleID)
-                            .addComponent(jCBRoleID, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                            .addComponent(jCBRoleID, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jCBRoleID1, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                 .addGroup(PanelAgregarLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(PanelAgregarLayout.createSequentialGroup()
                         .addGap(32, 32, 32)
@@ -549,7 +626,9 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                 .addComponent(LblRoleID)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jCBRoleID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(53, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jCBRoleID1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(13, Short.MAX_VALUE))
         );
 
         TpPersonas.addTab("Agregar/Editar", PanelAgregar);
@@ -589,6 +668,9 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         for(int i=jCBRoleID.getItemCount()-1;i>0;i--){
             jCBRoleID.removeItemAt(i);
         }
+        for(int i=jCBRoleID1.getItemCount()-1;i>0;i--){
+            jCBRoleID1.removeItemAt(i);
+        }
         
         this.LblCatID.setEnabled(true);
         this.LblCatID.setText("CIF Estudiante:");
@@ -597,6 +679,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         this.LblRoleID.setEnabled(true);
         this.LblRoleID.setText("Carrera:");
         this.jCBRoleID.setEnabled(true);
+        this.jCBRoleID1.setEnabled(true);
         //this.jCBRoleID1.setEnabled(true);
         carreraCBllenar();
         
@@ -607,6 +690,9 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         for(int i=jCBRoleID.getItemCount()-1;i>0;i--){
             jCBRoleID.removeItemAt(i);
         }
+        for(int i=jCBRoleID1.getItemCount()-1;i>0;i--){
+            jCBRoleID1.removeItemAt(i);
+        }
         
         this.LblCatID.setEnabled(true);
         this.LblCatID.setText("CIF Docente:");
@@ -615,6 +701,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         this.LblRoleID.setEnabled(true);
         this.LblRoleID.setText("Facultad:");
         this.jCBRoleID.setEnabled(true);
+        this.jCBRoleID1.setEnabled(true);
         //this.jCBRoleID1.setEnabled(false);
         facultadCBllenar();
     }//GEN-LAST:event_RbDocenteActionPerformed
@@ -631,7 +718,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         this.LblRoleID.setEnabled(true);
         this.LblRoleID.setText("Cargo:");
         this.jCBRoleID.setEnabled(true);
-        //this.jCBRoleID1.setEnabled(false);
+        this.jCBRoleID1.setEnabled(false);
         cargoCBllenar();
         
     }//GEN-LAST:event_RbPersonalActionPerformed
@@ -662,37 +749,53 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         if (f == 1){
             try {
                 //Estudiante
-                if(this.verificarDatosVacios()){
-                int l = jCBRoleID.getSelectedIndex();
-                Carrera test1 = new Carrera();
-                test1.setNombre_carrera(jCBRoleID.getSelectedItem().toString());
-                test1.setCod_carrera(Integer.toString(l));
-                String n = test1.getNombre_carrera()+ " " + test1.getCod_carrera();
-                System.out.println(n);
-                carrera.add(0, test1);
-                
-                
-                Estudiante a = new Estudiante(
-                    this.TfCatId.getText(),
-                    carrera,
-                    this.TfCedula.getText(),
-                    this.TfNombres.getText(),
-                    this.TfApellidos.getText(),
-                    this.TfTelefono.getText()
-                );
+                if(this.verificarDatosVacios()==true){
+                    if(this.jCBRoleID1.getSelectedIndex()!=this.jCBRoleID.getSelectedIndex() && this.jCBRoleID.getSelectedIndex()!=0){
+                        int l = jCBRoleID.getSelectedIndex();
+                        Carrera test1 = new Carrera(Integer.toString(l), jCBRoleID.getSelectedItem().toString());
+                        //test1.setNombre_carrera(jCBRoleID.getSelectedItem().toString());
+                        //test1.setCod_carrera(Integer.toString(l));
+                        String n = test1.getNombre_carrera()+ " " + test1.getCod_carrera();
+                        System.out.println(n);
+                        carrera.add(0, test1);
 
-                if (dEstudiante.guardarEstudiante(a)) {
-                    JOptionPane.showMessageDialog(this, "Registro Guardado.",
-                        "Estudiante", JOptionPane.INFORMATION_MESSAGE);
-                    actualizarTablaPersonas();
+                        if(this.jCBRoleID1.getSelectedIndex()!= 0){
+                            int k = jCBRoleID1.getSelectedIndex();
+                            Carrera test2 = new Carrera(Integer.toString(k), jCBRoleID1.getSelectedItem().toString());
+                            //test1.setNombre_carrera(jCBRoleID.getSelectedItem().toString());
+                            //test1.setCod_carrera(Integer.toString(l));
+                            String m = test2.getNombre_carrera()+ " " + test2.getCod_carrera();
+                            System.out.println(m);
+                            carrera.add(0, test2);
+                        }
 
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error al guardar",
-                        "Estudiante", JOptionPane.WARNING_MESSAGE);
-                    actualizarTablaPersonas();
 
+
+
+                        Estudiante a = new Estudiante(
+                            this.TfCatId.getText(),
+                            carrera,
+                            this.TfCedula.getText(),
+                            this.TfNombres.getText(),
+                            this.TfApellidos.getText(),
+                            this.TfTelefono.getText()
+                        );
+
+                        if (dEstudiante.guardarEstudiante(a)) {
+                            JOptionPane.showMessageDialog(this, "Registro Guardado.",
+                                "Estudiante", JOptionPane.INFORMATION_MESSAGE);
+                            actualizarTablaPersonas();
+
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Error al guardar",
+                                "Estudiante", JOptionPane.WARNING_MESSAGE);
+                            actualizarTablaPersonas();
+                        }
+                    }else{
+                                JOptionPane.showMessageDialog(this , "Por favor, seleccionar una opcion en el primer cuadro y que no sea repetida.",
+                            "Estudiante", JOptionPane.WARNING_MESSAGE);
+                            }
                 }
-            }
             } catch (HeadlessException ex) {
                 System.out.println("Error al intentar guardar: " + ex.getMessage());
             }
@@ -703,14 +806,21 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
             try {
                 
                     //Docente
-                    if(this.verificarDatosVacios()){
+                    if(this.verificarDatosVacios()==true){
+                        if(this.jCBRoleID1.getSelectedIndex()!=this.jCBRoleID.getSelectedIndex() && this.jCBRoleID.getSelectedIndex()!=0){
                     int l = jCBRoleID.getSelectedIndex();
-                    Facultad test1 = new Facultad();
-                    test1.setNombre_facultad(jCBRoleID.getSelectedItem().toString());
-                    test1.setCod_facultad(Integer.toString(l));
+                    Facultad test1 = new Facultad(Integer.toString(l), jCBRoleID.getSelectedItem().toString());
                     String n = test1.getNombre_facultad() + " " + test1.getCod_facultad();
                     System.out.println(n);
                     facultad.add(0, test1);
+                    
+                    if(this.jCBRoleID1.getSelectedIndex()!= 0){
+                        int k = jCBRoleID1.getSelectedIndex();
+                        Facultad test2 = new Facultad(Integer.toString(k), jCBRoleID1.getSelectedItem().toString());
+                        String m = test2.getNombre_facultad()+ " " + test2.getCod_facultad();
+                        System.out.println(m);
+                        facultad.add(0, test2);
+                    }
 
 
                     Docente a = new Docente(
@@ -732,6 +842,10 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                             "Docente", JOptionPane.WARNING_MESSAGE);
                         actualizarTablaPersonas();
                     }
+                    }else{
+                            JOptionPane.showMessageDialog(this , "Por favor, seleccionar una opcion en el primer cuadro y que no sea repetida.",
+                    "Docente", JOptionPane.WARNING_MESSAGE);
+                        }
                     }
                 } catch (HeadlessException ex) {
                     System.out.println("Error al intentar guardar: " + ex.getMessage());
@@ -739,12 +853,13 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         }
             if(f==3){
                 try {
-                    if(this.verificarDatosVacios()){
+                    if(this.verificarDatosVacios()==true){
+                        if(this.jCBRoleID.getSelectedIndex()!=0){
                     //PersonalActivo
                     int l = jCBRoleID.getSelectedIndex();
-                    Cargo test1 = new Cargo();
-                    test1.setNombre_cargo(jCBRoleID.getSelectedItem().toString());
-                    test1.setCod_cargo(Integer.toString(l));
+                    Cargo test1 = new Cargo(Integer.toString(l), jCBRoleID.getSelectedItem().toString());
+                    //test1.setNombre_cargo(jCBRoleID.getSelectedItem().toString());
+                    //test1.setCod_cargo(Integer.toString(l));
                     String n = test1.getNombre_cargo()+ " " + test1.getCod_cargo();
                     System.out.println(n);
                     cargo.add(0, test1);
@@ -769,6 +884,10 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                             "Cargo", JOptionPane.WARNING_MESSAGE);
                         actualizarTablaPersonas();
                     }
+                    } else{
+                            JOptionPane.showMessageDialog(this , "Por favor, seleccionar una opcion de Cargo.",
+                    "Personal Activo", JOptionPane.WARNING_MESSAGE);
+                        }
                     }
                 } catch (HeadlessException ex) {
                     System.out.println("Error al intentar guardar: " + ex.getMessage());
@@ -781,6 +900,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         limpiar();
         actualizarTablaPersonas();
         TpPersonas.setSelectedIndex(0);
+        
     }//GEN-LAST:event_BtnLimpiarActionPerformed
 
     private void jCBRoleIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBRoleIDActionPerformed
@@ -807,7 +927,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
             public void mouseClicked(java.awt.event.MouseEvent e) {
                 if (e.getClickCount() == 2) {
                     TpPersonas.setSelectedIndex(1);
-                    ubicarDatosLibro();
+                    ubicarDatosPersonas();
                 }
             }
         });
@@ -816,7 +936,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
     private void TblRegistroPersonasKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TblRegistroPersonasKeyReleased
         // TODO add your handling code here:
         if ((evt.getKeyCode () == KeyEvent.VK_DOWN) || (evt.getKeyCode () == KeyEvent.VK_UP) || (evt.getKeyCode () == KeyEvent.VK_ENTER)) {
-            ubicarDatosLibro();
+            ubicarDatosPersonas();
         }
     }//GEN-LAST:event_TblRegistroPersonasKeyReleased
 
@@ -861,9 +981,9 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         if(f==1){
             if(this.verificarDatosVacios()) {
                 int l = jCBRoleID.getSelectedIndex();
-                Carrera test1 = new Carrera();
-                test1.setNombre_carrera(jCBRoleID.getSelectedItem().toString());
-                test1.setCod_carrera(Integer.toString(l));
+                Carrera test1 = new Carrera(Integer.toString(l), jCBRoleID.getSelectedItem().toString());
+                //test1.setNombre_carrera(jCBRoleID.getSelectedItem().toString());
+                //test1.setCod_carrera(Integer.toString(l));
                 String n = test1.getNombre_carrera()+ " " + test1.getCod_carrera();
                 System.out.println(n);
                 carrera.add(0, test1);
@@ -893,9 +1013,9 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
             if(this.verificarDatosVacios()){
                 
                     int l = jCBRoleID.getSelectedIndex();
-                    Facultad test1 = new Facultad();
-                    test1.setNombre_facultad(jCBRoleID.getSelectedItem().toString());
-                    test1.setCod_facultad(Integer.toString(l));
+                    Facultad test1 = new Facultad(Integer.toString(l), jCBRoleID.getSelectedItem().toString());
+                    //test1.setNombre_facultad(jCBRoleID.getSelectedItem().toString());
+                    //test1.setCod_facultad(Integer.toString(l));
                     String n = test1.getNombre_facultad() + " " + test1.getCod_facultad();
                     System.out.println(n);
                     facultad.add(0, test1);
@@ -927,9 +1047,9 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                 
                     //PersonalActivo
                     int l = jCBRoleID.getSelectedIndex();
-                    Cargo test1 = new Cargo();
-                    test1.setNombre_cargo(jCBRoleID.getSelectedItem().toString());
-                    test1.setCod_cargo(Integer.toString(l));
+                    Cargo test1 = new Cargo(Integer.toString(l), jCBRoleID.getSelectedItem().toString());
+                    //test1.setNombre_cargo(jCBRoleID.getSelectedItem().toString());
+                    //test1.setCod_cargo(Integer.toString(l));
                     String n = test1.getNombre_cargo()+ " " + test1.getCod_cargo();
                     System.out.println(n);
                     cargo.add(0, test1);
@@ -957,6 +1077,14 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
             }
         }
     }//GEN-LAST:event_BtnEditarActionPerformed
+
+    private void jCBRoleID1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBRoleID1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCBRoleID1ActionPerformed
+
+    private void jCBRoleIDMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jCBRoleIDMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jCBRoleIDMouseClicked
 
     private void filtrarTablaPersonas() {
         filtroTablaPersonas.setRowFilter(RowFilter.regexFilter("(?i)" + this.TfDatoPersona.getText()
@@ -995,6 +1123,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
     private javax.swing.JToolBar ToolBarClud;
     private javax.swing.JTabbedPane TpPersonas;
     private javax.swing.JComboBox<String> jCBRoleID;
+    private javax.swing.JComboBox<String> jCBRoleID1;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

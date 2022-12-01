@@ -81,7 +81,7 @@ public class DPersona {
             guardado = true;
         } catch (SQLException ex) {
             System.out.println("Error al guardar Persona:" + ex.getMessage());
-        } finally {
+        } /*finally {
             try {
                 if (rs != null) {
                     rs.close();
@@ -95,7 +95,7 @@ public class DPersona {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
-        }
+        }*/
         return guardado;
     }
 
