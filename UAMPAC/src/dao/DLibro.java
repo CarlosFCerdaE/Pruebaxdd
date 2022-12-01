@@ -117,23 +117,7 @@ public class DLibro {
             }
         } catch (SQLException ex) {
             System.out.println("Error al listar Autores " + ex.getMessage());
-        } /*finally {
-            try {
-                
-                if (rs != null) {
-                    rs.close();
-                }
-                if (ps != null) {
-                    ps.close();
-                } 
-
-                if (conn != null) {
-                    Conexion.cerrarConexion(conn);
-                }
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            } 
-        } */
+        } 
         return lista;
     }
 
@@ -158,21 +142,7 @@ public class DLibro {
             guardado = true;
         } catch (SQLException ex) {
             System.out.println("Error al guardar Libro:" + ex.getMessage());
-        } /*finally {
-            try {
-                if (this.rs != null) {
-                    this.rs.close();
-                }
-                if (this.ps != null) {
-                    this.ps.close();
-                }
-                if (this.conn != null) {
-                    Conexion.cerrarConexion(this.conn);
-                }
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }*/
+        }
         return guardado;
     }
 
@@ -189,23 +159,7 @@ public class DLibro {
             }
         } catch (SQLException ex) {
             System.out.println("Error al buscar Libro: " + ex.getMessage());
-        } /*finally {
-            try {
-                if (rs != null) {
-                    rs.close();
-                }
-
-                if (ps != null) {
-                    ps.close();
-                }
-
-                if (conn != null) {
-                    Conexion.cerrarConexion(conn);
-                }
-            } catch (SQLException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }*/
+        } 
 
         return resp;
 

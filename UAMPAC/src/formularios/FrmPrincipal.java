@@ -21,6 +21,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         initComponents();
         this.DpEscritorio.add(frmInicio);
         frmInicio.setVisible(true);
+        setExtendedState(MAXIMIZED_BOTH);
     }
 
     /**

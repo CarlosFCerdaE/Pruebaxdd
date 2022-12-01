@@ -41,31 +41,27 @@ public class DPrestamo {
     public DefaultTableModel mostrarPrestamos(){
         DefaultTableModel dtm = new DefaultTableModel();
         String titulos[] = {
-             "Codigo Prestamo","Nombres","Apellidos","Titulo",
+             "Codigo Prestamo","Nombres","Rol","Titulo",
             "Numero de Copia","Fecha de emision","Fecha de devolucion","Mora"
         };
         
         dtm.setColumnIdentifiers(titulos);
         
         try{
-            ResultSet rs_vista = null;
-            conn = Conexion.obtConexion();
-            String tSQL = "SELECT * FROM [PRESTAMOS].[VW_LISTADOPRESTAMOS]";
-            ps = conn.prepareStatement(tSQL, ResultSet.TYPE_SCROLL_SENSITIVE,
-                    ResultSet.CONCUR_UPDATABLE,
-                    ResultSet.HOLD_CURSORS_OVER_COMMIT);
-            rs_vista = ps.executeQuery();
+            this.obtRegistros("SELECT * FROM [PRESTAMOS].[VW_LISTADOPRESTAMOS]");
             
-            while(rs_vista.next()){
+            while(rs.next()){
                 Object filas[]= new Object[8];
-                filas[0] = rs_vista.getString("codigo_prestamo");
-                filas[1] = rs_vista.getString("nombres");
-                filas[2] = rs_vista.getString("apellidos");
-                filas[3] = rs_vista.getString("titulo");
-                filas[4] = rs_vista.getInt("numero_copia");
-                filas[5] = rs_vista.getTimestamp("f_emision");
-                filas[6] = rs_vista.getTimestamp("f_devolucion");
-                filas[7] = rs_vista.getInt("Mora");
+                filas[0] = rs.getString("codigo_prestamo");
+                filas[1] = rs.getString("nombre");
+                filas[2] = rs.getString("tipo");
+                filas[3] = rs.getString("titulo");
+                filas[4] = rs.getInt("numero_copia");
+                filas[5] = rs.getTimestamp("f_emision");
+                filas[6] = rs.getTimestamp("f_devolucion");
+                filas[7] = rs.getInt("Mora");
+                dtm.addRow(filas);
+                System.out.println("Columna añadida");
             }
         }catch (SQLException ex) {
             System.out.println("Error al obtener registros: " + ex.getMessage());
