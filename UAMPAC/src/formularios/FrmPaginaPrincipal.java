@@ -213,10 +213,11 @@ public class FrmPaginaPrincipal extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
         int n = TblRegistroPrestamos.getSelectedRow();
         String codigo_prestamo = String.valueOf(TblRegistroPrestamos.getValueAt(n,0));
+        System.out.println(codigo_prestamo);
         BigDecimal mora = BigDecimal.valueOf(Double.parseDouble(String.valueOf(TblRegistroPrestamos.getValueAt(n,7))));
         mora.setScale(2);
         prestamos = dprestamo.listarPrestamo();
-        
+        System.out.println("Tamaño de prestamos "+prestamos.size());
         Prestamo prestamo = new Prestamo();
         
         for(Prestamo p:prestamos){

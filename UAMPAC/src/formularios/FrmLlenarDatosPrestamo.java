@@ -219,7 +219,7 @@ public class FrmLlenarDatosPrestamo extends javax.swing.JFrame {
 
     private void jBtnAceptarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBtnAceptarActionPerformed
         // TODO add your handling code here:
-        if(!jTfNombrePersona.getText().equals("")){
+        if((!jTfNombrePersona.getText().equals(""))&&(!jTfCodigoPrestamo.getText().equals(""))){
             java.sql.Date todaysDate = new java.sql.Date(new java.util.Date().getTime());
             Calendar calendario = Calendar.getInstance();
             calendario.setTime(todaysDate);
@@ -231,7 +231,7 @@ public class FrmLlenarDatosPrestamo extends javax.swing.JFrame {
             
             this.dispose();
         }
-        else JOptionPane.showMessageDialog(this, "Debe seleccionar a una persona","Error",JOptionPane.WARNING_MESSAGE);
+        else JOptionPane.showMessageDialog(this, "Debe seleccionar a una persona y un codigo de prestamo","Error",JOptionPane.WARNING_MESSAGE);
                 
         
        
@@ -384,10 +384,16 @@ public class FrmLlenarDatosPrestamo extends javax.swing.JFrame {
         if(numejemplar<3){
             for(Ejemplar e: ejemplaresporlibro){
                 if(e.isEstado()){
-                    listaEjemplarAPrestar.add(e);
-                    flag=true;
-                    numejemplar++;
-                    break;
+                    if(!listaEjemplarAPrestar.contains(e)){
+                        listaEjemplarAPrestar.add(e);
+                        flag=true;
+                        numejemplar++;
+                        break;
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(this, "Ya se añadió este libro, seleccione otro","Error",JOptionPane.WARNING_MESSAGE);
+                    }
+                    
                 }
             }
             if(!flag){

@@ -24,7 +24,7 @@ import java.awt.event.KeyEvent;
 
 /**
  *
- * @author Yamila Karim Conrado
+ * @author Diego
  */
 public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
     

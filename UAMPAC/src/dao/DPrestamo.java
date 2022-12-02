@@ -278,7 +278,6 @@ public class DPrestamo {
     public boolean editarPrestamo(Prestamo a) {
         boolean resp = false;
         this.obtRegistros("Select * from [PRESTAMOS].[Prestamo]");
-        DPrestamoxEjemplar dpxe = new DPrestamoxEjemplar();
         DEjemplar dejemplar = new DEjemplar();
         try {
             rs.beforeFirst();
@@ -289,7 +288,6 @@ public class DPrestamo {
                     rs.updateString("id_persona", a.getPersona().getId_pers());
                     rs.updateRow();
                     for(Ejemplar ej: a.getEjemplares()){
-                        dpxe.editarPrestamoxEjemplar(a.getCod_prestamo(), ej.getCod_inventario());
                         dejemplar.editarEjemplar(ej);
                     }
                     resp = true;
