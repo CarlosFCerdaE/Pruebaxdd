@@ -100,7 +100,7 @@ public class DEstudiantexCarrera {
             }
         } catch (SQLException ex) {
             System.out.println("Error al editar en tabla EstudianteXCarrera: " + ex.getMessage());
-        } /*finally {
+        } finally {
             try {
                 if (rs != null) {
                     rs.close();
@@ -116,7 +116,7 @@ public class DEstudiantexCarrera {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
-        }*/
+        }
         return resp;
     }
     
@@ -148,6 +148,42 @@ public class DEstudiantexCarrera {
         }*/
         return lista;
     }
+    
+    public boolean eliminarTodoEstxCar(String cif_estudiante) {
+        boolean resp = false;
+        this.obtRegistros2("Select * from [RRHH].[EstudianteXCarrera]" + " WHERE cif LIKE '" + cif_estudiante + "'");
+        try {
+            rs2.beforeFirst();
+            while (rs2.next()) {
+                if (rs2.getString("cif").equals(cif_estudiante) /*&& rs.getString("codigo_autor").equals(cod) */ ) {
+                    rs2.deleteRow();
+                    //resp = true;
+                    //break;
+                }
+            }
+            resp = true;
+
+        } catch (SQLException ex) {
+            System.out.println("Error al eliminar Estudiante" + ex.getMessage());
+        } /*finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+
+                if (ps != null) {
+                    ps.close();
+                }
+
+                if (conn != null) {
+                    Conexion.cerrarConexion(conn);
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        } */
+        return resp;
+    } 
 
     
 }

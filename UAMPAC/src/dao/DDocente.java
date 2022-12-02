@@ -219,13 +219,14 @@ public class DDocente {
                 rs.beforeFirst();
                 while (rs.next()) {
                     if (rs.getString("id_docente").equals(e.getId_docente())) {
-                        rs.updateString("id_docente",e.getId_docente());
-                        rs.updateRow();
+                        
+                        dexc.eliminarTodoDocxFac(e.getId_docente());
+                        
                         for(Facultad fac: e.getFacultad()){
-                            dexc.editarDocentexFacultad(e.getId_docente(),fac.getCod_facultad());
+                            dexc.guardarDocentexFacultad(e.getId_docente(),fac.getCod_facultad());
                         }
                         resp = true;
-                        dpersona=null;
+                        //dpersona=null;
                         break;
                     }
                 }

@@ -218,13 +218,14 @@ public class DEstudiante {
                 rs.beforeFirst();
                 while (rs.next()) {
                     if (rs.getString("cif").equals(e.getCif())) {
-                        rs.updateString("cif",e.getCif());
-                        rs.updateRow();
+                        
+                        dexc.eliminarTodoEstxCar(e.getCif());
+                        
                         for(Carrera carr: e.getCarreras()){
-                            dexc.editarEstudiantexCarrera(e.getCif(),carr.getCod_carrera());
+                            dexc.guardarEstudiantexCarrera(e.getCif(),carr.getCod_carrera());
                         }
                         resp = true;
-                        dpersona=null;
+                        //dpersona=null;
                         break;
                     }
                 }

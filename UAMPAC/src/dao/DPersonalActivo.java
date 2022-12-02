@@ -218,13 +218,14 @@ public class DPersonalActivo {
                 rs.beforeFirst();
                 while (rs.next()) {
                     if (rs.getString("id_personalactivo").equals(pa.getId_PersonalActivo())) {
-                        rs.updateString("id_personalactivo",pa.getId_PersonalActivo());
-                        rs.updateRow();
+                        
+                        dpaxc.eliminarTodoPerxCar(pa.getId_PersonalActivo());
+                        
                         for(Cargo car: pa.getCargos()){
-                            dpaxc.editarPersonalActivoxCargo(pa.getId_PersonalActivo(),car.getCod_cargo());
+                            dpaxc.guardarPersonalActivoxCargo(pa.getId_PersonalActivo(),car.getCod_cargo());
                         }
                         resp = true;
-                        dpersona=null;
+                        //dpersona=null;
                         break;
                     }
                 }

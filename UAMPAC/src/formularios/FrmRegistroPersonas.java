@@ -38,7 +38,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
     DListadoPersonas dListado = new DListadoPersonas();
     DPersonalActivo dPersonal = new DPersonalActivo();
     DEstudiantexCarrera dExC = new DEstudiantexCarrera();
-    DPersonalActivo dPxC = new DPersonalActivo();
+    DPersonalActivoxCargo dPxC = new DPersonalActivoxCargo();
     DDocentexFacultad dDxF = new DDocentexFacultad();
     ArrayList<ListadoPersonas> listaPersonas = new ArrayList<>();
     ArrayList<String> idcif = new ArrayList<>();
@@ -246,9 +246,12 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         if(tip.equals("Personal Activo")){
             this.RbPersonal.setSelected(true);
             this.jCBRoleID.setEnabled(true);
-            this.jCBRoleID1.setEnabled(false);
+            this.jCBRoleID1.setEnabled(true);
             for(int i=jCBRoleID.getItemCount()-1;i>0;i--){
             jCBRoleID.removeItemAt(i);
+            }
+            for(int i=jCBRoleID1.getItemCount()-1;i>0;i--){
+            jCBRoleID1.removeItemAt(i);
             }
             cargoCBllenar();
             this.LblCatID.setText("ID Personal:");
@@ -262,10 +265,16 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
             this.TfCatId.setText(cifNew2);
             
             //obteniendo carreras
-            cifcarr = dDxF.listarFacultad(cifNew2);
+            cifcarr = dPxC.listarCargo(cifNew2);
             String carr1 = String.valueOf(cifcarr.get(0));
             int car1 = Integer.valueOf(carr1);
             this.jCBRoleID.setSelectedIndex(car1);
+            
+            if(cifcarr.size()>1){
+                String carr2 = String.valueOf(cifcarr.get(1));
+                int car2 = Integer.valueOf(carr2);
+                this.jCBRoleID1.setSelectedIndex(car2);
+            }
         }
         
         
@@ -310,6 +319,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
             ResultSet rs=stat.executeQuery(selectQuery);
             while(rs.next()){
                 jCBRoleID.addItem(rs.getString("nombre_cargo"));
+                jCBRoleID1.addItem(rs.getString("nombre_cargo"));
             }
         }
         catch(Exception e){
@@ -779,7 +789,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         this.LblRoleID.setEnabled(true);
         this.LblRoleID.setText("Cargo:");
         this.jCBRoleID.setEnabled(true);
-        this.jCBRoleID1.setEnabled(false);
+        this.jCBRoleID1.setEnabled(true);
         cargoCBllenar();
         
     }//GEN-LAST:event_RbPersonalActionPerformed
@@ -915,7 +925,7 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
             if(f==3){
                 try {
                     if(this.verificarDatosVacios()==true){
-                        if(this.jCBRoleID.getSelectedIndex()!=0){
+                        if(this.jCBRoleID1.getSelectedIndex()!=this.jCBRoleID.getSelectedIndex() && this.jCBRoleID.getSelectedIndex()!=0){
                     //PersonalActivo
                     int l = jCBRoleID.getSelectedIndex();
                     Cargo test1 = new Cargo(Integer.toString(l), jCBRoleID.getSelectedItem().toString());
@@ -924,6 +934,14 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                     String n = test1.getNombre_cargo()+ " " + test1.getCod_cargo();
                     System.out.println(n);
                     cargo.add(0, test1);
+                    
+                    if(this.jCBRoleID1.getSelectedIndex()!= 0){
+                        int k = jCBRoleID1.getSelectedIndex();
+                        Cargo test2 = new Cargo(Integer.toString(k), jCBRoleID1.getSelectedItem().toString());
+                        String m = test2.getNombre_cargo()+ " " + test2.getCod_cargo();
+                        System.out.println(m);
+                        cargo.add(0, test2);
+                    }
 
 
                     PersonalActivo a = new PersonalActivo(
@@ -1152,6 +1170,16 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
                     String n = test1.getNombre_cargo()+ " " + test1.getCod_cargo();
                     System.out.println(n);
                     cargo.add(0, test1);
+                    
+                    if(this.jCBRoleID1.getSelectedIndex()!= 0){
+                        int k = jCBRoleID1.getSelectedIndex();
+                        Cargo test2 = new Cargo(Integer.toString(k), jCBRoleID1.getSelectedItem().toString());
+                        String m = test2.getNombre_cargo()+ " " + test2.getCod_cargo();
+                        System.out.println(m);
+                        cargo.add(0, test2);
+                    }
+                    
+                    
 
 
                     PersonalActivo a = new PersonalActivo(

@@ -148,6 +148,42 @@ public class DPersonalActivoxCargo {
         }*/
         return lista;
     }
+    
+    public boolean eliminarTodoPerxCar(String id_personalactivo) {
+        boolean resp = false;
+        this.obtRegistros2("Select * from [RRHH].[PersonalActivoXCargo]" + " WHERE id_personalactivo LIKE '" + id_personalactivo + "'");
+        try {
+            rs2.beforeFirst();
+            while (rs2.next()) {
+                if (rs2.getString("id_personalactivo").equals(id_personalactivo) /*&& rs.getString("codigo_autor").equals(cod) */ ) {
+                    rs2.deleteRow();
+                    //resp = true;
+                    //break;
+                }
+            }
+            resp = true;
+
+        } catch (SQLException ex) {
+            System.out.println("Error al eliminar Docente" + ex.getMessage());
+        } /*finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+
+                if (ps != null) {
+                    ps.close();
+                }
+
+                if (conn != null) {
+                    Conexion.cerrarConexion(conn);
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        } */
+        return resp;
+    } 
 
     
 }

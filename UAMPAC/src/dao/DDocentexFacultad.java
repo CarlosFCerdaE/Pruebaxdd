@@ -148,6 +148,42 @@ public class DDocentexFacultad {
         }*/
         return lista;
     }
+    
+    public boolean eliminarTodoDocxFac(String codigo_facultad) {
+        boolean resp = false;
+        this.obtRegistros2("Select * from [RRHH].[DocenteXFacultad]" + " WHERE codigo_facultad LIKE '" + codigo_facultad + "'");
+        try {
+            rs2.beforeFirst();
+            while (rs2.next()) {
+                if (rs2.getString("codigo_facultad").equals(codigo_facultad) /*&& rs.getString("codigo_autor").equals(cod) */ ) {
+                    rs2.deleteRow();
+                    //resp = true;
+                    //break;
+                }
+            }
+            resp = true;
+
+        } catch (SQLException ex) {
+            System.out.println("Error al eliminar Docente" + ex.getMessage());
+        } /*finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+
+                if (ps != null) {
+                    ps.close();
+                }
+
+                if (conn != null) {
+                    Conexion.cerrarConexion(conn);
+                }
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+            }
+        } */
+        return resp;
+    } 
 
     
 }
