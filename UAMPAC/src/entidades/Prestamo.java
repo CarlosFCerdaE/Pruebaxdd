@@ -5,7 +5,7 @@
 package entidades;
 
 import java.math.BigDecimal;
-import java.sql.Timestamp;
+import java.sql.Date;
 import java.util.ArrayList;
 
 /**
@@ -16,8 +16,8 @@ import java.util.ArrayList;
 public class Prestamo {
 
     private String cod_prestamo;
-    private java.sql.Timestamp f_emision;
-    private java.sql.Timestamp f_devolucion;
+    private java.sql.Date f_emision;
+    private java.sql.Date f_devolucion;
     private java.math.BigDecimal mora;
     private boolean estado;
     private Persona persona;
@@ -31,19 +31,19 @@ public class Prestamo {
         this.cod_prestamo = cod_prestamo;
     }
 
-    public java.sql.Timestamp getf_emision() {
+    public java.sql.Date getF_emision() {
         return f_emision;
     }
 
-    public void setf_emision(java.sql.Timestamp f_emision) {
+    public void setF_emision(java.sql.Date f_emision) {
         this.f_emision = f_emision;
     }
 
-    public java.sql.Timestamp getf_devolucion() {
+    public java.sql.Date getF_devolucion() {
         return f_devolucion;
     }
 
-    public void setf_devolucion(java.sql.Timestamp f_devolucion) {
+    public void setF_devolucion(java.sql.Date f_devolucion) {
         this.f_devolucion = f_devolucion;
     }
 
@@ -78,12 +78,11 @@ public class Prestamo {
     public void setEjemplares(ArrayList<Ejemplar> ejemplares) {
         this.ejemplares = ejemplares;
     }
-    
-     public Prestamo() {
-         
+
+    public Prestamo() {
     }
 
-    public Prestamo(String cod_prestamo, Timestamp f_emision, Timestamp f_devolucion, BigDecimal mora, boolean estado, Persona persona, ArrayList<Ejemplar> ejemplares) {
+    public Prestamo(String cod_prestamo, Date f_emision, Date f_devolucion, BigDecimal mora, boolean estado, Persona persona, ArrayList<Ejemplar> ejemplares) {
         this.cod_prestamo = cod_prestamo;
         this.f_emision = f_emision;
         this.f_devolucion = f_devolucion;
@@ -92,6 +91,11 @@ public class Prestamo {
         this.persona = persona;
         this.ejemplares = ejemplares;
     }
+
+   
+   
+
+    
      
    
 }

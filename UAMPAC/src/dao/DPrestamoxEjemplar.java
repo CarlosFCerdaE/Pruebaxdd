@@ -82,7 +82,7 @@ public class DPrestamoxEjemplar {
             }
         } catch (SQLException ex) {
             System.out.println("Error al editar en tabla PrestamoXEjemplar: " + ex.getMessage());
-        } finally {
+        } /*finally {
             try {
                 if (rs != null) {
                     rs.close();
@@ -98,7 +98,7 @@ public class DPrestamoxEjemplar {
             } catch (SQLException ex) {
                 System.out.println(ex.getMessage());
             }
-        }
+        }*/
         return resp;
     }
 

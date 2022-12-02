@@ -51,7 +51,7 @@ public class DEjemplar {
                 lista.add(new Ejemplar(rs.getString("codigo_inventario"),
                         rs.getBoolean("estado"),
                         rs.getInt("numero_copia"),
-                        new Ubicacion(rs.getString("codigo_ubicacion"),rs.getString("nombre")),
+                        new Ubicacion(rs.getString("codigo_ubicacion"),rs.getString("nombre_ubicacion")),
                         rs.getString("ISBN"),
                         rs.getString("titulo"),
                         rs.getString("MFN"),
@@ -82,6 +82,7 @@ public class DEjemplar {
     }
     
     public ArrayList<Ejemplar> listarEjemplar(String x) {
+        
         ArrayList<Ejemplar> lista = new ArrayList<>();
         DLibro dlibro = new DLibro();
         try {
@@ -91,7 +92,7 @@ public class DEjemplar {
                 lista.add(new Ejemplar(rs.getString("codigo_inventario"),
                         rs.getBoolean("estado"),
                         rs.getInt("numero_copia"),
-                        new Ubicacion(rs.getString("codigo_ubicacion"),rs.getString("nombre")),
+                        new Ubicacion(rs.getString("codigo_ubicacion"),rs.getString("nombre_ubicacion")),
                         rs.getString("ISBN"),
                         rs.getString("titulo"),
                         rs.getString("MFN"),
@@ -221,11 +222,8 @@ public class DEjemplar {
             try {
                 rs.beforeFirst();
                 while (rs.next()) {
-                    if (rs.getString("codigo_inventario").equals(a.getCod_inventario())) {
-                        rs.updateBoolean("estado", a.isEstado());
-                        rs.updateInt("numero_copia", a.getNum_copia());
-                        rs.updateString("ISBN", a.getIsbn());
-                        rs.updateString("codigo_ubicacion", a.getUbicacion().getCod_ubicacion());
+                    if ((rs.getString("codigo_inventario").equals(a.getCod_inventario())&& (rs.getInt("numero_copia") == a.getNum_copia()))) {
+                        rs.updateBoolean("estado", !a.isEstado());
                         rs.updateRow();
                         resp = true;
                         dlibro=null;
@@ -235,7 +233,7 @@ public class DEjemplar {
 
             } catch (SQLException ex) {
                 System.out.println("Error al editar: " + ex.getMessage());
-            } finally {
+            } /*finally {
                 try {
                     if (rs != null) {
                         rs.close();
@@ -251,7 +249,7 @@ public class DEjemplar {
                 } catch (SQLException ex) {
                     System.out.println(ex.getMessage());
                 }
-            }
+            }*/
         }
         else{
              System.out.println("No existe el libro");

@@ -6,7 +6,14 @@ package formularios;
 
 import dao.*;
 import entidades.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -15,6 +22,9 @@ import javax.swing.table.DefaultTableModel;
 public class FrmPaginaPrincipal extends javax.swing.JInternalFrame {
 
     DPrestamo dprestamo = new DPrestamo();
+    ArrayList<Prestamo> prestamos = new ArrayList<>();
+
+     TableRowSorter filtroTablaPrestamosNombre;
     /**
      * Creates new form FrmPaginaPrincipal
      */
@@ -37,13 +47,11 @@ public class FrmPaginaPrincipal extends javax.swing.JInternalFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         TblRegistroPrestamos = new javax.swing.JTable();
         BtnAgregarPrestamo = new javax.swing.JButton();
-        BtnEditarPrestamo = new javax.swing.JButton();
-        BtnCompletarrPrestamo = new javax.swing.JButton();
+        BtnActualizar = new javax.swing.JButton();
         BtnCancelarPrestamo = new javax.swing.JButton();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
+        jTfFiltroNombre = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        BtnCompletarPrestamo = new javax.swing.JButton();
 
         setMaximizable(true);
         setResizable(true);
@@ -64,6 +72,12 @@ public class FrmPaginaPrincipal extends javax.swing.JInternalFrame {
 
             }
         ));
+        TblRegistroPrestamos.getTableHeader().setReorderingAllowed(false);
+        TblRegistroPrestamos.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                TblRegistroPrestamosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(TblRegistroPrestamos);
 
         BtnAgregarPrestamo.setText("Agregar");
@@ -74,40 +88,40 @@ public class FrmPaginaPrincipal extends javax.swing.JInternalFrame {
             }
         });
 
-        BtnEditarPrestamo.setText("Editar");
-        BtnEditarPrestamo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        BtnEditarPrestamo.setEnabled(false);
-        BtnEditarPrestamo.addActionListener(new java.awt.event.ActionListener() {
+        BtnActualizar.setText("Actualizar");
+        BtnActualizar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BtnEditarPrestamoActionPerformed(evt);
+                BtnActualizarActionPerformed(evt);
             }
         });
-
-        BtnCompletarrPrestamo.setText("Completar");
-        BtnCompletarrPrestamo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        BtnCompletarrPrestamo.setEnabled(false);
 
         BtnCancelarPrestamo.setText("Cancelar");
         BtnCancelarPrestamo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         BtnCancelarPrestamo.setEnabled(false);
 
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        jTfFiltroNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                jTfFiltroNombreActionPerformed(evt);
             }
         });
-
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+        jTfFiltroNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                jTfFiltroNombreKeyTyped(evt);
             }
         });
 
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
         jLabel1.setText("Nombre:");
 
-        jLabel3.setFont(new java.awt.Font("Segoe UI", 0, 24)); // NOI18N
-        jLabel3.setText("Título: ");
+        BtnCompletarPrestamo.setText("Completar");
+        BtnCompletarPrestamo.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        BtnCompletarPrestamo.setEnabled(false);
+        BtnCompletarPrestamo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                BtnCompletarPrestamoActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -125,22 +139,19 @@ public class FrmPaginaPrincipal extends javax.swing.JInternalFrame {
                         .addGroup(layout.createSequentialGroup()
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addGroup(layout.createSequentialGroup()
-                                    .addContainerGap(178, Short.MAX_VALUE)
+                                    .addGap(291, 291, 291)
                                     .addComponent(jLabel1)
-                                    .addGap(27, 27, 27)
-                                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 295, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGap(39, 39, 39)
-                                    .addComponent(jLabel3)
-                                    .addGap(38, 38, 38)
-                                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 370, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGap(70, 70, 70)
+                                    .addComponent(jTfFiltroNombre, javax.swing.GroupLayout.PREFERRED_SIZE, 544, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGap(115, 115, 115))
                                 .addGroup(layout.createSequentialGroup()
                                     .addGap(80, 80, 80)
                                     .addComponent(jScrollPane1)))
                             .addGap(53, 53, 53)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(BtnEditarPrestamo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(BtnAgregarPrestamo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(BtnCompletarrPrestamo, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)))))
+                                .addComponent(BtnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)
+                                .addComponent(BtnCompletarPrestamo, javax.swing.GroupLayout.DEFAULT_SIZE, 156, Short.MAX_VALUE)))))
                 .addGap(65, 65, 65))
         );
         layout.setVerticalGroup(
@@ -153,9 +164,7 @@ public class FrmPaginaPrincipal extends javax.swing.JInternalFrame {
                         .addGap(18, 18, 18)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel3)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(jTfFiltroNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(LblUAMLogo)))
@@ -163,10 +172,11 @@ public class FrmPaginaPrincipal extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(54, 54, 54)
                         .addComponent(BtnAgregarPrestamo)
-                        .addGap(18, 18, 18)
-                        .addComponent(BtnEditarPrestamo)
-                        .addGap(18, 18, 18)
-                        .addComponent(BtnCompletarrPrestamo))
+                        .addGap(29, 29, 29)
+                        .addComponent(BtnCompletarPrestamo)
+                        .addGap(26, 26, 26)
+                        .addComponent(BtnActualizar)
+                        .addGap(0, 0, 0))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(39, 39, 39)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 544, Short.MAX_VALUE)))
@@ -178,24 +188,83 @@ public class FrmPaginaPrincipal extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    private void jTfFiltroNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTfFiltroNombreActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
-
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
-
-    private void BtnEditarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnEditarPrestamoActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_BtnEditarPrestamoActionPerformed
+    }//GEN-LAST:event_jTfFiltroNombreActionPerformed
 
     private void BtnAgregarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnAgregarPrestamoActionPerformed
         // TODO add your handling code here:
-        
+        FrmLlenarDatosPrestamo frm = new FrmLlenarDatosPrestamo();
+        frm.setVisible(true);
+
     }//GEN-LAST:event_BtnAgregarPrestamoActionPerformed
 
-     private void llenarTablaPrestamos() {
+    private void BtnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnActualizarActionPerformed
+        // TODO add your handling code here:
+        llenarTablaPrestamos();
+    }//GEN-LAST:event_BtnActualizarActionPerformed
+
+    private void TblRegistroPrestamosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TblRegistroPrestamosMouseClicked
+        // TODO add your handling code here:
+        BtnCompletarPrestamo.setEnabled(true);
+    }//GEN-LAST:event_TblRegistroPrestamosMouseClicked
+
+    private void BtnCompletarPrestamoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BtnCompletarPrestamoActionPerformed
+        // TODO add your handling code here:
+        int n = TblRegistroPrestamos.getSelectedRow();
+        String codigo_prestamo = String.valueOf(TblRegistroPrestamos.getValueAt(n,0));
+        BigDecimal mora = BigDecimal.valueOf(Double.parseDouble(String.valueOf(TblRegistroPrestamos.getValueAt(n,7))));
+        mora.setScale(2);
+        prestamos = dprestamo.listarPrestamo();
+        
+        Prestamo prestamo = new Prestamo();
+        
+        for(Prestamo p:prestamos){
+            if(p.getCod_prestamo().equals(codigo_prestamo)){
+                p.setMora(mora);
+                prestamo = p;
+                
+            }
+        }
+        int resp = JOptionPane.showConfirmDialog(this, "¿Desea completar este préstamo?\nLa mora es "+mora,"Completar",JOptionPane.YES_NO_OPTION);
+        if (resp == 0){
+            //respuesta yes
+            dprestamo.editarPrestamo(prestamo);
+            JOptionPane.showMessageDialog(this, "Prestamo "+prestamo.getCod_prestamo(),"Prestamo "+prestamo.getCod_prestamo()+" completado",JOptionPane.INFORMATION_MESSAGE);
+            llenarTablaPrestamos();
+            BtnCompletarPrestamo.setEnabled(false);
+            
+        }
+        else{
+            //resp no
+            System.out.println("Respuesta no");
+            TblRegistroPrestamos.clearSelection();
+            BtnCompletarPrestamo.setEnabled(false);
+            
+        }
+        
+    }//GEN-LAST:event_BtnCompletarPrestamoActionPerformed
+
+    private void jTfFiltroNombreKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTfFiltroNombreKeyTyped
+        // TODO add your handling code here:
+        this.jTfFiltroNombre.addKeyListener(new KeyAdapter() {
+            public void keyReleased(final KeyEvent e) {
+                filtrarTablaPrestamos();
+
+            }
+
+            private void filtrarTablaPrestamos() {
+                filtroTablaPrestamosNombre.setRowFilter(RowFilter.regexFilter("(?i)" + jTfFiltroNombre.getText(),
+                1));
+                
+            }
+        });
+
+        filtroTablaPrestamosNombre = new TableRowSorter(this.TblRegistroPrestamos.getModel());
+        this.TblRegistroPrestamos.setRowSorter(filtroTablaPrestamosNombre);
+    }//GEN-LAST:event_jTfFiltroNombreKeyTyped
+
+    private void llenarTablaPrestamos() {
         DefaultTableModel dtm = new DefaultTableModel() {
             public boolean isCellEditable(int row, int column) {
                 return false;
@@ -203,22 +272,20 @@ public class FrmPaginaPrincipal extends javax.swing.JInternalFrame {
         };
         dtm = dprestamo.mostrarPrestamos();
         this.TblRegistroPrestamos.setModel(dtm);
-     }
-        
-     
+    }
+  
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton BtnActualizar;
     private javax.swing.JButton BtnAgregarPrestamo;
     private javax.swing.JButton BtnCancelarPrestamo;
-    private javax.swing.JButton BtnCompletarrPrestamo;
-    private javax.swing.JButton BtnEditarPrestamo;
+    private javax.swing.JButton BtnCompletarPrestamo;
     private javax.swing.JLabel LblUAMLogo;
     private javax.swing.JTable TblRegistroPrestamos;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
+    private javax.swing.JTextField jTfFiltroNombre;
     // End of variables declaration//GEN-END:variables
 }
