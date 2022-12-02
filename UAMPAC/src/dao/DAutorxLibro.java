@@ -34,7 +34,6 @@ public class DAutorxLibro {
             System.out.println("Error al obtener registros: " + ex.getMessage());
         }
     }
-
     
 
     public boolean guardarAutorxLibro(String ISBN, String Cod_autor) {
@@ -141,5 +140,4 @@ public class DAutorxLibro {
         } */
         return resp;
     } 
-    
 }
