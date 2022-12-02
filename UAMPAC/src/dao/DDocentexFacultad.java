@@ -16,6 +16,7 @@ import java.util.ArrayList;
  *
  * @author cfco5
  */
+
 public class DDocentexFacultad {
 
     private Connection conn = null;
@@ -129,7 +130,7 @@ public class DDocentexFacultad {
                 lista.add(rs2.getString("codigo_facultad"));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar el codigo de la facultad " + ex.getMessage());
+            System.out.println("Error al listar el codigo de la facultad: " + ex.getMessage());
         } /*finally {
             try {
                 if (rs != null) {
@@ -164,7 +165,7 @@ public class DDocentexFacultad {
             resp = true;
 
         } catch (SQLException ex) {
-            System.out.println("Error al eliminar Docente" + ex.getMessage());
+            System.out.println("Error al eliminar Docente: " + ex.getMessage());
         } /*finally {
             try {
                 if (rs != null) {

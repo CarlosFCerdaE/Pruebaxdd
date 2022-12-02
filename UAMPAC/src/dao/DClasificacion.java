@@ -16,6 +16,7 @@ import java.util.ArrayList;
  *
  * @author cfco5
  */
+
 public class DClasificacion {
 
     private Connection conn = null;
@@ -44,7 +45,7 @@ public class DClasificacion {
                         rs.getString("nombre_clasificacion")));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar la clasificacion " + ex.getMessage());
+            System.out.println("Error al listar la clasificacion: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -75,7 +76,7 @@ public class DClasificacion {
             rs.moveToCurrentRow();
             guardado = true;
         } catch (SQLException ex) {
-            System.out.println("Error al guardar clasificacion:" + ex.getMessage());
+            System.out.println("Error al guardar clasificacion: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -178,7 +179,7 @@ public class DClasificacion {
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Error al eliminar clasificacion" + ex.getMessage());
+            System.out.println("Error al eliminar clasificacion: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {

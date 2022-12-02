@@ -129,7 +129,7 @@ public class DEstudiantexCarrera {
                 lista.add(rs2.getString("codigo_carrera"));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar el codigo de la carrera " + ex.getMessage());
+            System.out.println("Error al listar el codigo de la carrera: " + ex.getMessage());
         } /*finally {
             try {
                 if (rs != null) {
@@ -164,7 +164,7 @@ public class DEstudiantexCarrera {
             resp = true;
 
         } catch (SQLException ex) {
-            System.out.println("Error al eliminar Estudiante" + ex.getMessage());
+            System.out.println("Error al eliminar Estudiante: " + ex.getMessage());
         } /*finally {
             try {
                 if (rs != null) {

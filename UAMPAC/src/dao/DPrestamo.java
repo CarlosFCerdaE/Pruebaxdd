@@ -24,6 +24,7 @@ import javax.swing.table.DefaultTableModel;
  *
  * @author cfco5
  */
+
 public class DPrestamo {
 
     private Connection conn = null;
@@ -111,10 +112,6 @@ public class DPrestamo {
         return dtm;
     }
     
-    
-    
-    
-    
     public ArrayList<Prestamo> listarPrestamo() {
         ArrayList<Prestamo> lista = new ArrayList<>();
         DEjemplar dejemplar = new DEjemplar();
@@ -141,7 +138,7 @@ public class DPrestamo {
                 ));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listarr el Prestamo " + ex.getMessage());
+            System.out.println("Error al listarr el Prestamo: " + ex.getMessage());
         } finally {
             try {
                 if (rs2 != null) {
@@ -194,7 +191,7 @@ public class DPrestamo {
                 ));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar el Ejemplar en for principal " + ex.getMessage());
+            System.out.println("Error al listar el Ejemplar en for principal: " + ex.getMessage());
         }
         return lista;
     }
@@ -221,7 +218,7 @@ public class DPrestamo {
             
             guardado = true;
         } catch (SQLException ex) {
-            System.out.println("Error al guardar Prestamo:" + ex.getMessage());
+            System.out.println("Error al guardar Prestamo: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {

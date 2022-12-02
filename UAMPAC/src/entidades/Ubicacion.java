@@ -8,6 +8,7 @@ package entidades;
  *
  * @author cfco5
  */
+
 public class Ubicacion {
     private String cod_ubicacion;
     private String nombre_ubi;
@@ -35,6 +36,4 @@ public class Ubicacion {
         this.cod_ubicacion = cod_ubicacion;
         this.nombre_ubi = nombre_ubi;
     }
-    
-    
 }

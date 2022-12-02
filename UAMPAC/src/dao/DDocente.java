@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
  *
  * @author cfco5
  */
+
 public class DDocente {
 
     private Connection conn = null;
@@ -73,7 +74,7 @@ public class DDocente {
                 ));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar Libro " + ex.getMessage());
+            System.out.println("Error al listar Libro: " + ex.getMessage());
         } finally {
             try {
                 if (rs2 != null) {
@@ -110,7 +111,7 @@ public class DDocente {
                         rs.getString("nombre")));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar Facultades " + ex.getMessage());
+            System.out.println("Error al listar Facultades: " + ex.getMessage());
         } /*finally {
             try {
                 if (rs != null) {
@@ -149,7 +150,7 @@ public class DDocente {
                 guardado = true;
                 dpersona = null;
             } catch (SQLException ex) {
-                System.out.println("Error al guardar Docente:" + ex.getMessage());
+                System.out.println("Error al guardar Docente: " + ex.getMessage());
             } finally {
                 try {
                     if (rs != null) {
@@ -272,7 +273,7 @@ public class DDocente {
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Error al eliminar docente" + ex.getMessage());
+            System.out.println("Error al eliminar docente: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -302,7 +303,7 @@ public class DDocente {
                 lista.add(rs.getString("id_docente"));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar el cif " + ex.getMessage());
+            System.out.println("Error al listar el cif: " + ex.getMessage());
         } /*finally {
             try {
                 if (rs != null) {

@@ -19,6 +19,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author gchang110101
  */
+
 public class FrmPaginaPrincipal extends javax.swing.JInternalFrame {
 
     DPrestamo dprestamo = new DPrestamo();
@@ -224,7 +225,6 @@ public class FrmPaginaPrincipal extends javax.swing.JInternalFrame {
             if(p.getCod_prestamo().equals(codigo_prestamo)){
                 p.setMora(mora);
                 prestamo = p;
-                
             }
         }
         int resp = JOptionPane.showConfirmDialog(this, "¿Desea completar este préstamo?\nLa mora es "+mora,"Completar",JOptionPane.YES_NO_OPTION);
@@ -241,7 +241,6 @@ public class FrmPaginaPrincipal extends javax.swing.JInternalFrame {
             System.out.println("Respuesta no");
             TblRegistroPrestamos.clearSelection();
             BtnCompletarPrestamo.setEnabled(false);
-            
         }
         
     }//GEN-LAST:event_BtnCompletarPrestamoActionPerformed
@@ -257,7 +256,6 @@ public class FrmPaginaPrincipal extends javax.swing.JInternalFrame {
             private void filtrarTablaPrestamos() {
                 filtroTablaPrestamosNombre.setRowFilter(RowFilter.regexFilter("(?i)" + jTfFiltroNombre.getText(),
                 1));
-                
             }
         });
 
@@ -274,8 +272,6 @@ public class FrmPaginaPrincipal extends javax.swing.JInternalFrame {
         dtm = dprestamo.mostrarPrestamos();
         this.TblRegistroPrestamos.setModel(dtm);
     }
-  
-
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton BtnActualizar;

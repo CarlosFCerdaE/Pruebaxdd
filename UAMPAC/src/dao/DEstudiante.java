@@ -72,7 +72,7 @@ public class DEstudiante {
                 ));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar Libro " + ex.getMessage());
+            System.out.println("Error al listar Libro: " + ex.getMessage());
         } finally {
             try {
                 if (rs2 != null) {
@@ -109,7 +109,7 @@ public class DEstudiante {
                         rs.getString("nombre")));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar Carreras " + ex.getMessage());
+            System.out.println("Error al listar Carreras: " + ex.getMessage());
         } /*finally {
             try {
                 if (rs != null) {
@@ -148,7 +148,7 @@ public class DEstudiante {
                 guardado = true;
                 dpersona = null;
             } catch (SQLException ex) {
-                System.out.println("Error al guardar Estudiante:" + ex.getMessage());
+                System.out.println("Error al guardar Estudiante: " + ex.getMessage());
             } finally {
                 try {
                     if (rs != null) {
@@ -271,7 +271,7 @@ public class DEstudiante {
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Error al eliminar estudiante" + ex.getMessage());
+            System.out.println("Error al eliminar estudiante: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -301,7 +301,7 @@ public class DEstudiante {
                 lista.add(rs.getString("cif"));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar el cif " + ex.getMessage());
+            System.out.println("Error al listar el cif: " + ex.getMessage());
         } /*finally {
             try {
                 if (rs != null) {

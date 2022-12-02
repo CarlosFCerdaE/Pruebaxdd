@@ -44,7 +44,7 @@ public class DAutor {
                         rs.getString("nombre_autor")));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar autor " + ex.getMessage());
+            System.out.println("Error al listar autor: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -75,7 +75,7 @@ public class DAutor {
             rs.moveToCurrentRow();
             guardado = true;
         } catch (SQLException ex) {
-            System.out.println("Error al guardar autor:" + ex.getMessage());
+            System.out.println("Error al guardar autor: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -178,7 +178,7 @@ public class DAutor {
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Error al eliminar autor" + ex.getMessage());
+            System.out.println("Error al eliminar autor: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {

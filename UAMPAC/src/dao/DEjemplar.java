@@ -21,6 +21,7 @@ import java.util.ArrayList;
  *
  * @author cfco5
  */
+
 public class DEjemplar {
 
     private Connection conn = null;
@@ -61,7 +62,7 @@ public class DEjemplar {
                 ));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar la Ejemplar " + ex.getMessage());
+            System.out.println("Error al listar la Ejemplar: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -102,7 +103,7 @@ public class DEjemplar {
                 ));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar la Ejemplar " + ex.getMessage());
+            System.out.println("Error al listar la Ejemplar: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -155,7 +156,7 @@ public class DEjemplar {
                 guardado = true;
                 dlibro = null;
             } catch (SQLException ex) {
-                System.out.println("Error al guardar Ejemplar:" + ex.getMessage());
+                System.out.println("Error al guardar Ejemplar: " + ex.getMessage());
             } finally {
                 try {
                     if (rs != null) {
@@ -271,7 +272,7 @@ public class DEjemplar {
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Error al eliminar ejemplar" + ex.getMessage());
+            System.out.println("Error al eliminar ejemplar: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {

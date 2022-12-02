@@ -16,6 +16,7 @@ import java.util.ArrayList;
  *
  * @author cfco5
  */
+
 public class DPersonalActivoxCargo {
 
     private Connection conn = null;
@@ -51,9 +52,7 @@ public class DPersonalActivoxCargo {
             System.out.println("Error al obtener registros: " + ex.getMessage());
         }
     }
-
     
-
     public boolean guardarPersonalActivoxCargo(String id_personalactivo,String Cod_Facultad) {
         boolean guardado = false;
         this.obtRegistros();
@@ -129,7 +128,7 @@ public class DPersonalActivoxCargo {
                 lista.add(rs2.getString("codigo_cargo"));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar el codigo del cargo " + ex.getMessage());
+            System.out.println("Error al listar el codigo del cargo: " + ex.getMessage());
         } /*finally {
             try {
                 if (rs != null) {
@@ -164,7 +163,7 @@ public class DPersonalActivoxCargo {
             resp = true;
 
         } catch (SQLException ex) {
-            System.out.println("Error al eliminar Docente" + ex.getMessage());
+            System.out.println("Error al eliminar Docente: " + ex.getMessage());
         } /*finally {
             try {
                 if (rs != null) {
@@ -184,6 +183,4 @@ public class DPersonalActivoxCargo {
         } */
         return resp;
     } 
-
-    
 }

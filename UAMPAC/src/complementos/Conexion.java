@@ -9,6 +9,7 @@ import java.sql.*;
  *
  * @author cfco5
  */
+
 public class Conexion {
     private static Conexion conx = null;
     private static Connection con = null;
@@ -73,5 +74,4 @@ public class Conexion {
             }
         }
     }
-    
 }

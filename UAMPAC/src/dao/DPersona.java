@@ -47,7 +47,7 @@ public class DPersona {
                         ));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar Persona " + ex.getMessage());
+            System.out.println("Error al listar Persona: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -80,7 +80,7 @@ public class DPersona {
             rs.moveToCurrentRow();
             guardado = true;
         } catch (SQLException ex) {
-            System.out.println("Error al guardar Persona:" + ex.getMessage());
+            System.out.println("Error al guardar Persona: " + ex.getMessage());
         } /*finally {
             try {
                 if (rs != null) {
@@ -185,7 +185,7 @@ public class DPersona {
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Error al eliminar persona" + ex.getMessage());
+            System.out.println("Error al eliminar persona: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {

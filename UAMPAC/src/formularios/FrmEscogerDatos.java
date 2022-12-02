@@ -21,6 +21,7 @@ import javax.swing.table.TableRowSorter;
  *
  * @author gchang110101
  */
+
 public class FrmEscogerDatos extends javax.swing.JFrame {
     
     //4 instancias del mismo form (cada tab)
@@ -486,7 +487,6 @@ public class FrmEscogerDatos extends javax.swing.JFrame {
         this.TfDatoBuscarEditorialEsc.addKeyListener(new KeyAdapter() {
             public void keyReleased(final KeyEvent e) {
                 filtrarTablaEdi();
-
             }
         });
         
@@ -499,7 +499,6 @@ public class FrmEscogerDatos extends javax.swing.JFrame {
         this.TfDatoBuscarClasificacionEsc.addKeyListener(new KeyAdapter() {
             public void keyReleased(final KeyEvent e) {
                 filtrarTablaClasi();
-
             }
         });
         
@@ -512,7 +511,6 @@ public class FrmEscogerDatos extends javax.swing.JFrame {
         this.TfDatoBuscarAutorEsc.addKeyListener(new KeyAdapter() {
             public void keyReleased(final KeyEvent e) {
                 filtrarTablaAut();
-
             }
         });
         

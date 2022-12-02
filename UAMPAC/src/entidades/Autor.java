@@ -8,6 +8,7 @@ package entidades;
  *
  * @author cfco5
  */
+
 public class Autor {
     private String cod_autor;
     private String nombre_autor;

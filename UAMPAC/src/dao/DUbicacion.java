@@ -16,6 +16,7 @@ import java.util.ArrayList;
  *
  * @author cfco5
  */
+
 public class DUbicacion {
 
     private Connection conn = null;
@@ -44,7 +45,7 @@ public class DUbicacion {
                         rs.getString("nombre_ubicacion")));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar la ubicacion " + ex.getMessage());
+            System.out.println("Error al listar la ubicacion: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -75,7 +76,7 @@ public class DUbicacion {
             rs.moveToCurrentRow();
             guardado = true;
         } catch (SQLException ex) {
-            System.out.println("Error al guardar ubicacion:" + ex.getMessage());
+            System.out.println("Error al guardar ubicacion: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -178,7 +179,7 @@ public class DUbicacion {
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Error al eliminar ubicacion" + ex.getMessage());
+            System.out.println("Error al eliminar ubicacion: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {

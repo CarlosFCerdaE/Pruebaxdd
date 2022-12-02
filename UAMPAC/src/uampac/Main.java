@@ -18,7 +18,7 @@ public class Main {
     public static void main(String[] args) {
         FrmPrincipal frmPrincipal = new FrmPrincipal();
         
-        frmPrincipal.setSize(1200, 680);
+        frmPrincipal.setSize(1600, 900);
         
         frmPrincipal.setVisible(true);
     }

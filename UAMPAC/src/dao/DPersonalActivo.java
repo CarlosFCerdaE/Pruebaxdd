@@ -19,6 +19,7 @@ import javax.swing.JOptionPane;
  *
  * @author cfco5
  */
+
 public class DPersonalActivo {
 
     private Connection conn = null;
@@ -72,7 +73,7 @@ public class DPersonalActivo {
                 ));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar Libro " + ex.getMessage());
+            System.out.println("Error al listar Libro: " + ex.getMessage());
         } finally {
             try {
                 if (rs2 != null) {
@@ -109,7 +110,7 @@ public class DPersonalActivo {
                         rs.getString("nombre")));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar Cargos " + ex.getMessage());
+            System.out.println("Error al listar Cargos: " + ex.getMessage());
         } /*finally {
             try {
                 if (rs != null) {
@@ -147,7 +148,7 @@ public class DPersonalActivo {
                 guardado = true;
                 dpersona = null;
             } catch (SQLException ex) {
-                System.out.println("Error al guardar Personal Activo:" + ex.getMessage());
+                System.out.println("Error al guardar Personal Activo: " + ex.getMessage());
             } finally {
                 try {
                     if (rs != null) {
@@ -271,7 +272,7 @@ public class DPersonalActivo {
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Error al eliminar personal activo" + ex.getMessage());
+            System.out.println("Error al eliminar personal activo: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -301,7 +302,7 @@ public class DPersonalActivo {
                 lista.add(rs.getString("id_personalactivo"));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar el cif " + ex.getMessage());
+            System.out.println("Error al listar el cif: " + ex.getMessage());
         } /*finally {
             try {
                 if (rs != null) {

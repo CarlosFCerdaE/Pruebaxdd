@@ -17,6 +17,7 @@ import java.sql.Date;
  *
  * @author cfco5
  */
+
 public class FrmLlenarDatosPrestamo extends javax.swing.JFrame {
     Persona persona = new Persona();
     DPersona dPersona = new DPersona();
@@ -31,6 +32,7 @@ public class FrmLlenarDatosPrestamo extends javax.swing.JFrame {
     /**
      * Creates new form FrmLlenarDatosPrestamo
      */
+    
     public FrmLlenarDatosPrestamo() {
         initComponents();
         llenarTablaPersonas();

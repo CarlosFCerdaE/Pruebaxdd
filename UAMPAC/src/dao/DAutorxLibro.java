@@ -15,6 +15,7 @@ import java.sql.SQLException;
  *
  * @author cfco5
  */
+
 public class DAutorxLibro {
 
     private Connection conn = null;
@@ -120,7 +121,7 @@ public class DAutorxLibro {
             resp = true;
 
         } catch (SQLException ex) {
-            System.out.println("Error al eliminar Libro" + ex.getMessage());
+            System.out.println("Error al eliminar Libro: " + ex.getMessage());
         } /*finally {
             try {
                 if (rs != null) {

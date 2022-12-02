@@ -19,6 +19,7 @@ import java.util.ArrayList;
  *
  * @author usuario
  */
+
 public class DListadoPersonas {
     
     private Connection conn = null;
@@ -78,7 +79,7 @@ public class DListadoPersonas {
                 ));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar Libro " + ex.getMessage());
+            System.out.println("Error al listar Libro: " + ex.getMessage());
         } finally {
             try {
                 if (rs2 != null) {

@@ -19,6 +19,7 @@ import java.util.ArrayList;
  *
  * @author cfco5
  */
+
 public class DLibro {
 
     private Connection conn = null;
@@ -79,7 +80,7 @@ public class DLibro {
                 ));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar Libro " + ex.getMessage());
+            System.out.println("Error al listar Libro: " + ex.getMessage());
         } finally {
             try {
                 if (rs2 != null) {
@@ -116,7 +117,7 @@ public class DLibro {
                         rs.getString("nombre_autor")));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar Autores " + ex.getMessage());
+            System.out.println("Error al listar Autores: " + ex.getMessage());
         } 
         return lista;
     }
@@ -141,7 +142,7 @@ public class DLibro {
             
             guardado = true;
         } catch (SQLException ex) {
-            System.out.println("Error al guardar Libro:" + ex.getMessage());
+            System.out.println("Error al guardar Libro: " + ex.getMessage());
         }
         return guardado;
     }
@@ -268,7 +269,7 @@ public class DLibro {
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Error al eliminar Libro" + ex.getMessage());
+            System.out.println("Error al eliminar Libro: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {

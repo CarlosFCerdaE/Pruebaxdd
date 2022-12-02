@@ -10,8 +10,9 @@ package formularios;
  */
 public class FrmPrincipal extends javax.swing.JFrame {
     //crear objeto formulario para cada uno (internos)
+    
     FrmRegistroPersonas frmPersonas = new FrmRegistroPersonas();
-    FrmCatalogo frmLibros = new FrmCatalogo();
+    //FrmCatalogo frmLibros = new FrmCatalogo();
     FrmPaginaPrincipal frmInicio = new FrmPaginaPrincipal();
     
     /**
@@ -106,14 +107,21 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private void MiGestionarPerActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MiGestionarPerActionPerformed
         // TODO add your handling code here:
         // a ver cómo es esto XD
+        
         this.DpEscritorio.add(this.frmPersonas);
         this.frmPersonas.setVisible(true);
     }//GEN-LAST:event_MiGestionarPerActionPerformed
 
     private void MiLibrosListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MiLibrosListActionPerformed
         // TODO add your handling code here:
+        
+        this.DpEscritorio.add(FrmCatalogo.getObjLibro());
+        FrmCatalogo.getObjLibro().setVisible(true);
+        
+        /*
         this.DpEscritorio.add(this.frmLibros);
         this.frmLibros.setVisible(true);
+        */
     }//GEN-LAST:event_MiLibrosListActionPerformed
 
     private void MiInventarioListActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_MiInventarioListActionPerformed

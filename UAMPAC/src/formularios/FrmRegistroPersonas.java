@@ -26,6 +26,7 @@ import java.awt.event.KeyEvent;
  *
  * @author Diego
  */
+
 public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
     
     int f = 0;
@@ -55,7 +56,6 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
     public FrmRegistroPersonas() {
         initComponents();
         llenarTablaPersonas();
-        
     }
     
     private boolean verificarDatosVacios() {
@@ -161,8 +161,6 @@ public class FrmRegistroPersonas extends javax.swing.JInternalFrame {
         ape = String.valueOf(apellidos);
         num = String.valueOf(telefono);
         tip = String.valueOf(tipo);
-        
-        
         
         
         //this.TfCodClasi.setEnabled(false);

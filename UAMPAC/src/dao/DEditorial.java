@@ -16,6 +16,7 @@ import java.util.ArrayList;
  *
  * @author cfco5
  */
+
 public class DEditorial {
 
     private Connection conn = null;
@@ -44,7 +45,7 @@ public class DEditorial {
                         rs.getString("nombre_editorial")));
             }
         } catch (SQLException ex) {
-            System.out.println("Error al listar la Editorial " + ex.getMessage());
+            System.out.println("Error al listar la Editorial: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -75,7 +76,7 @@ public class DEditorial {
             rs.moveToCurrentRow();
             guardado = true;
         } catch (SQLException ex) {
-            System.out.println("Error al guardar Editorial:" + ex.getMessage());
+            System.out.println("Error al guardar Editorial: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
@@ -178,7 +179,7 @@ public class DEditorial {
                 }
             }
         } catch (SQLException ex) {
-            System.out.println("Error al eliminar editorial" + ex.getMessage());
+            System.out.println("Error al eliminar editorial: " + ex.getMessage());
         } finally {
             try {
                 if (rs != null) {
